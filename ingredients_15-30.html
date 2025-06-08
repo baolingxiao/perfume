@@ -1,0 +1,463 @@
+<!--
+Last updated: 2024-03-19 15:30
+Author: Perfume Workshop Team
+Description: 香料选择页面，展示各种类型的香料供用户选择
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选择香料 - 香水工坊</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/base_15-30.css">
+    <link rel="stylesheet" href="css/ingredients_15-30.css">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-content">
+            <div class="logo">香水工坊</div>
+            <ul class="nav-links">
+                <li><a href="index_15-30.html">首页</a></li>
+                <li><a href="#about">关于我们</a></li>
+                <li><a href="#contact">联系方式</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="ingredients-page">
+        <h1 class="page-title">选择香料</h1>
+        
+        <!-- 香料类型选择器 -->
+        <div class="fragrance-types">
+            <button class="type-btn active" data-type="all">全部</button>
+            <button class="type-btn" data-type="fruit">果香</button>
+            <button class="type-btn" data-type="floral">花香</button>
+            <button class="type-btn" data-type="woody">木香</button>
+        </div>
+
+        <!-- 香调选择器 -->
+        <div class="note-selector">
+            <button class="note-btn active" data-note="all">全部</button>
+            <button class="note-btn" data-note="top">前调</button>
+            <button class="note-btn" data-note="middle">中调</button>
+            <button class="note-btn" data-note="base">尾调</button>
+        </div>
+
+        <!-- 香料展示区域 -->
+        <div class="ingredients-grid">
+            <!-- 果香部分 -->
+            <div class="ingredient-category" id="fruit">
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/香柠檬.jpeg" alt="香柠檬 Bergamot">
+                    <h3>香柠檬<br><span class='en'>Bergamot</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/西西里柠檬.jpeg" alt="西西里柠檬 Lemon">
+                    <h3>西西里柠檬<br><span class='en'>Lemon</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/青柠.jpeg" alt="青柠 Lime">
+                    <h3>青柠<br><span class='en'>Lime</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/橙子.jpeg" alt="橙子 Orange">
+                    <h3>橙子<br><span class='en'>Orange</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/血橙.jpeg" alt="血橙 Blood Orange">
+                    <h3>血橙<br><span class='en'>Blood Orange</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/柚子.jpeg" alt="柚子 Grapefruit">
+                    <h3>柚子<br><span class='en'>Grapefruit</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/柑橘.jpeg" alt="柑橘 Mandarin Orange">
+                    <h3>柑橘<br><span class='en'>Mandarin Orange</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/橘皮.jpeg" alt="橘皮 Petitgrain">
+                    <h3>橘皮<br><span class='en'>Petitgrain</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/苹果.jpeg" alt="苹果 Apple">
+                    <h3>苹果<br><span class='en'>Apple</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/青苹果.jpeg" alt="青苹果 Green Apple">
+                    <h3>青苹果<br><span class='en'>Green Apple</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/梨.jpeg" alt="梨 Pear">
+                    <h3>梨<br><span class='en'>Pear</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/桃子.jpeg" alt="桃子 Peach">
+                    <h3>桃子<br><span class='en'>Peach</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/白桃.jpeg" alt="白桃 White Peach">
+                    <h3>白桃<br><span class='en'>White Peach</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/杏子.jpeg" alt="杏子 Apricot">
+                    <h3>杏子<br><span class='en'>Apricot</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/樱桃.jpeg" alt="樱桃 Cherry">
+                    <h3>樱桃<br><span class='en'>Cherry</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/李子.jpeg" alt="李子 Plum">
+                    <h3>李子<br><span class='en'>Plum</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/黑李子.jpeg" alt="黑李子 Black Plum">
+                    <h3>黑李子<br><span class='en'>Black Plum</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/黑加仑.jpeg" alt="黑加仑 Blackcurrant / Cassis">
+                    <h3>黑加仑<br><span class='en'>Blackcurrant / Cassis</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/蓝莓.jpeg" alt="蓝莓 Blueberry">
+                    <h3>蓝莓<br><span class='en'>Blueberry</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/草莓.jpeg" alt="草莓 Strawberry">
+                    <h3>草莓<br><span class='en'>Strawberry</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/覆盆子.jpeg" alt="覆盆子 Raspberry">
+                    <h3>覆盆子<br><span class='en'>Raspberry</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/红醋粟.jpeg" alt="红醋栗 Redcurrant">
+                    <h3>红醋栗<br><span class='en'>Redcurrant</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/越橘.jpeg" alt="越橘 Cranberry">
+                    <h3>越橘<br><span class='en'>Cranberry</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/菠萝.jpeg" alt="菠萝 Pineapple">
+                    <h3>菠萝<br><span class='en'>Pineapple</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/芒果.jpeg" alt="芒果 Mango">
+                    <h3>芒果<br><span class='en'>Mango</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/木瓜.jpeg" alt="木瓜 Papaya">
+                    <h3>木瓜<br><span class='en'>Papaya</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/香蕉.jpeg" alt="香蕉 Banana">
+                    <h3>香蕉<br><span class='en'>Banana</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/椰子.jpeg" alt="椰子 Coconut">
+                    <h3>椰子<br><span class='en'>Coconut</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/百香果.jpeg" alt="百香果 Passionfruit">
+                    <h3>百香果<br><span class='en'>Passionfruit</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/火龙果.jpeg" alt="火龙果 Dragonfruit">
+                    <h3>火龙果<br><span class='en'>Dragonfruit</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/番石榴.jpeg" alt="番石榴 Guava">
+                    <h3>番石榴<br><span class='en'>Guava</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/葡萄干.jpeg" alt="葡萄干 Raisin">
+                    <h3>葡萄干<br><span class='en'>Raisin</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/无花果干.jpeg" alt="无花果干 Dried Fig">
+                    <h3>无花果干<br><span class='en'>Dried Fig</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/枣.jpeg" alt="枣 Date">
+                    <h3>枣<br><span class='en'>Date</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/果脯.jpeg" alt="果脯 Candied Fruits">
+                    <h3>果脯<br><span class='en'>Candied Fruits</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/梅子干.jpeg" alt="梅子干 Prune">
+                    <h3>梅子干<br><span class='en'>Prune</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/樱桃酒.jpeg" alt="樱桃酒 Kirsch">
+                    <h3>樱桃酒<br><span class='en'>Kirsch</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/李子酒.jpeg" alt="李子酒 Slivovitz">
+                    <h3>李子酒<br><span class='en'>Slivovitz</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/黑加仑酒.jpeg" alt="黑加仑酒 Crème de Cassis">
+                    <h3>黑加仑酒<br><span class='en'>Crème de Cassis</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="top">
+                    <img src="perfume-workshop/images/香槟:白兰地.jpeg" alt="香槟/白兰地香气 Champagne / Brandy Note">
+                    <h3>香槟/白兰地香气<br><span class='en'>Champagne / Brandy Note</span></h3>
+                </div>
+            </div>
+
+            <!-- 花香部分 -->
+            <div class="ingredient-category" id="floral">
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/茉莉.jpeg" alt="茉莉">
+                    <h3>茉莉<br><span class='en'>Jasmine</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/夜来香.jpeg" alt="夜来香 Tuberose">
+                    <h3>夜来香<br><span class='en'>Tuberose</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/橙花.jpeg" alt="橙花 Orange Blossom">
+                    <h3>橙花<br><span class='en'>Orange Blossom</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/白兰花.jpeg" alt="白兰花 Magnolia">
+                    <h3>白兰花<br><span class='en'>Magnolia</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/栀子花.jpeg" alt="栀子花 Gardenia">
+                    <h3>栀子花<br><span class='en'>Gardenia</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/鸢尾花.jpeg" alt="鸢尾花 Iris">
+                    <h3>鸢尾花<br><span class='en'>Iris</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/大马士革玫瑰.jpeg" alt="大马士革玫瑰 Damask Rose">
+                    <h3>大马士革玫瑰<br><span class='en'>Damask Rose</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/土耳其玫瑰.jpeg" alt="土耳其玫瑰 Turkish Rose">
+                    <h3>土耳其玫瑰<br><span class='en'>Turkish Rose</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/保加利亚玫瑰.jpeg" alt="保加利亚玫瑰 Bulgarian Rose">
+                    <h3>保加利亚玫瑰<br><span class='en'>Bulgarian Rose</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/铃兰.jpeg" alt="铃兰 Lily of the Valley">
+                    <h3>铃兰<br><span class='en'>Lily of the Valley</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/紫罗兰.jpeg" alt="紫罗兰 Violet">
+                    <h3>紫罗兰<br><span class='en'>Violet</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/小苍兰.jpeg" alt="小苍兰 Freesia">
+                    <h3>小苍兰<br><span class='en'>Freesia</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/风信子.jpeg" alt="风信子 Hyacinth">
+                    <h3>风信子<br><span class='en'>Hyacinth</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/金合欢.jpeg" alt="金合欢 Mimosa">
+                    <h3>金合欢<br><span class='en'>Mimosa</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/金银花.jpeg" alt="金银花 Honeysuckle">
+                    <h3>金银花<br><span class='en'>Honeysuckle</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/向日葵.jpeg" alt="向日葵 Sunflower">
+                    <h3>向日葵<br><span class='en'>Sunflower</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/鸳鸯茉莉.jpeg" alt="鸳鸯茉莉 Ylang-Ylang">
+                    <h3>鸳鸯茉莉<br><span class='en'>Ylang-Ylang</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/鸡蛋花.jpeg" alt="梔子花 Frangipani">
+                    <h3>鸡蛋花<br><span class='en'>Frangipani</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/红姜花.jpeg" alt="红姜花 Ginger Lily">
+                    <h3>红姜花<br><span class='en'>Ginger Lily</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="middle">
+                    <img src="perfume-workshop/images/ingredients/樱花.jpeg" alt="樱花 Sakura">
+                    <h3>樱花<br><span class='en'>Sakura</span></h3>
+                </div>
+            </div>
+
+            <!-- 木香部分 -->
+            <div class="ingredient-category" id="woody">
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/雪松.jpeg" alt="雪松 Cedarwood">
+                    <h3>雪松<br><span class='en'>Cedarwood</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/檀香.jpeg" alt="檀香 Sandalwood">
+                    <h3>檀香<br><span class='en'>Sandalwood</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/岩兰草.jpeg" alt="岩兰草 / 香根草 Vetiver">
+                    <h3>岩兰草<br><span class='en'>Vetiver</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/旱地松.jpeg" alt="旱地松 Pine">
+                    <h3>旱地松<br><span class='en'>Pine</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/古巴香脂木.jpeg" alt="古巴香脂木 / 癒创木 Guaiac Wood">
+                    <h3>古巴香脂木<br><span class='en'>Guaiac Wood</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/印度檀香.jpeg" alt="印度檀香 Mysore Sandalwood">
+                    <h3>印度檀香<br><span class='en'>Mysore Sandalwood</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/橡木苔.jpeg" alt="橡木苔 Oakmoss">
+                    <h3>橡木苔<br><span class='en'>Oakmoss</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/杉木.jpeg" alt="杉木 Fir">
+                    <h3>杉木<br><span class='en'>Fir</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/柏木.jpeg" alt="柏木 Cypress">
+                    <h3>柏木<br><span class='en'>Cypress</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/广藿香.jpeg" alt="广藿香 Patchouli">
+                    <h3>广藿香<br><span class='en'>Patchouli</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/橡苔.jpeg" alt="橡苔 Oakmoss">
+                    <h3>橡苔<br><span class='en'>Oakmoss</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/雪松苔.jpeg" alt="雪松苔调 Cedar Moss">
+                    <h3>雪松苔调<br><span class='en'>Cedar Moss</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/潮湿森林气息.jpeg" alt="潮湿森林气息 Wet Woods">
+                    <h3>潮湿森林气息<br><span class='en'>Wet Woods</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/乌木.jpeg" alt="乌木 / 沉香 Oud / Agarwood">
+                    <h3>乌木/沉香<br><span class='en'>Oud / Agarwood</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/桦木焦油.jpeg" alt="桦木焦油 Birch Tar">
+                    <h3>桦木焦油<br><span class='en'>Birch Tar</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/雪松焦香.jpeg" alt="雪松焦香 Smoky Cedar">
+                    <h3>雪松焦香<br><span class='en'>Smoky Cedar</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/焦糖木.jpeg" alt="焦糖木 Caramel Wood">
+                    <h3>焦糖木<br><span class='en'>Caramel Wood</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/艾克木.jpeg" alt="艾克木 Iso E Super">
+                    <h3>艾克木<br><span class='en'>Iso E Super</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/阿米香树分子.jpeg" alt="阿米香树分子 Cashmeran">
+                    <h3>阿米香树分子<br><span class='en'>Cashmeran</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/琥珀木.jpeg" alt="琥珀木 Amberwood">
+                    <h3>琥珀木<br><span class='en'>Amberwood</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/雪松醇.jpeg" alt="雪松醇 Cedrol">
+                    <h3>雪松醇<br><span class='en'>Cedrol</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/胡椒木酮.jpeg" alt="胡椒木酮 Timberol">
+                    <h3>胡椒木酮<br><span class='en'>Timberol</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/琥珀顺醇.jpeg" alt="琥珀顺醇 Norlimbanol">
+                    <h3>琥珀顺醇<br><span class='en'>Norlimbanol</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/月桂木.jpeg" alt="月桂木 Baywood">
+                    <h3>月桂木<br><span class='en'>Baywood</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/罗勒木.jpeg" alt="罗勒木 Basil Wood">
+                    <h3>罗勒木<br><span class='en'>Basil Wood</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/松木.jpeg" alt="松针 Pine Needle">
+                    <h3>松木<br><span class='en'>Pine Needle</span></h3>
+                </div>
+                <div class="ingredient-item" data-note="base">
+                    <img src="perfume-workshop/images/ingredients/罗文莎叶.jpeg" alt="罗文莎叶 Ho Wood">
+                    <h3>罗文莎叶<br><span class='en'>Ho Wood</span></h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- 已选香料展示区 -->
+        <div class="selected-ingredients">
+            <h2>已选择的香料</h2>
+            <div class="selected-list">
+                <!-- 这里将通过JavaScript动态添加选中的香料 -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 香料类型筛选功能
+        document.querySelectorAll('.type-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 移除所有active类
+                document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+                // 添加active类到当前按钮
+                btn.classList.add('active');
+                
+                const type = btn.dataset.type;
+                const categories = document.querySelectorAll('.ingredient-category');
+                
+                if (type === 'all') {
+                    categories.forEach(cat => cat.style.display = 'block');
+                } else {
+                    categories.forEach(cat => {
+                        cat.style.display = cat.id === type ? 'block' : 'none';
+                    });
+                }
+            });
+        });
+
+        // 香调筛选功能
+        document.querySelectorAll('.note-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 移除所有active类
+                document.querySelectorAll('.note-btn').forEach(b => b.classList.remove('active'));
+                // 添加active类到当前按钮
+                btn.classList.add('active');
+                
+                const note = btn.dataset.note;
+                const items = document.querySelectorAll('.ingredient-item');
+                
+                if (note === 'all') {
+                    items.forEach(item => item.style.display = 'block');
+                } else {
+                    items.forEach(item => {
+                        item.style.display = item.dataset.note === note ? 'block' : 'none';
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

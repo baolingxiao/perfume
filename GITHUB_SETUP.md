@@ -1,5 +1,12 @@
 # GitHub 部署指南
 
+<!-- 
+🚀 GitHub同步指南
+Last updated: 2025-06-09 18:40
+Author: Perfume Workshop Team
+Description: 将项目推送到GitHub的详细操作指南
+-->
+
 ## 🚀 将项目推送到GitHub
 
 ### 步骤1: 在GitHub上创建新仓库

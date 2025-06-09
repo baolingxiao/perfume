@@ -1,3 +1,10 @@
+/**
+ * 💻 香水工坊 - 主要JavaScript文件
+ * Last updated: 2025-06-09 18:40
+ * Author: Perfume Workshop Team
+ * Description: 项目主要JavaScript逻辑和初始化代码
+ */
+
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'

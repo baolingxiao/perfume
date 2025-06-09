@@ -1,5 +1,12 @@
 # 香水工坊 (Perfume Workshop)
 
+<!-- 
+📚 项目文档
+Last updated: 2025-06-09 18:40
+Author: Perfume Workshop Team
+Description: 香水工坊项目完整介绍文档
+-->
+
 一个优雅的香水工坊网站，展示各种香料和香水调配体验。
 
 ## 🌸 项目简介

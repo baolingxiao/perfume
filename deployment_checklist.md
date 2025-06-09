@@ -1,5 +1,12 @@
 # 香水工坊网站部署检查清单
 
+<!-- 
+🔧 部署指南
+Last updated: 2025-06-09 18:40
+Author: Perfume Workshop Team
+Description: 网站部署问题修复记录和部署指南
+-->
+
 ## 📋 已修复的问题
 
 ### ✅ 1. 路径问题修复

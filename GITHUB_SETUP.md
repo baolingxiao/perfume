@@ -95,3 +95,83 @@ git clone https://github.com/YOUR_USERNAME/perfume-workshop.git
 
 ---
 **恭喜！** 您的香水工坊项目现在已经安全地存储在GitHub上了！🎉 
+
+## 1. GitHub Pages 设置
+
+### 启用 GitHub Pages
+1. 访问你的GitHub仓库：`https://github.com/baolingxiao/perfume`
+2. 点击 `Settings` 标签页
+3. 在左侧菜单中找到 `Pages`
+4. 在 "Source" 部分：
+   - 选择 `Deploy from a branch`
+   - Branch: 选择 `main`
+   - Folder: 选择 `/ (root)`
+5. 点击 `Save` 保存设置
+
+### 自定义域名设置
+1. 在 Pages 设置页面的 "Custom domain" 部分
+2. 输入你的域名：`perfumetalk.in`
+3. 点击 `Save` 保存
+4. 勾选 `Enforce HTTPS`（推荐）
+
+## 2. 域名DNS设置
+
+如果你使用自定义域名 `perfumetalk.in`，需要在你的域名提供商处设置DNS：
+
+### A记录设置：
+```
+Type: A
+Name: @
+Value: 185.199.108.153
+```
+```
+Type: A  
+Name: @
+Value: 185.199.109.153
+```
+```
+Type: A
+Name: @
+Value: 185.199.110.153
+```
+```
+Type: A
+Name: @
+Value: 185.199.111.153
+```
+
+### CNAME记录设置（如果使用www子域名）：
+```
+Type: CNAME
+Name: www
+Value: baolingxiao.github.io
+```
+
+## 3. 验证部署
+
+设置完成后，等待5-10分钟，然后访问：
+- GitHub Pages URL: `https://baolingxiao.github.io/perfume/`
+- 自定义域名: `https://perfumetalk.in/`
+
+## 4. 网站文件说明
+
+- `ingredients_15-30.html` - 主页面
+- `index_15-30.html` - 首页
+- `perfume-workshop/` - Vue.js项目目录
+- `test_paths.html` - 路径测试页面
+
+## 5. 问题排查
+
+如果遇到403或404错误：
+1. 检查GitHub Pages是否正确启用
+2. 确认文件路径正确
+3. 等待DNS传播（可能需要24-48小时）
+4. 检查浏览器缓存
+
+## 6. 本地测试
+
+在项目根目录运行：
+```bash
+python3 -m http.server 8000
+```
+然后访问 `http://localhost:8000/ingredients_15-30.html` 

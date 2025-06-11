@@ -73,43 +73,66 @@
     color: white;
 }
 
-/* 香料网格布局 */
+/* 🎯 统一矩阵网格布局 - 主要修改部分 */
 .ingredients-grid {
+    /* 统一的4列网格布局，不再按分类分组 */
     display: grid;
-    gap: 2rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
     margin-bottom: 3rem;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .ingredient-category {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1.5rem;
+    /* 移除原有的网格设置，让所有香材在同一个网格中 */
+    display: contents;
 }
 
 .ingredient-item {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
-    transition: transform 0.3s;
+    transition: all 0.3s ease;
     cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .ingredient-item:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .ingredient-item img {
     width: 100%;
-    height: 150px;
+    height: 180px;
     object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.ingredient-item:hover img {
+    transform: scale(1.05);
 }
 
 .ingredient-item h3 {
-    padding: 1rem;
+    padding: 15px;
     text-align: center;
     font-weight: 500;
     color: var(--text-color);
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.ingredient-item h3 .en {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: 400;
+    display: block;
+    margin-top: 4px;
 }
 
 /* 已选香料区域 */
@@ -136,6 +159,13 @@
 }
 
 /* 响应式设计 */
+@media (max-width: 1024px) {
+    .ingredients-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+}
+
 @media (max-width: 768px) {
     .ingredients-page {
         padding: 60px 15px 30px;
@@ -150,7 +180,19 @@
         font-size: 0.9rem;
     }
 
-    .ingredient-category {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    .ingredients-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .ingredient-item img {
+        height: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ingredients-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
     }
 } 

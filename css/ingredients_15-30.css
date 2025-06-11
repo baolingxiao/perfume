@@ -74,10 +74,10 @@
 }
 
 /* 🎯 统一矩阵网格布局 - 主要修改部分 */
-.ingredients-grid {
+.ingredients-page .ingredients-grid {
     /* 统一的4列网格布局，不再按分类分组 */
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
     gap: 20px;
     margin-bottom: 3rem;
     max-width: 1000px;
@@ -85,12 +85,12 @@
     margin-right: auto;
 }
 
-.ingredient-category {
+.ingredients-page .ingredient-category {
     /* 移除原有的网格设置，让所有香材在同一个网格中 */
-    display: contents;
+    display: contents !important;
 }
 
-.ingredient-item {
+.ingredients-page .ingredient-item {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border-radius: 12px;
@@ -102,8 +102,8 @@
 }
 
 /* 隐藏筛选后不显示的香材 */
-.ingredient-item.hidden {
-    display: none;
+.ingredients-page .ingredient-item.hidden {
+    display: none !important;
 }
 
 .ingredient-item:hover {

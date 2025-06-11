@@ -101,6 +101,11 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* 隐藏筛选后不显示的香材 */
+.ingredient-item.hidden {
+    display: none;
+}
+
 .ingredient-item:hover {
     transform: translateY(-8px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);

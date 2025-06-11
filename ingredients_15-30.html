@@ -432,13 +432,20 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                 btn.classList.add('active');
                 
                 const type = btn.dataset.type;
-                const categories = document.querySelectorAll('.ingredient-category');
+                const items = document.querySelectorAll('.ingredient-item');
                 
                 if (type === 'all') {
-                    categories.forEach(cat => cat.style.display = 'block');
+                    // 显示所有香材
+                    items.forEach(item => item.classList.remove('hidden'));
                 } else {
-                    categories.forEach(cat => {
-                        cat.style.display = cat.id === type ? 'block' : 'none';
+                    // 根据类型筛选香材
+                    items.forEach(item => {
+                        const category = item.closest('.ingredient-category');
+                        if (category && category.id === type) {
+                            item.classList.remove('hidden');
+                        } else {
+                            item.classList.add('hidden');
+                        }
                     });
                 }
             });
@@ -456,10 +463,16 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                 const items = document.querySelectorAll('.ingredient-item');
                 
                 if (note === 'all') {
-                    items.forEach(item => item.style.display = 'block');
+                    // 显示所有香材
+                    items.forEach(item => item.classList.remove('hidden'));
                 } else {
+                    // 根据香调筛选香材
                     items.forEach(item => {
-                        item.style.display = item.dataset.note === note ? 'block' : 'none';
+                        if (item.dataset.note === note) {
+                            item.classList.remove('hidden');
+                        } else {
+                            item.classList.add('hidden');
+                        }
                     });
                 }
             });

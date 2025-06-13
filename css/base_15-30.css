@@ -11,14 +11,15 @@
 
 /* Linear.app 风格全局变量 */
 :root {
-    --primary-color: #7F56D9;
-    --primary-color-dark: #6E56CF;
-    --background-color: #F6F7F9;
-    --sidebar-bg: #fff;
-    --header-bg: #fff;
+    --primary-color: #232c5c;
+    --primary-color-dark: #232c5c;
+    --background-color: #5b5bb2;
+    --sidebar-bg: #5b5bb2;
+    --header-bg: #232c5c;
     --card-bg: #fff;
-    --text-color: #23272F;
-    --muted-text: #7A7A8C;
+    --card-bottom: #b48be6;
+    --text-color: #232c5c;
+    --muted-text: #232c5c;
     --border-radius: 8px;
     --shadow: 0 2px 8px rgba(0,0,0,0.05);
     --spacing: 24px;
@@ -202,4 +203,9 @@ body {
     .nav-links {
         gap: 1rem;
     }
+}
+
+.main-nav, .linear-header {
+    background: var(--header-bg);
+    color: #fff;
 } 

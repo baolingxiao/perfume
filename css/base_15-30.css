@@ -11,9 +11,11 @@
 
 /* 全局样式 */
 :root {
-    --primary-color: #1976D2;
-    --text-color: #2c3e50;
-    --background-color: #f5f7fa;
+    --primary-color: #232c5c;
+    --text-color: #232c5c;
+    --background-color: #5b5bb2;
+    --card-bg: #fff;
+    --card-bottom: #b48be6;
 }
 
 * {
@@ -24,14 +26,14 @@
 }
 
 body {
-    background: linear-gradient(135deg, var(--background-color) 0%, #c3cfe2 100%);
+    background: var(--background-color);
     min-height: 100vh;
 }
 
 /* 导航栏样式 */
 .main-nav {
     background-color: var(--primary-color);
-    color: white;
+    color: #fff;
     position: fixed;
     top: 0;
     left: 0;
@@ -84,11 +86,11 @@ body {
 
 .btn-primary {
     background-color: var(--primary-color);
-    color: white;
+    color: #fff;
 }
 
 .btn-primary:hover {
-    background-color: #1565C0;
+    background-color: #1a2247;
 }
 
 .btn-outline {
@@ -98,7 +100,7 @@ body {
 
 .btn-outline:hover {
     background-color: var(--primary-color);
-    color: white;
+    color: #fff;
 }
 
 /* 通用响应式设计 */

@@ -15,12 +15,13 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 80px 20px 40px;
+    background: var(--background-color);
 }
 
 .page-title {
     text-align: center;
     font-size: 2.5rem;
-    color: var(--text-color);
+    color: #fff;
     margin-bottom: 2rem;
     font-weight: 300;
 }
@@ -91,7 +92,7 @@
 }
 
 .ingredients-page .ingredient-item {
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--card-bg);
     backdrop-filter: blur(10px);
     border-radius: 12px;
     overflow: hidden;
@@ -99,6 +100,7 @@
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 32px solid var(--card-bottom);
 }
 
 /* 隐藏筛选后不显示的香材 */

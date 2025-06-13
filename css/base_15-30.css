@@ -9,25 +9,111 @@
    通用样式重置和基础设置
    ========================================================================== */
 
-/* 全局样式 */
+/* Linear.app 风格全局变量 */
 :root {
-    --primary-color: #232c5c;
-    --text-color: #232c5c;
-    --background-color: #5b5bb2;
+    --primary-color: #7F56D9;
+    --primary-color-dark: #6E56CF;
+    --background-color: #F6F7F9;
+    --sidebar-bg: #fff;
+    --header-bg: #fff;
     --card-bg: #fff;
-    --card-bottom: #b48be6;
+    --text-color: #23272F;
+    --muted-text: #7A7A8C;
+    --border-radius: 8px;
+    --shadow: 0 2px 8px rgba(0,0,0,0.05);
+    --spacing: 24px;
+    --font-family: 'Inter', 'SF Pro', 'Helvetica Neue', Arial, system-ui, sans-serif;
 }
 
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
-    font-family: 'Noto Sans SC', sans-serif;
+    font-family: var(--font-family);
 }
 
 body {
     background: var(--background-color);
+    color: var(--text-color);
     min-height: 100vh;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* 左侧导航栏 */
+.linear-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background: var(--sidebar-bg);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing) 0;
+    z-index: 100;
+}
+
+/* 顶部Header */
+.linear-header {
+    position: fixed;
+    left: 220px;
+    right: 0;
+    top: 0;
+    height: 64px;
+    background: var(--header-bg);
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    padding: 0 var(--spacing);
+    z-index: 99;
+}
+
+/* 主内容区 */
+.linear-main {
+    margin-left: 220px;
+    margin-top: 64px;
+    padding: var(--spacing);
+}
+
+/* 卡片风格 */
+.linear-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: var(--spacing);
+    margin-bottom: var(--spacing);
+}
+
+/* 按钮 */
+.linear-btn {
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.6em 1.4em;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.linear-btn:hover {
+    background: var(--primary-color-dark);
+}
+
+/* 统一间距 */
+.mt-2 { margin-top: 16px; }
+.mt-4 { margin-top: 32px; }
+.mb-2 { margin-bottom: 16px; }
+.mb-4 { margin-bottom: 32px; }
+
+/* 极简滚动条 */
+::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #e0e0e0;
+    border-radius: 4px;
 }
 
 /* 导航栏样式 */

@@ -11,19 +11,18 @@
 
 /* 页面整体布局 */
 .ingredients-page {
-    padding-top: 80px;
+    background: var(--background-color);
+    padding: var(--spacing);
     max-width: 1200px;
     margin: 0 auto;
-    padding: 80px 20px 40px;
-    background: var(--background-color);
+    padding-top: 88px;
 }
 
 .page-title {
-    text-align: center;
-    font-size: 2.5rem;
-    color: #fff;
-    margin-bottom: 2rem;
-    font-weight: 300;
+    color: var(--text-color);
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing);
 }
 
 /* 香料类型选择器样式 */
@@ -76,11 +75,10 @@
 
 /* 🎯 统一矩阵网格布局 - 主要修改部分 */
 .ingredients-page .ingredients-grid {
-    /* 统一的4列网格布局，不再按分类分组 */
     display: grid !important;
     grid-template-columns: repeat(4, 1fr) !important;
-    gap: 20px;
-    margin-bottom: 3rem;
+    gap: var(--spacing);
+    margin-bottom: var(--spacing);
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
@@ -93,14 +91,15 @@
 
 .ingredients-page .ingredient-item {
     background: var(--card-bg);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: box-shadow 0.2s, transform 0.2s;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-bottom: 32px solid var(--card-bottom);
+    border: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 /* 隐藏筛选后不显示的香材 */
@@ -109,28 +108,25 @@
 }
 
 .ingredient-item:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 16px rgba(127,86,217,0.10);
+    transform: translateY(-2px) scale(1.01);
 }
 
 .ingredient-item img {
     width: 100%;
-    height: 180px;
+    height: 140px;
     object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.ingredient-item:hover img {
-    transform: scale(1.05);
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
 }
 
 .ingredient-item h3 {
-    padding: 15px;
+    padding: 18px 0 12px 0;
     text-align: center;
     font-weight: 500;
     color: var(--text-color);
     margin: 0;
-    font-size: 1rem;
+    font-size: 1.1rem;
     line-height: 1.4;
 }
 
@@ -144,18 +140,17 @@
 
 /* 已选香料区域 */
 .selected-ingredients {
-    background: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(10px);
-    border-radius: 10px;
-    padding: 2rem;
-    margin-top: 3rem;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: var(--spacing);
+    margin-top: var(--spacing);
 }
 
 .selected-ingredients h2 {
-    text-align: center;
-    margin-bottom: 1.5rem;
     color: var(--text-color);
-    font-weight: 300;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
 }
 
 .selected-list {
@@ -175,25 +170,17 @@
 
 @media (max-width: 768px) {
     .ingredients-page {
-        padding: 60px 15px 30px;
+        padding: 16px;
     }
-
     .page-title {
-        font-size: 2rem;
+        font-size: 1.3rem;
     }
-
-    .type-btn, .note-btn {
-        padding: 0.6rem 1rem;
-        font-size: 0.9rem;
-    }
-
     .ingredients-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
+        gap: 12px;
     }
-    
     .ingredient-item img {
-        height: 150px;
+        height: 100px;
     }
 }
 

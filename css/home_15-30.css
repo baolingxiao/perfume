@@ -9,28 +9,28 @@
    主页样式定义
    ========================================================================== */
 
-/* 主页样式 */
+/* 主页整体布局 */
 .home {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    padding-top: 80px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0;
     background: var(--background-color);
 }
 
 .entrance-animation {
-    text-align: center;
-    margin-bottom: 4rem;
+    margin: 0;
+    padding: 0;
 }
 
 .title {
-    font-size: 3.5rem;
-    color: #fff;
-    margin-bottom: 2rem;
-    font-weight: 300;
+    font-size: 2.2rem;
+    color: var(--text-color);
+    font-weight: 600;
+    margin-bottom: var(--spacing);
+    margin-top: var(--spacing);
 }
 
 /* 香水瓶样式 */
@@ -64,8 +64,14 @@
 }
 
 .main-content {
-    text-align: center;
-    padding: 2rem;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--spacing);
+}
+
+.linear-card {
+    margin-bottom: var(--spacing);
 }
 
 .main-content h2 {
@@ -78,16 +84,15 @@
 .action-buttons {
     display: flex;
     gap: 1rem;
-    justify-content: center;
+    margin-top: var(--spacing);
 }
 
 /* 响应式设计 */
-@media (max-width: 768px) {
-    .title {
-        font-size: 2.5rem;
+@media (max-width: 900px) {
+    .main-content {
+        padding: 16px;
     }
-
-    .action-buttons {
-        flex-direction: column;
+    .title {
+        font-size: 1.5rem;
     }
 } 

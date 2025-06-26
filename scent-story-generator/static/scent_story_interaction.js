@@ -249,11 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "floral": "花香调",
       "woody": "木香调",
       "fruity": "果香调",
-      "citrus": "柑橘调",
-      "spicy": "辛辣调",
-      "oriental": "东方调",
-      "fresh": "清新调",
-      "aquatic": "水香调"
+      "oriental": "东方调"
     };
     return scentMap[scentId] || scentId;
   }

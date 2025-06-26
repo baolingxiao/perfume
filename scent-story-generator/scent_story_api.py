@@ -127,11 +127,7 @@ def build_prompt(main_scent, accents):
         "floral": "花之精灵",
         "woody": "森林长老",
         "fruity": "果园信使",
-        "citrus": "阳光守护者",
-        "spicy": "火焰祭司",
-        "oriental": "沙漠旅者",
-        "fresh": "溪流精灵",
-        "aquatic": "海洋歌者"
+        "oriental": "沙漠旅者"
     }
     
     # 映射主香调到精神象征
@@ -139,11 +135,7 @@ def build_prompt(main_scent, accents):
         "floral": "温柔与优雅",
         "woody": "沉稳与力量",
         "fruity": "活力与喜悦",
-        "citrus": "清新与希望",
-        "spicy": "热情与冒险",
-        "oriental": "神秘与诱惑",
-        "fresh": "纯净与自然",
-        "aquatic": "宁静与深邃"
+        "oriental": "神秘与诱惑"
     }
     
     # 映射辅料到情感标签

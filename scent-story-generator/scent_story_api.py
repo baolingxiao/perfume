@@ -3,15 +3,28 @@ from huggingface_hub import InferenceClient
 import os
 import time
 import threading
+import requests
+import json
 
 app = Flask(__name__, static_folder='static')
 
-# 配置Hugging Face客户端
+# 配置API密钥
 HF_API_KEY = os.environ.get('HF_API_KEY')
-client = InferenceClient(
-    model="mistralai/Mistral-7B-Instruct-v0.2",
-    token=HF_API_KEY
-)
+DEEPSEEK_API_KEY = os.environ.get('DEEPSEEK_API_KEY')
+
+# 初始化Hugging Face客户端
+hf_client = None
+if HF_API_KEY:
+    try:
+        hf_client = InferenceClient(
+            model="mistralai/Mistral-7B-Instruct-v0.2",
+            token=HF_API_KEY
+        )
+    except Exception as e:
+        print(f"Hugging Face客户端初始化失败: {e}")
+
+# DeepSeek API配置
+DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
 # 内存缓存（带过期机制）
 story_cache = {}
@@ -42,13 +55,13 @@ def generate_story():
         # 频率限制检查
         current_time = time.time()
         if user_ip in user_requests:
-            requests = [t for t in user_requests[user_ip] if current_time - t < REQUEST_WINDOW]
-            if len(requests) >= REQUEST_LIMIT:
-                remaining_time = REQUEST_WINDOW - (current_time - min(requests))
+            requests_list = [t for t in user_requests[user_ip] if current_time - t < REQUEST_WINDOW]
+            if len(requests_list) >= REQUEST_LIMIT:
+                remaining_time = REQUEST_WINDOW - (current_time - min(requests_list))
                 return jsonify({
                     "error": f"请求频率过快，请等待{int(remaining_time/60)}分钟后再试"
                 }), 429
-            user_requests[user_ip] = requests
+            user_requests[user_ip] = requests_list
         else:
             user_requests[user_ip] = []
         
@@ -58,12 +71,13 @@ def generate_story():
         data = request.json
         main_scent = data.get('mainScent')
         accents = data.get('accents', [])
+        ai_provider = data.get('aiProvider', 'huggingface')  # 默认使用Hugging Face
         
         if not main_scent:
             return jsonify({"error": "请选择主香调"}), 400
         
         # 构建缓存键
-        combo_key = f"{main_scent}_{'_'.join(sorted(accents))}"
+        combo_key = f"{ai_provider}_{main_scent}_{'_'.join(sorted(accents))}"
         
         # 检查预生成内容池
         if combo_key in PRE_GENERATED_POOL:
@@ -76,17 +90,11 @@ def generate_story():
         # 构建提示词
         prompt = build_prompt(main_scent, accents)
         
-        # 调用Hugging Face API
-        response = client.text_generation(
-            prompt,
-            max_new_tokens=300,
-            temperature=0.7,
-            top_p=0.9,
-            wait_for_model=True
-        )
-        
-        # 处理响应
-        story = response.strip()
+        # 根据选择的AI提供商生成故事
+        if ai_provider == 'deepseek':
+            story = generate_with_deepseek(prompt)
+        else:
+            story = generate_with_huggingface(prompt)
         
         # 内容过滤
         filtered_story = filter_content(story)
@@ -102,6 +110,7 @@ def generate_story():
             "content": filtered_story,
             "scent": main_scent,
             "accents": accents,
+            "ai_provider": ai_provider,
             "generated_at": int(current_time)
         }
         
@@ -120,6 +129,50 @@ def generate_story():
             "error": "生成故事失败，请稍后再试",
             "details": str(e)
         }), 500
+
+def generate_with_huggingface(prompt):
+    """使用Hugging Face API生成故事"""
+    if not hf_client:
+        raise Exception("Hugging Face API未配置或初始化失败")
+    
+    response = hf_client.text_generation(
+        prompt,
+        max_new_tokens=300,
+        temperature=0.7,
+        top_p=0.9,
+        wait_for_model=True
+    )
+    return response.strip()
+
+def generate_with_deepseek(prompt):
+    """使用DeepSeek API生成故事"""
+    if not DEEPSEEK_API_KEY:
+        raise Exception("DeepSeek API密钥未配置")
+    
+    headers = {
+        "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    data = {
+        "model": "deepseek-chat",
+        "messages": [
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        "temperature": 0.7,
+        "max_tokens": 300
+    }
+    
+    response = requests.post(DEEPSEEK_API_URL, headers=headers, json=data)
+    
+    if response.status_code != 200:
+        raise Exception(f"DeepSeek API请求失败: {response.status_code} - {response.text}")
+    
+    result = response.json()
+    return result['choices'][0]['message']['content'].strip()
 
 def build_prompt(main_scent, accents):
     # 映射主香调到守护者角色

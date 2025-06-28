@@ -31,7 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // 状态变量
   let selectedMainScent = null;
-  const selectedAccents = new Set();
+  let selectedAccents = [];
+  let selectedAIProvider = 'huggingface'; // 默认选择美国AI
   let lastGeneratedTime = 0;
   const GENERATION_COOLDOWN = 600000; // 10分钟
   
@@ -50,9 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
       button.classList.toggle('scent-btn-active');
       
       if (button.classList.contains('scent-btn-active')) {
-        selectedAccents.add(accent.id);
+        selectedAccents.push(accent.id);
       } else {
-        selectedAccents.delete(accent.id);
+        selectedAccents = selectedAccents.filter(id => id !== accent.id);
       }
     });
     
@@ -96,7 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         body: JSON.stringify({
           mainScent: selectedMainScent,
-          accents: Array.from(selectedAccents)
+          accents: selectedAccents,
+          aiProvider: selectedAIProvider
         })
       });
       

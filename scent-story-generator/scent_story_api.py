@@ -540,6 +540,110 @@ FLORAL_INGREDIENTS = {
     }
 }
 
+# 木香类感官特征数据
+WOODY_INGREDIENTS = {
+    "cedarwood": {
+        "name": "雪松",
+        "english": "Cedarwood",
+        "olfactory": "冷冽树脂感",
+        "tail_note": "干燥木屑尾韵",
+        "visual": "裂开的琥珀/垂直光柱",
+        "impression": ["冷冽", "沉稳", "自然"],
+        "volatility": "后调",
+        "duration": "6-12小时+"
+    },
+    "sandalwood": {
+        "name": "檀香",
+        "english": "Sandalwood",
+        "olfactory": "无瑕的奶香木质",
+        "tail_note": "冥想焚香的禅意余烟",
+        "visual": "寺庙梁柱流淌的金漆",
+        "impression": ["奶香", "宁静", "禅意"],
+        "volatility": "后调",
+        "duration": "6-12小时+"
+    },
+    "vetiver": {
+        "name": "岩兰草",
+        "english": "Vetiver",
+        "olfactory": "潮湿泥土的烟熏根茎",
+        "tail_note": "皮革包裹的野性回甘",
+        "visual": "雨林深处的腐殖层",
+        "impression": ["泥土", "烟熏", "野性"],
+        "volatility": "后调",
+        "duration": "6-12小时+"
+    },
+    "pine": {
+        "name": "松木",
+        "english": "Pine",
+        "olfactory": "圣诞树的新鲜针叶香",
+        "tail_note": "松脂黏连的透明感",
+        "visual": "雪山脚下的针叶林",
+        "impression": ["清新", "树脂", "自然"],
+        "volatility": "前调",
+        "duration": "0.5-2小时"
+    },
+    "guaiac_wood": {
+        "name": "古巴香脂木",
+        "english": "Guaiac Wood",
+        "olfactory": "烟熏培根的油脂木质",
+        "tail_note": "红糖熬煮的焦甜感",
+        "visual": "殖民时期老药柜",
+        "impression": ["烟熏", "焦甜", "复古"],
+        "volatility": "中调",
+        "duration": "2-6小时"
+    },
+    "mysore_sandalwood": {
+        "name": "印度檀香",
+        "english": "Mysore Sandalwood",
+        "olfactory": "奶油质地的丝滑木香",
+        "tail_note": "瑜伽垫上的体温余韵",
+        "visual": "迈索尔皇宫的雕花木柱",
+        "impression": ["丝滑", "温暖", "沉静"],
+        "volatility": "后调",
+        "duration": "6-12小时+"
+    },
+    "oakmoss": {
+        "name": "橡木苔",
+        "english": "Oakmoss",
+        "olfactory": "潮湿石壁的绿霉气息",
+        "tail_note": "古董书籍的陈旧纸香",
+        "visual": "哥特教堂的湿壁画",
+        "impression": ["潮湿", "古朴", "神秘"],
+        "volatility": "中调",
+        "duration": "2-6小时"
+    },
+    "patchouli": {
+        "name": "广藿香",
+        "english": "Patchouli",
+        "olfactory": "霉叶发酵的药感",
+        "tail_note": "巧克力般的醇厚底韵",
+        "visual": "古董木箱的铜锁绿锈",
+        "impression": ["药感", "醇厚", "深邃"],
+        "volatility": "中调",
+        "duration": "2-6小时"
+    },
+    "oud": {
+        "name": "乌木/沉香",
+        "english": "Oud",
+        "olfactory": "蜂巢蜜炼的焦苦",
+        "tail_note": "伤口结痂的动物腥臊",
+        "visual": "滴入树脂的炭火余烬",
+        "impression": ["焦苦", "浓郁", "神秘"],
+        "volatility": "后调",
+        "duration": "6-12小时+"
+    },
+    "iso_e_super": {
+        "name": "Iso E Super",
+        "english": "Iso E Super",
+        "olfactory": "极简的矿物粉尘感",
+        "tail_note": "肌肤升温后的伪体香",
+        "visual": "磨砂玻璃上的指纹",
+        "impression": ["极简", "贴肤", "自然"],
+        "volatility": "后调",
+        "duration": "6-12小时+"
+    }
+}
+
 @app.route('/')
 def index():
     return app.send_static_file('scent_story_generator.html')

@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from huggingface_hub import InferenceClient
+# from huggingface_hub import InferenceClient  # 暂时注释掉Hugging Face
 import os
 import time
 import threading
@@ -9,19 +9,19 @@ import json
 app = Flask(__name__, static_folder='static')
 
 # 配置API密钥
-HF_API_KEY = os.environ.get('HF_API_KEY')
-DEEPSEEK_API_KEY = os.environ.get('DEEPSEEK_API_KEY')
+# HF_API_KEY = os.environ.get('HF_API_KEY')  # 暂时注释掉
+DEEPSEEK_API_KEY = "sk-c6e6960c80184e3cabfa7f8bf9aaa042"  # 直接设置DeepSeek API密钥
 
-# 初始化Hugging Face客户端
-hf_client = None
-if HF_API_KEY:
-    try:
-        hf_client = InferenceClient(
-            model="mistralai/Mistral-7B-Instruct-v0.2",
-            token=HF_API_KEY
-        )
-    except Exception as e:
-        print(f"Hugging Face客户端初始化失败: {e}")
+# 初始化Hugging Face客户端（暂时禁用）
+# hf_client = None
+# if HF_API_KEY:
+#     try:
+#         hf_client = InferenceClient(
+#             model="mistralai/Mistral-7B-Instruct-v0.2",
+#             token=HF_API_KEY
+#         )
+#     except Exception as e:
+#         print(f"Hugging Face客户端初始化失败: {e}")
 
 # DeepSeek API配置
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
@@ -644,6 +644,154 @@ WOODY_INGREDIENTS = {
     }
 }
 
+# 香料搭配兼容性表
+PAIRING_COMPATIBILITY = {
+    # 果香 × 花香
+    ("bergamot", "jasmine"): {
+        "type": "recommended",
+        "logic": "香柠檬的酸涩柑橘皮与茉莉的吲哚甜香形成酸甜对比，回甘与乳脂尾韵融合为清新白花柑橘调。"
+    },
+    ("bergamot", "hyacinth"): {
+        "type": "caution",
+        "logic": "风信子浓烈的蓝紫色花香会覆盖香柠檬的明亮感，气味易杂乱。"
+    },
+    ("peach", "damask_rose"): {
+        "type": "recommended",
+        "logic": "桃子的蜜酿甜香与玫瑰的蜂蜜腌渍花瓣味叠加，形成浓郁甜暖的果香花香调，尾韵的发酵感与微醺感互补。"
+    },
+    ("peach", "lily_of_valley"): {
+        "type": "caution",
+        "logic": "桃子的厚重甜香与铃兰的清冽青绿感冲突，质地一暖一冷易割裂。"
+    },
+    ("grape", "freesia"): {
+        "type": "recommended",
+        "logic": "葡萄的水晶甜香与小苍兰的雨后清透花香结合，木质尾韵与梨汁水润感形成通透的果香花束调。"
+    },
+    ("grape", "tuberose"): {
+        "type": "caution",
+        "logic": "夜来香近乎腐败的浓郁甜腻会掩盖葡萄的清爽感，气味过腻。"
+    },
+    ("blood_orange", "orange_blossom"): {
+        "type": "recommended",
+        "logic": "血橙的浆果酸甜与橙花的洁净皂感中和，金属腥甜与新娘捧花的幸福微甜形成奇妙的酸甜皂感调。"
+    },
+    ("blood_orange", "gardenia"): {
+        "type": "caution",
+        "logic": "栀子花的奶油馥郁与血橙的金属感冲突，尾韵的青涩与腥甜难以融合。"
+    },
+    # 果香 × 木香
+    ("fig", "sandalwood"): {
+        "type": "recommended",
+        "logic": "无花果的乳脂奶香与檀香的无瑕奶香木质叠加，干燥树叶绿意与禅意余烟形成温暖绵长的木质奶香调。"
+    },
+    ("fig", "oud"): {
+        "type": "caution",
+        "logic": "乌木的焦苦动物腥臊会破坏无花果的奶甜感，气味攻击性过强。"
+    },
+    ("grapefruit", "cedarwood"): {
+        "type": "recommended",
+        "logic": "柚子的微苦清凉与雪松的冷冽树脂感呼应，薄荷尾韵与干燥木屑形成清冽的木质柑橘调，适合秋冬清寒氛围。"
+    },
+    ("grapefruit", "vetiver"): {
+        "type": "caution",
+        "logic": "岩兰草的潮湿泥土烟熏味与柚子的清新感矛盾，尾韵的野性与清凉无法调和。"
+    },
+    ("cherry", "mysore_sandalwood"): {
+        "type": "recommended",
+        "logic": "樱桃的糖渍甜腻与印度檀香的奶油丝滑木香结合，酒醇厚韵与体温余韵形成甜暖绵密的美食木质调。"
+    },
+    ("cherry", "patchouli"): {
+        "type": "caution",
+        "logic": "广藿香的霉叶药感与樱桃的甜腻冲突，尾韵的巧克力醇厚与糖渍感易显廉价。"
+    },
+    ("green_apple", "iso_e_super"): {
+        "type": "recommended",
+        "logic": "青苹果的青绿酸爽与 Iso E Super 的矿物粉尘感融合，蜡质清脆感与伪体香形成干净利落的少年感香气。"
+    },
+    ("green_apple", "guaiac_wood"): {
+        "type": "caution",
+        "logic": "古巴香脂木的烟熏培根油脂味与青苹果的青涩感完全不搭，气味像 '油烟 + 生果'。"
+    },
+    # 花香 × 木香
+    ("jasmine", "cedarwood"): {
+        "type": "recommended",
+        "logic": "茉莉的乳脂白花与雪松的冷冽树脂形成暖甜与冷冽的反差感，尾韵的烛泪与木屑交织出神秘清冷的白花木质调。"
+    },
+    ("jasmine", "vetiver"): {
+        "type": "caution",
+        "logic": "岩兰草的泥土腥气会污染茉莉的洁净感，气味像潮湿花坛与过期香水的混合。"
+    },
+    ("damask_rose", "oud"): {
+        "type": "recommended",
+        "logic": "玫瑰的蜂蜜花瓣与乌木的焦苦蜂巢蜜形成 '甜腻 + 焦苦' 的重口味组合，葡萄酒窖微醺感与动物腥臊碰撞出东方神秘调（需专业调香师把控比例）。"
+    },
+    ("damask_rose", "oakmoss"): {
+        "type": "caution",
+        "logic": "橡木苔的潮湿绿霉味会破坏玫瑰的甜美，尾韵的陈旧纸香与微醺感格格不入。"
+    },
+    ("lily_of_valley", "sandalwood"): {
+        "type": "recommended",
+        "logic": "铃兰的初雪清新与檀香的奶香木质融合，珍珠串般的洁净感与禅意余烟形成温柔干净的白花木质调，适合线性香。"
+    },
+    ("lily_of_valley", "patchouli"): {
+        "type": "caution",
+        "logic": "广藿香的药感霉味彻底掩盖铃兰的清冽，气味浑浊且压抑。"
+    },
+    ("orange_blossom", "mysore_sandalwood"): {
+        "type": "recommended",
+        "logic": "橙花的洁净皂感与印度檀香的奶油木香结合，新娘捧花的幸福甜与瑜伽垫体温感形成治愈系的皂感奶香调。"
+    },
+    ("orange_blossom", "guaiac_wood"): {
+        "type": "caution",
+        "logic": "古巴香脂木的烟熏焦甜与橙花的皂感冲突，气味像 '香皂 + 烧烤'，极度违和。"
+    }
+}
+
+# 合规审核规则
+PERFUME_BANNED_TERMS = [
+    # 感官负面词汇
+    "血腥", "腥气", "腐坏", "腐烂", "变质", "酸败", "刺鼻", "恶臭", "怪异", "恶心",
+    # 过度夸张或绝对化表述
+    "绝对安全", "医疗效果", "治愈", "杀菌", "抗癌", "包治百病",
+    # 宗教相关
+    "上帝", "耶稣", "佛", "菩萨", "十字架", "教堂", "清真寺", "庙宇", "宗教仪式",
+    # 政治相关
+    "独裁", "专政", "革命", "暴动", "国旗", "国徽", "政党",
+    # 伦理与道德敏感
+    "低俗", "色情", "淫秽", "滥交", "毒品", "大麻", "迷幻",
+    # 恐怖与暴力
+    "死亡", "尸臭", "谋杀", "凶器", "血腥玛丽", "断头台",
+    # 疾病与医疗
+    "癌症", "肿瘤", "艾滋病", "病毒", "病菌", "尸体", "腐烂",
+    # 种族与歧视
+    "黑鬼", "黄种人", "白种人", "歧视", "偏见", "杂种",
+    # 其他敏感
+    "传销", "赌博", "自杀", "自残", "恐怖袭击", "爆炸", "武器"
+]
+
+# 合规审核函数
+
+def is_story_compliant(story):
+    """
+    检查生成的故事内容是否合规。
+    1. 不包含敏感词
+    2. 不包含绝对化、医疗暗示等违规描述
+    """
+    for term in PERFUME_BANNED_TERMS:
+        if term in story:
+            return False, f"内容包含敏感词：{term}"
+    # 绝对化表述
+    absolute_words = ["最", "绝对", "完美"]
+    for word in absolute_words:
+        if f"{word}" in story:
+            return False, f"内容包含绝对化表述：{word}"
+    # 医疗暗示
+    medical_words = ["缓解", "治疗", "改善", "保健", "治愈", "抗癌", "杀菌"]
+    for word in medical_words:
+        if word in story:
+            return False, f"内容包含医疗暗示：{word}"
+    return True, "合规"
+
 @app.route('/')
 def index():
     return app.send_static_file('scent_story_generator.html')
@@ -673,7 +821,7 @@ def generate_story():
         data = request.json
         main_scent = data.get('mainScent')
         accents = data.get('accents', [])
-        ai_provider = data.get('aiProvider', 'huggingface')  # 默认使用Hugging Face
+        ai_provider = data.get('aiProvider', 'deepseek')  # 默认使用DeepSeek
         
         if not main_scent:
             return jsonify({"error": "请选择主香调"}), 400
@@ -692,11 +840,11 @@ def generate_story():
         # 构建提示词
         prompt = build_prompt(main_scent, accents)
         
-        # 根据选择的AI提供商生成故事
-        if ai_provider == 'deepseek':
-            story = generate_with_deepseek(prompt)
-        else:
+        # 根据选择的AI提供商生成故事（现在主要使用DeepSeek）
+        if ai_provider == 'huggingface':
             story = generate_with_huggingface(prompt)
+        else:
+            story = generate_with_deepseek(prompt)
         
         # 内容过滤
         filtered_story = filter_content(story)
@@ -734,17 +882,18 @@ def generate_story():
 
 def generate_with_huggingface(prompt):
     """使用Hugging Face API生成故事"""
-    if not hf_client:
-        raise Exception("Hugging Face API未配置或初始化失败")
+    # if not hf_client:
+    #     raise Exception("Hugging Face API未配置或初始化失败")
     
-    response = hf_client.text_generation(
-        prompt,
-        max_new_tokens=300,
-        temperature=0.7,
-        top_p=0.9,
-        wait_for_model=True
-    )
-    return response.strip()
+    # response = hf_client.text_generation(
+    #     prompt,
+    #     max_new_tokens=300,
+    #     temperature=0.7,
+    #     top_p=0.9,
+    #     wait_for_model=True
+    # )
+    # return response.strip()
+    return "Hugging Face API未配置或初始化失败"
 
 def generate_with_deepseek(prompt):
     """使用DeepSeek API生成故事"""
@@ -826,9 +975,9 @@ def build_prompt(main_scent, accents):
     return "\n".join(prompt_parts)
 
 def filter_content(content):
-    for term in BANNED_TERMS:
-        if term in content:
-            return "抱歉，生成的内容包含敏感信息，无法展示。"
+    compliant, reason = is_story_compliant(content)
+    if not compliant:
+        return f"抱歉，生成的内容不合规：{reason}"
     return content
 
 def save_to_pre_generated(key, data):

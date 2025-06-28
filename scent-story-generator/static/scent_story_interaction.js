@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 状态变量
   let selectedMainScent = null;
   let selectedAccents = [];
-  let selectedAIProvider = 'huggingface'; // 默认选择美国AI
+  let selectedAIProvider = 'deepseek'; // 默认选择中国AI
   let lastGeneratedTime = 0;
   const GENERATION_COOLDOWN = 600000; // 10分钟
   
@@ -68,6 +68,20 @@ document.addEventListener('DOMContentLoaded', () => {
       selectedMainScent = btn.dataset.scent;
     });
   });
+  
+  // AI提供商选择器事件
+  document.querySelectorAll('.ai-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.ai-btn').forEach(b => {
+        b.classList.remove('ring-2', 'ring-primary');
+      });
+      btn.classList.add('ring-2', 'ring-primary');
+      selectedAIProvider = btn.dataset.ai;
+    });
+  });
+  
+  // 默认选中DeepSeek
+  document.querySelector('[data-ai="deepseek"]').classList.add('ring-2', 'ring-primary');
   
   // 生成按钮事件
   generateBtn.addEventListener('click', async () => {

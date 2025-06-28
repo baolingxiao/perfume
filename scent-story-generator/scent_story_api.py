@@ -336,6 +336,210 @@ FRUITY_INGREDIENTS = {
     }
 }
 
+# 花香类感官特征数据
+FLORAL_INGREDIENTS = {
+    "jasmine": {
+        "name": "茉莉",
+        "english": "Jasmine",
+        "olfactory": "星夜绽放的吲哚腥甜",
+        "tail_note": "茶汤浸泡后的清雅",
+        "visual": "月光下的瓷白花簪",
+        "impression": ["浪漫", "优雅", "神秘"],
+        "volatility": "中调",
+        "duration": "2-6小时"
+    },
+    "tuberose": {
+        "name": "夜来香",
+        "english": "Tuberose",
+        "olfactory": "乳脂般的丰腴白花",
+        "tail_note": "近乎腐败的浓郁甜腻",
+        "visual": "融化的奶油烛泪",
+        "impression": ["丰腴", "浓郁", "性感"],
+        "volatility": "中调",
+        "duration": "2-6小时"
+    },
+    "orange_blossom": {
+        "name": "橙花",
+        "english": "Orange Blossom",
+        "olfactory": "苦橙叶的洁净皂感",
+        "tail_note": "新娘捧花的幸福微甜",
+        "visual": "蕾丝婚纱的织纹",
+        "impression": ["洁净", "清新", "温柔"],
+        "volatility": "前调",
+        "duration": "0.5-2小时"
+    },
+    "magnolia": {
+        "name": "白兰花",
+        "english": "Magnolia",
+        "olfactory": "古典梳妆台的脂粉花香",
+        "tail_note": "青柠檬皮的清爽中和",
+        "visual": "民国月份牌上的手绘花卉",
+        "impression": ["古典", "脂粉", "雅致"],
+        "volatility": "前调",
+        "duration": "0.5-2小时"
+    },
+    "gardenia": {
+        "name": "栀子花",
+        "english": "Gardenia",
+        "olfactory": "热带夏夜的奶油馥郁",
+        "tail_note": "绿叶掐断的汁液青涩",
+        "visual": "别在耳后的鹅黄油滴",
+        "impression": ["馥郁", "奶油", "夏夜"],
+        "volatility": "中调",
+        "duration": "2-6小时"
+    },
+    "iris": {
+        "name": "鸢尾花",
+        "english": "Iris",
+        "olfactory": "紫根研磨的粉质感",
+        "tail_note": "天鹅绒幕布般的奢华",
+        "visual": "覆霜的紫罗兰矿石",
+        "impression": ["粉感", "奢华", "神秘"],
+        "volatility": "中调",
+        "duration": "2-6小时"
+    },
+    "damask_rose": {
+        "name": "大马士革玫瑰",
+        "english": "Damask Rose",
+        "olfactory": "蜂蜜腌渍的深红花瓣",
+        "tail_note": "葡萄酒窖的微醺感",
+        "visual": "波斯细密画中的重瓣玫瑰",
+        "impression": ["甜蜜", "浓郁", "浪漫"],
+        "volatility": "中调",
+        "duration": "2-6小时"
+    },
+    "turkish_rose": {
+        "name": "土耳其玫瑰",
+        "english": "Turkish Rose",
+        "olfactory": "干燥花苞的辛香粉感",
+        "tail_note": "玫瑰果茶的酸甜尾韵",
+        "visual": "奥斯曼宫殿的彩釉瓷砖",
+        "impression": ["辛香", "粉感", "温暖"],
+        "volatility": "中调",
+        "duration": "2-6小时"
+    },
+    "bulgarian_rose": {
+        "name": "保加利亚玫瑰",
+        "english": "Bulgarian Rose",
+        "olfactory": "晨露中的新鲜玫瑰",
+        "tail_note": "青茎折断的汁液绿意",
+        "visual": "水晶瓶中的露水玫瑰",
+        "impression": ["新鲜", "清新", "纯净"],
+        "volatility": "中调",
+        "duration": "2-6小时"
+    },
+    "lily_of_valley": {
+        "name": "铃兰",
+        "english": "Lily of the Valley",
+        "olfactory": "初雪覆盖的铃铛小花",
+        "tail_note": "茎叶汁液的青绿锐利",
+        "visual": "新娘头纱上的珍珠串",
+        "impression": ["清冽", "纯净", "雅致"],
+        "volatility": "中调",
+        "duration": "2-6小时"
+    },
+    "violet": {
+        "name": "紫罗兰",
+        "english": "Violet",
+        "olfactory": "糖霜包裹的复古粉香",
+        "tail_note": "鸢尾根的尘土粉感",
+        "visual": "老式香粉盒里的干花",
+        "impression": ["粉香", "复古", "温婉"],
+        "volatility": "中调",
+        "duration": "2-6小时"
+    },
+    "freesia": {
+        "name": "小苍兰",
+        "english": "Freesia",
+        "olfactory": "雨后花园的透明花香",
+        "tail_note": "梨汁般的清甜水润",
+        "visual": "玻璃花瓶中的水光折射",
+        "impression": ["清透", "水润", "清新"],
+        "volatility": "前调",
+        "duration": "0.5-2小时"
+    },
+    "hyacinth": {
+        "name": "风信子",
+        "english": "Hyacinth",
+        "olfactory": "浓烈到刺鼻的蓝紫色花香",
+        "tail_note": "根茎汁液的腥绿感",
+        "visual": "拜占庭马赛克拼花",
+        "impression": ["浓烈", "馥郁", "神秘"],
+        "volatility": "前调",
+        "duration": "0.5-2小时"
+    },
+    "mimosa": {
+        "name": "金合欢",
+        "english": "Mimosa",
+        "olfactory": "阳光晒过的金色花粉香",
+        "tail_note": "杏仁奶油的绵密包裹",
+        "visual": "普罗旺斯集市上的干花束",
+        "impression": ["温暖", "绵密", "阳光"],
+        "volatility": "后调",
+        "duration": "6-10小时+"
+    },
+    "honeysuckle": {
+        "name": "金银花",
+        "english": "Honeysuckle",
+        "olfactory": "藤蔓缠绕的蜜糖花香",
+        "tail_note": "茶汤回甘的轻微涩感",
+        "visual": "江南白墙垂落的绿蔓",
+        "impression": ["甜蜜", "清新", "温婉"],
+        "volatility": "前调",
+        "duration": "0.5-2小时"
+    },
+    "sunflower": {
+        "name": "向日葵",
+        "english": "Sunflower",
+        "olfactory": "阳光烘焙的干燥花粉",
+        "tail_note": "葵花籽油的坚果暖香",
+        "visual": "梵高油画笔触的厚涂",
+        "impression": ["干燥", "温暖", "明媚"],
+        "volatility": "前调",
+        "duration": "0.5-2小时"
+    },
+    "ylang_ylang": {
+        "name": "鸳鸯茉莉",
+        "english": "Ylang-Ylang",
+        "olfactory": "热带夜晚的甜腻白花",
+        "tail_note": "香蕉熟透的发酵酒香",
+        "visual": "巴厘岛神庙的花供",
+        "impression": ["甜腻", "热带", "魅惑"],
+        "volatility": "中调",
+        "duration": "2-6小时"
+    },
+    "frangipani": {
+        "name": "鸡蛋花",
+        "english": "Frangipani",
+        "olfactory": "椰奶浸泡的温润花香",
+        "tail_note": "热带树叶的青绿汁液",
+        "visual": "少女鬓角的白色花朵",
+        "impression": ["温润", "清新", "热带"],
+        "volatility": "中调",
+        "duration": "2-6小时"
+    },
+    "ginger_lily": {
+        "name": "红姜花",
+        "english": "Ginger Lily",
+        "olfactory": "辛辣与甜美的奇异平衡",
+        "tail_note": "姜汁撞奶的温热感",
+        "visual": "东南亚祭坛上的鲜红花束",
+        "impression": ["辛辣", "甜美", "温暖"],
+        "volatility": "前调",
+        "duration": "0.5-2小时"
+    },
+    "sakura": {
+        "name": "樱花",
+        "english": "Sakura",
+        "olfactory": "盐渍花瓣的淡咸",
+        "tail_note": "落英缤纷的脆弱感",
+        "visual": "和纸透出的粉晕",
+        "impression": ["淡雅", "脆弱", "诗意"],
+        "volatility": "前调",
+        "duration": "0.5-2小时"
+    }
+}
+
 @app.route('/')
 def index():
     return app.send_static_file('scent_story_generator.html')

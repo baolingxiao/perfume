@@ -1,3 +1,9 @@
+//
+// 🌸 香水工坊 - AI香气故事生成器交互脚本
+// Last updated: 2025-07-01 15:27
+// Author: Perfume Workshop Team
+// Description: AI香气故事生成器的前端交互逻辑
+//
 // 全局状态变量
 let selectedMainScent = null;
 let selectedAccents = [];

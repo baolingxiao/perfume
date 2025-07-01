@@ -71,9 +71,14 @@ body {
 
 /* 主内容区 */
 .linear-main {
-    margin-left: 220px;
-    margin-top: 64px;
-    padding: var(--spacing);
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
 }
 
 /* 卡片风格 */
@@ -83,6 +88,7 @@ body {
     box-shadow: var(--shadow);
     padding: var(--spacing);
     margin-bottom: var(--spacing);
+    margin: 0 !important;
 }
 
 /* 按钮 */

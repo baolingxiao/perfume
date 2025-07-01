@@ -203,6 +203,120 @@ body {
     .nav-links {
         gap: 1rem;
     }
+    
+    /* 香料介绍页面移动端优化 */
+    .linear-main {
+        margin-left: 0;
+        margin-top: 0;
+        padding: 16px;
+        padding-top: 80px;
+    }
+    
+    .linear-card {
+        padding: 16px;
+        margin-bottom: 16px;
+        max-width: 100% !important;
+    }
+    
+    .linear-card img {
+        height: auto;
+        max-height: 300px;
+        object-fit: cover;
+    }
+    
+    .linear-card h1 {
+        font-size: 1.5rem !important;
+        margin-bottom: 12px !important;
+    }
+    
+    .linear-card section {
+        margin-bottom: 16px !important;
+    }
+    
+    .linear-card ul {
+        margin: 8px 0 0 1em !important;
+        padding: 0;
+    }
+    
+    .linear-card li {
+        margin-bottom: 4px;
+    }
+}
+
+/* 小屏幕手机优化 */
+@media (max-width: 480px) {
+    .nav-content {
+        padding: 0.6rem;
+    }
+    
+    .logo {
+        font-size: 1.2rem;
+    }
+    
+    .nav-links {
+        gap: 0.8rem;
+        font-size: 0.9rem;
+    }
+    
+    .linear-main {
+        padding: 12px;
+        padding-top: 70px;
+    }
+    
+    .linear-card {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .linear-card img {
+        max-height: 250px;
+    }
+    
+    .linear-card h1 {
+        font-size: 1.3rem !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .linear-card section {
+        margin-bottom: 12px !important;
+    }
+    
+    .linear-card b {
+        font-size: 0.95rem;
+    }
+    
+    .linear-card ul, .linear-card div {
+        font-size: 0.9rem;
+    }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 360px) {
+    .linear-main {
+        padding: 8px;
+        padding-top: 60px;
+    }
+    
+    .linear-card {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .linear-card img {
+        max-height: 200px;
+    }
+    
+    .linear-card h1 {
+        font-size: 1.2rem !important;
+    }
+    
+    .linear-card b {
+        font-size: 0.9rem;
+    }
+    
+    .linear-card ul, .linear-card div {
+        font-size: 0.85rem;
+    }
 }
 
 .main-nav, .linear-header {

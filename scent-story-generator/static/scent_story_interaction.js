@@ -1,4 +1,40 @@
+// 全局状态变量
+let selectedMainScent = null;
+let selectedAccents = [];
+let selectedAIProvider = 'deepseek';
+let lastGeneratedTime = 0;
+const GENERATION_COOLDOWN = 600000; // 10分钟
+
 document.addEventListener('DOMContentLoaded', () => {
+  // --- 新增：香料滑块UI与数据流 ---
+  const selectedIngredients = JSON.parse(localStorage.getItem('selectedIngredients') || '[]');
+  const sliderForm = document.getElementById('slider-form');
+  const totalWarning = document.getElementById('total-warning');
+  if (sliderForm && selectedIngredients.length > 0) {
+    sliderForm.innerHTML = selectedIngredients.map(ing => `
+      <div class="mb-4">
+        <label class="block font-bold mb-1">${ing.name} <span id="val-${ing.id}">0</span>%</label>
+        <input type="range" min="0" max="100" value="0" step="0.1" data-id="${ing.id}" class="w-full accent-primary" />
+      </div>
+    `).join('');
+  }
+  function updateTotal() {
+    let total = 0;
+    selectedIngredients.forEach(ing => {
+      const val = parseFloat(document.querySelector(`input[data-id="${ing.id}"]`).value);
+      document.getElementById(`val-${ing.id}`).textContent = val;
+      ing.ratio = val;
+      total += val;
+    });
+    if (totalWarning) totalWarning.style.display = (Math.abs(total-100)>0.01) ? 'block' : 'none';
+    return total;
+  }
+  if (sliderForm && selectedIngredients.length > 0) {
+    sliderForm.oninput = updateTotal;
+    updateTotal();
+  }
+  // --- END 新增 ---
+
   // 香调数据
   const accentOptions = [
     { id: 'rose', name: '玫瑰', icon: 'fa-heart', color: '#FF6B8B' },
@@ -29,35 +65,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const storyOutput = document.getElementById('story-output');
   const accentButtonsContainer = document.getElementById('accent-buttons');
   
-  // 状态变量
-  let selectedMainScent = null;
-  let selectedAccents = [];
-  let selectedAIProvider = 'deepseek'; // 默认选择中国AI
-  let lastGeneratedTime = 0;
-  const GENERATION_COOLDOWN = 600000; // 10分钟
-  
-  // 生成辅料按钮
-  accentOptions.forEach(accent => {
-    const button = document.createElement('button');
-    button.className = `scent-btn bg-accent/10 hover:bg-accent/30 border border-accent/30 flex items-center justify-center`;
-    button.style.color = accent.color;
-    button.dataset.accent = accent.id;
-    
-    button.innerHTML = `
-      <i class="fa ${accent.icon} mr-1"></i> ${accent.name}
-    `;
-    
-    button.addEventListener('click', () => {
-      button.classList.toggle('scent-btn-active');
-      
-      if (button.classList.contains('scent-btn-active')) {
-        selectedAccents.push(accent.id);
-      } else {
-        selectedAccents = selectedAccents.filter(id => id !== accent.id);
-      }
+  // AI提供商按钮初始化和切换逻辑
+  const aiBtns = document.querySelectorAll('.ai-btn');
+  aiBtns.forEach(b => b.classList.remove('ring-2', 'ring-primary'));
+  const deepseekBtn = document.querySelector('[data-ai="deepseek"]');
+  if (deepseekBtn) deepseekBtn.classList.add('ring-2', 'ring-primary');
+  selectedAIProvider = 'deepseek';
+  aiBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      aiBtns.forEach(b => b.classList.remove('ring-2', 'ring-primary'));
+      btn.classList.add('ring-2', 'ring-primary');
+      selectedAIProvider = btn.dataset.ai;
     });
-    
-    accentButtonsContainer.appendChild(button);
   });
   
   // 主香调按钮事件
@@ -69,78 +88,89 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   
-  // AI提供商选择器事件
-  document.querySelectorAll('.ai-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.ai-btn').forEach(b => {
-        b.classList.remove('ring-2', 'ring-primary');
+  // 生成辅料按钮
+  if (accentButtonsContainer) {
+    accentButtonsContainer.querySelectorAll('button').forEach(button => {
+      button.addEventListener('click', () => {
+        button.classList.toggle('scent-btn-active');
+        const accentId = button.dataset.accent;
+        if (button.classList.contains('scent-btn-active')) {
+          if (!selectedAccents.includes(accentId)) selectedAccents.push(accentId);
+        } else {
+          selectedAccents = selectedAccents.filter(id => id !== accentId);
+        }
       });
-      btn.classList.add('ring-2', 'ring-primary');
-      selectedAIProvider = btn.dataset.ai;
     });
-  });
-  
-  // 默认选中DeepSeek
-  document.querySelector('[data-ai="deepseek"]').classList.add('ring-2', 'ring-primary');
+  }
   
   // 生成按钮事件
-  generateBtn.addEventListener('click', async () => {
-    // 检查是否选择了主香调
-    if (!selectedMainScent) {
-      showToast('请先选择一种主香调', 'error');
-      return;
-    }
-    
-    // 频率限制检查
-    const now = Date.now();
-    if (now - lastGeneratedTime < GENERATION_COOLDOWN) {
-      const remainingTime = Math.ceil((GENERATION_COOLDOWN - (now - lastGeneratedTime)) / 60000);
-      showToast(`请求频率过快，请等待${remainingTime}分钟后再试`, 'warning');
-      return;
-    }
-    
-    // 显示加载状态
-    showLoadingStory();
-    
-    try {
-      // 发送请求到后端
-      const response = await fetch('/api/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          mainScent: selectedMainScent,
-          accents: selectedAccents,
-          aiProvider: selectedAIProvider
-        })
-      });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+  if (generateBtn) {
+    generateBtn.addEventListener('click', async () => {
+      // --- 新增：ingredients优先提交 ---
+      if (selectedIngredients.length > 0) {
+        if (Math.abs(updateTotal()-100)>0.01) {
+          alert('比例总和必须为100%');
+          return;
+        }
+        showLoadingStory();
+        try {
+          const response = await fetch('/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              ingredients: selectedIngredients,
+              aiProvider: selectedAIProvider
+            })
+          });
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const storyData = await response.json();
+          if (storyData.error) throw new Error(storyData.error);
+          displayStory(storyData);
+          lastGeneratedTime = Date.now();
+          showToast('故事生成成功！', 'success');
+        } catch (error) {
+          console.error('Error generating story:', error);
+          showErrorStory(error.message);
+          showToast('故事生成失败，请重试', 'error');
+        }
+        return;
       }
-      
-      const storyData = await response.json();
-      
-      // 检查是否有错误
-      if (storyData.error) {
-        throw new Error(storyData.error);
+      // --- END 新增 ---
+      // 原有主香调/辅料逻辑
+      if (!selectedMainScent) {
+        showToast('请先选择一种主香调', 'error');
+        return;
       }
-      
-      // 显示生成的故事
-      displayStory(storyData);
-      
-      // 更新最后生成时间
-      lastGeneratedTime = now;
-      
-      showToast('故事生成成功！', 'success');
-      
-    } catch (error) {
-      console.error('Error generating story:', error);
-      showErrorStory(error.message);
-      showToast('故事生成失败，请重试', 'error');
-    }
-  });
+      const now = Date.now();
+      if (now - lastGeneratedTime < GENERATION_COOLDOWN) {
+        const remainingTime = Math.ceil((GENERATION_COOLDOWN - (now - lastGeneratedTime)) / 60000);
+        showToast(`请求频率过快，请等待${remainingTime}分钟后再试`, 'warning');
+        return;
+      }
+      showLoadingStory();
+      try {
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            mainScent: selectedMainScent,
+            accents: selectedAccents,
+            aiProvider: selectedAIProvider
+          })
+        });
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const storyData = await response.json();
+        if (storyData.error) throw new Error(storyData.error);
+        displayStory(storyData);
+        lastGeneratedTime = now;
+        showToast('故事生成成功！', 'success');
+      } catch (error) {
+        console.error('Error generating story:', error);
+        showErrorStory(error.message);
+        showToast('故事生成失败，请重试', 'error');
+      }
+    });
+  }
   
   // 显示加载中的故事
   function showLoadingStory() {
@@ -269,4 +299,20 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     return scentMap[scentId] || scentId;
   }
-}); 
+});
+
+// 自动集成全站锚点平滑滚动
+if (typeof window !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+      anchor.addEventListener('click', function(e) {
+        const targetId = this.getAttribute('href').slice(1);
+        const target = document.getElementById(targetId);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  });
+} 

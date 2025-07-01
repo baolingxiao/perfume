@@ -172,10 +172,34 @@
 @media (max-width: 768px) {
     .ingredients-page {
         padding: 16px;
+        padding-top: 80px;
     }
     .page-title {
         font-size: 1.3rem;
+        text-align: center;
+        margin-bottom: 20px;
     }
+    
+    .fragrance-types {
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+    
+    .type-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .note-selector {
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+    
+    .note-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+    }
+    
     .ingredients-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
@@ -183,11 +207,139 @@
     .ingredient-item img {
         height: 100px;
     }
+    
+    .ingredient-item h3 {
+        font-size: 1rem;
+        padding: 12px 0 8px 0;
+    }
+    
+    .ingredient-item h3 .en {
+        font-size: 0.8rem;
+    }
+    
+    .selected-ingredients {
+        padding: 16px;
+        margin-top: 16px;
+    }
+    
+    .selected-ingredients h2 {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
 }
 
 @media (max-width: 480px) {
+    .ingredients-page {
+        padding: 12px;
+        padding-top: 70px;
+    }
+    
+    .page-title {
+        font-size: 1.2rem;
+        margin-bottom: 16px;
+    }
+    
+    .fragrance-types {
+        gap: 6px;
+        margin-bottom: 12px;
+    }
+    
+    .type-btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+    }
+    
+    .note-selector {
+        gap: 6px;
+        margin-bottom: 16px;
+    }
+    
+    .note-btn {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+    }
+    
     .ingredients-grid {
         grid-template-columns: 1fr;
         gap: 12px;
+    }
+    
+    .ingredient-item img {
+        height: 120px;
+    }
+    
+    .ingredient-item h3 {
+        font-size: 0.95rem;
+        padding: 10px 0 6px 0;
+    }
+    
+    .ingredient-item h3 .en {
+        font-size: 0.75rem;
+    }
+    
+    .selected-ingredients {
+        padding: 12px;
+        margin-top: 12px;
+    }
+    
+    .selected-ingredients h2 {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 360px) {
+    .ingredients-page {
+        padding: 10px;
+        padding-top: 60px;
+    }
+    
+    .page-title {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+    }
+    
+    .fragrance-types {
+        gap: 4px;
+        margin-bottom: 10px;
+    }
+    
+    .type-btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
+    
+    .note-selector {
+        gap: 4px;
+        margin-bottom: 12px;
+    }
+    
+    .note-btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .ingredient-item img {
+        height: 100px;
+    }
+    
+    .ingredient-item h3 {
+        font-size: 0.9rem;
+        padding: 8px 0 4px 0;
+    }
+    
+    .ingredient-item h3 .en {
+        font-size: 0.7rem;
+    }
+    
+    .selected-ingredients {
+        padding: 10px;
+        margin-top: 10px;
+    }
+    
+    .selected-ingredients h2 {
+        font-size: 1rem;
+        margin-bottom: 8px;
     }
 } 

@@ -97,6 +97,121 @@
     }
 }
 
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .home {
+        padding-top: 80px;
+    }
+    
+    .entrance-animation {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .title {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+    
+    .perfume-bottle {
+        width: 80px;
+        height: 120px;
+        margin: 20px auto;
+    }
+    
+    .main-content {
+        padding: 16px;
+        text-align: center;
+    }
+    
+    .main-content h2 {
+        font-size: 1.4rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 280px;
+        text-align: center;
+    }
+}
+
+/* 小屏幕手机优化 */
+@media (max-width: 480px) {
+    .home {
+        padding-top: 70px;
+    }
+    
+    .title {
+        font-size: 1.6rem;
+        margin-bottom: 16px;
+    }
+    
+    .perfume-bottle {
+        width: 70px;
+        height: 105px;
+        margin: 16px auto;
+    }
+    
+    .main-content {
+        padding: 12px;
+    }
+    
+    .main-content h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1.2rem;
+    }
+    
+    .action-buttons {
+        gap: 10px;
+    }
+    
+    .btn {
+        max-width: 260px;
+        padding: 0.7rem 1.2rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 360px) {
+    .home {
+        padding-top: 60px;
+    }
+    
+    .title {
+        font-size: 1.4rem;
+        margin-bottom: 12px;
+    }
+    
+    .perfume-bottle {
+        width: 60px;
+        height: 90px;
+        margin: 12px auto;
+    }
+    
+    .main-content {
+        padding: 10px;
+    }
+    
+    .main-content h2 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .btn {
+        max-width: 240px;
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
 .btn-primary {
     background: var(--primary-color);
     color: #fff;

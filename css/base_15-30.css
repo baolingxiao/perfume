@@ -76,8 +76,7 @@ body {
     align-items: center !important;
     height: 100vh !important;
     width: 100vw !important;
-    padding: 0 !important;
-    margin: 0 !important;
+    padding: 5vw !important;
     box-sizing: border-box !important;
 }
 
@@ -89,6 +88,9 @@ body {
     padding: var(--spacing);
     margin-bottom: var(--spacing);
     margin: 0 !important;
+    max-width: 600px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* 按钮 */

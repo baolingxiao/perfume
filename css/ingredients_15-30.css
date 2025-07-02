@@ -48,6 +48,7 @@
     cursor: pointer;
     font-size: 1rem;
     transition: all 0.3s;
+    color: #1a237e;
 }
 
 .type-btn.active {
@@ -73,7 +74,7 @@
     padding: 0.5rem 1rem;
     border: 1px solid var(--primary-color);
     background: transparent;
-    color: var(--primary-color);
+    color: #1a237e;
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s;
@@ -366,4 +367,27 @@
         font-size: 1rem;
         margin-bottom: 8px;
     }
+}
+
+/* 卡片底部色块 */
+.ingredient-bottom {
+  background: var(--card-bottom, #b86a8c);
+  width: 100%;
+  height: 20%;
+  min-height: 24px;
+  border-bottom-left-radius: var(--border-radius, 16px);
+  border-bottom-right-radius: var(--border-radius, 16px);
+}
+
+.ingredient-item {
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 1/1.1;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.ingredient-item img {
+  flex: 1 1 80%;
 } 

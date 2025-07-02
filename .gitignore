@@ -29,4 +29,7 @@ yarn-error.log*
 
 # 备份文件
 *.bak
-*.backup 
+*.backup
+
+# 忽略 scent-story-generator/venv 目录
+scent-story-generator/venv/ 

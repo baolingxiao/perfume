@@ -548,10 +548,16 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                     selected = JSON.parse(localStorage.getItem('selectedIngredients')||'[]');
                 } catch(e) {}
                 selected = selected.slice(0,5);
-                selected.forEach(imgSrc => {
+                selected.forEach(ingredient => {
                     const img = document.createElement('img');
-                    img.src = imgSrc;
+                    // 处理新旧数据格式兼容
+                    if (typeof ingredient === 'string') {
+                        img.src = ingredient;
+                    } else if (ingredient && ingredient.image) {
+                        img.src = ingredient.image;
+                    }
                     img.className = 'selected-img';
+                    img.title = typeof ingredient === 'string' ? '已选择' : (ingredient.name || '已选择');
                     list.appendChild(img);
                 });
                 for(let i=selected.length;i<5;i++){
@@ -562,6 +568,18 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
             }
             window.renderSelectedIngredients = renderSelectedIngredients;
             renderSelectedIngredients();
+            
+            // 页面加载时同步选择状态
+            document.addEventListener('DOMContentLoaded', function() {
+                renderSelectedIngredients();
+            });
+            
+            // 监听localStorage变化，实时更新显示
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'selectedIngredients') {
+                    renderSelectedIngredients();
+                }
+            });
         })();
     </script>
     <script src="perfume-workshop/static/scent_story_interaction.js"></script>

@@ -137,6 +137,31 @@ body {
     background: var(--primary-color-dark);
 }
 
+/* 成功提示样式 */
+.success-toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #4CAF50;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: 500;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.success-toast.show {
+    opacity: 1;
+}
+
+.success-toast.hide {
+    opacity: 0;
+}
+
 /* 统一间距 */
 .mt-2 { margin-top: 16px; }
 .mt-4 { margin-top: 32px; }

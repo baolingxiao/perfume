@@ -43,44 +43,98 @@ Description: 香料详细介绍页面
         </div>
     </main>
     <script>
-    (function(){
-      // 获取本香料图片src
-      var img = document.querySelector('.linear-card img');
-      var imgSrc = img ? img.src : '';
-      var selectBtn = document.getElementById('select-btn');
-      var cancelBtn = document.getElementById('cancel-btn');
-      function getSelected(){
-        try{return JSON.parse(localStorage.getItem('selectedIngredients')||'[]');}catch(e){return[];}
-      }
-      function setSelected(arr){
-        localStorage.setItem('selectedIngredients',JSON.stringify(arr));
-        if(window.opener && window.opener.renderSelectedIngredients) window.opener.renderSelectedIngredients();
-      }
-      function updateBtn(){
-        var arr = getSelected();
-        if(arr.includes(imgSrc)){
-          selectBtn.style.display='none';
-          cancelBtn.style.display='inline-block';
-        }else{
-          selectBtn.style.display='inline-block';
-          cancelBtn.style.display='none';
+        // 显示成功提示
+        function showSuccessToast(message) {
+            // 移除已存在的提示
+            const existingToast = document.querySelector('.success-toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = 'success-toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // 显示动画
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            // 3秒后隐藏
+            setTimeout(() => {
+                toast.classList.remove('show');
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
-      }
-      selectBtn.onclick=function(){
-        var arr = getSelected();
-        if(arr.length>=5){alert('最多只能选择5种香料');return;}
-        if(!arr.includes(imgSrc)) arr.push(imgSrc);
-        setSelected(arr);
-        updateBtn();
-      };
-      cancelBtn.onclick=function(){
-        var arr = getSelected();
-        arr=arr.filter(x=>x!==imgSrc);
-        setSelected(arr);
-        updateBtn();
-      };
-      updateBtn();
-    })();
+
+        // 选择香料逻辑
+        function toggleSelection() {
+            const ingredientName = '雪松';
+            const ingredientImage = 'perfume-workshop/images/ingredients/雪松.jpeg';
+            
+            let selectedIngredients = [];
+            try {
+                selectedIngredients = JSON.parse(localStorage.getItem('selectedIngredients') || '[]');
+            } catch(e) {}
+            
+            // 检查是否已选择
+            const existingIndex = selectedIngredients.findIndex(item => 
+                (typeof item === 'string' && item === ingredientImage) || 
+                (typeof item === 'object' && item.name === ingredientName)
+            );
+            
+            const button = document.querySelector('.select-button');
+            
+            if (existingIndex > -1) {
+                // 取消选择
+                selectedIngredients.splice(existingIndex, 1);
+                localStorage.setItem('selectedIngredients', JSON.stringify(selectedIngredients));
+                button.textContent = '选择';
+                button.classList.remove('selected');
+                showSuccessToast('已取消选择 ' + ingredientName);
+            } else {
+                // 检查是否已达到最大选择数量
+                if (selectedIngredients.length >= 5) {
+                    showSuccessToast('最多只能选择5种香料');
+                    return;
+                }
+                
+                // 添加选择
+                selectedIngredients.push({
+                    name: ingredientName,
+                    image: ingredientImage
+                });
+                localStorage.setItem('selectedIngredients', JSON.stringify(selectedIngredients));
+                button.textContent = '取消选择';
+                button.classList.add('selected');
+                showSuccessToast('已选择 ' + ingredientName + ' (' + selectedIngredients.length + '/5)');
+            }
+        }
+        
+        // 页面加载时更新按钮状态
+        document.addEventListener('DOMContentLoaded', function() {
+            const ingredientName = '雪松';
+            const ingredientImage = 'perfume-workshop/images/ingredients/雪松.jpeg';
+            
+            let selectedIngredients = [];
+            try {
+                selectedIngredients = JSON.parse(localStorage.getItem('selectedIngredients') || '[]');
+            } catch(e) {}
+            
+            const isSelected = selectedIngredients.some(item => 
+                (typeof item === 'string' && item === ingredientImage) || 
+                (typeof item === 'object' && item.name === ingredientName)
+            );
+            
+            const button = document.querySelector('.select-button');
+            if (isSelected) {
+                button.textContent = '取消选择';
+                button.classList.add('selected');
+            } else {
+                button.textContent = '选择';
+                button.classList.remove('selected');
+            }
+        });
     </script>
 </body>
 </html> 

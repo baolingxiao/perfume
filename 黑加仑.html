@@ -39,5 +39,78 @@ Description: 香料详细介绍页面
             </section>
         </div>
     </main>
+    
+    <!-- 选择按钮 -->
+    <div class="select-button-container">
+        <button id="selectBtn" class="select-button">选择</button>
+    </div>
+
+    <script>
+        // 获取当前香料信息
+        const currentIngredient = {
+            name: '黑加仑',
+            image: 'perfume-workshop/images/黑加仑.jpeg'
+        };
+
+        // 获取按钮元素
+        const selectBtn = document.getElementById('selectBtn');
+
+        // 从localStorage获取已选择的香料
+        function getSelectedIngredients() {
+            const selected = localStorage.getItem('selectedIngredients');
+            return selected ? JSON.parse(selected) : [];
+        }
+
+        // 保存选择的香料到localStorage
+        function saveSelectedIngredients(ingredients) {
+            localStorage.setItem('selectedIngredients', JSON.stringify(ingredients));
+        }
+
+        // 检查当前香料是否已被选择
+        function isCurrentIngredientSelected() {
+            const selected = getSelectedIngredients();
+            return selected.some(ingredient => ingredient.name === currentIngredient.name);
+        }
+
+        // 更新按钮状态
+        function updateButtonState() {
+            if (isCurrentIngredientSelected()) {
+                selectBtn.textContent = '取消选择';
+                selectBtn.classList.add('selected');
+            } else {
+                selectBtn.textContent = '选择';
+                selectBtn.classList.remove('selected');
+            }
+        }
+
+        // 选择/取消选择香料
+        function toggleSelection() {
+            let selected = getSelectedIngredients();
+            
+            if (isCurrentIngredientSelected()) {
+                // 取消选择
+                selected = selected.filter(ingredient => ingredient.name !== currentIngredient.name);
+                saveSelectedIngredients(selected);
+                updateButtonState();
+            } else {
+                // 检查是否已达到最大选择数量
+                if (selected.length >= 5) {
+                    alert('最多只能选择5种香料！');
+                    return;
+                }
+                
+                // 添加选择
+                selected.push(currentIngredient);
+                saveSelectedIngredients(selected);
+                updateButtonState();
+            }
+        }
+
+        // 绑定按钮点击事件
+        selectBtn.addEventListener('click', toggleSelection);
+
+        // 页面加载时更新按钮状态
+        document.addEventListener('DOMContentLoaded', updateButtonState);
+    </script>
 </body>
 </html> 

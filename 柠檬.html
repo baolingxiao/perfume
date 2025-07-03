@@ -37,49 +37,79 @@ Description: 香料详细介绍页面
                 </div>
             </section>
         </div>
-        <div class="select-action" style="display:flex;justify-content:center;margin:24px 0;">
-            <button id="select-btn" class="linear-btn">选择</button>
-            <button id="cancel-btn" class="linear-btn" style="margin-left:16px;display:none;">取消选择</button>
-        </div>
     </main>
+    
+    <!-- 选择按钮 -->
+    <div class="select-button-container">
+        <button id="selectBtn" class="select-button">选择</button>
+    </div>
+
     <script>
-    (function(){
-      var img = document.querySelector('.linear-card img');
-      var imgSrc = img ? img.src : '';
-      var selectBtn = document.getElementById('select-btn');
-      var cancelBtn = document.getElementById('cancel-btn');
-      function getSelected(){
-        try{return JSON.parse(localStorage.getItem('selectedIngredients')||'[]');}catch(e){return[];}
-      }
-      function setSelected(arr){
-        localStorage.setItem('selectedIngredients',JSON.stringify(arr));
-        if(window.opener && window.opener.renderSelectedIngredients) window.opener.renderSelectedIngredients();
-      }
-      function updateBtn(){
-        var arr = getSelected();
-        if(arr.includes(imgSrc)){
-          selectBtn.style.display='none';
-          cancelBtn.style.display='inline-block';
-        }else{
-          selectBtn.style.display='inline-block';
-          cancelBtn.style.display='none';
+        // 获取当前香料信息
+        const currentIngredient = {
+            name: '西西里柠檬',
+            image: 'perfume-workshop/images/西西里柠檬.jpeg'
+        };
+
+        // 获取按钮元素
+        const selectBtn = document.getElementById('selectBtn');
+
+        // 从localStorage获取已选择的香料
+        function getSelectedIngredients() {
+            const selected = localStorage.getItem('selectedIngredients');
+            return selected ? JSON.parse(selected) : [];
         }
-      }
-      selectBtn.onclick=function(){
-        var arr = getSelected();
-        if(arr.length>=5){alert('最多只能选择5种香料');return;}
-        if(!arr.includes(imgSrc)) arr.push(imgSrc);
-        setSelected(arr);
-        updateBtn();
-      };
-      cancelBtn.onclick=function(){
-        var arr = getSelected();
-        arr=arr.filter(x=>x!==imgSrc);
-        setSelected(arr);
-        updateBtn();
-      };
-      updateBtn();
-    })();
+
+        // 保存选择的香料到localStorage
+        function saveSelectedIngredients(ingredients) {
+            localStorage.setItem('selectedIngredients', JSON.stringify(ingredients));
+        }
+
+        // 检查当前香料是否已被选择
+        function isCurrentIngredientSelected() {
+            const selected = getSelectedIngredients();
+            return selected.some(ingredient => ingredient.name === currentIngredient.name);
+        }
+
+        // 更新按钮状态
+        function updateButtonState() {
+            if (isCurrentIngredientSelected()) {
+                selectBtn.textContent = '取消选择';
+                selectBtn.classList.add('selected');
+            } else {
+                selectBtn.textContent = '选择';
+                selectBtn.classList.remove('selected');
+            }
+        }
+
+        // 选择/取消选择香料
+        function toggleSelection() {
+            let selected = getSelectedIngredients();
+            
+            if (isCurrentIngredientSelected()) {
+                // 取消选择
+                selected = selected.filter(ingredient => ingredient.name !== currentIngredient.name);
+                saveSelectedIngredients(selected);
+                updateButtonState();
+            } else {
+                // 检查是否已达到最大选择数量
+                if (selected.length >= 5) {
+                    alert('最多只能选择5种香料！');
+                    return;
+                }
+                
+                // 添加选择
+                selected.push(currentIngredient);
+                saveSelectedIngredients(selected);
+                updateButtonState();
+            }
+        }
+
+        // 绑定按钮点击事件
+        selectBtn.addEventListener('click', toggleSelection);
+
+        // 页面加载时更新按钮状态
+        document.addEventListener('DOMContentLoaded', updateButtonState);
     </script>
 </body>
 </html> 

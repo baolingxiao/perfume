@@ -109,6 +109,34 @@ body {
     background: var(--primary-color-dark);
 }
 
+/* 选择按钮容器 */
+.select-button-container {
+    display: flex;
+    justify-content: center;
+    margin: 24px 0;
+}
+
+/* 选择按钮样式 */
+.select-button {
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.6em 1.4em;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.select-button:hover {
+    background: var(--primary-color-dark);
+}
+
+.select-button.selected {
+    background: var(--primary-color-dark);
+}
+
 /* 统一间距 */
 .mt-2 { margin-top: 16px; }
 .mt-4 { margin-top: 32px; }

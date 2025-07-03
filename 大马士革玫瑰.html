@@ -38,6 +38,49 @@ Description: 香料详细介绍页面
                 </div>
             </section>
         </div>
+        <div class="select-action" style="display:flex;justify-content:center;margin:24px 0;">
+            <button id="select-btn" class="linear-btn">选择</button>
+            <button id="cancel-btn" class="linear-btn" style="margin-left:16px;display:none;">取消选择</button>
+        </div>
     </main>
+    <script>
+    (function(){
+      var img = document.querySelector('.linear-card img');
+      var imgSrc = img ? img.src : '';
+      var selectBtn = document.getElementById('select-btn');
+      var cancelBtn = document.getElementById('cancel-btn');
+      function getSelected(){
+        try{return JSON.parse(localStorage.getItem('selectedIngredients')||'[]');}catch(e){return[];}
+      }
+      function setSelected(arr){
+        localStorage.setItem('selectedIngredients',JSON.stringify(arr));
+        if(window.opener && window.opener.renderSelectedIngredients) window.opener.renderSelectedIngredients();
+      }
+      function updateBtn(){
+        var arr = getSelected();
+        if(arr.includes(imgSrc)){
+          selectBtn.style.display='none';
+          cancelBtn.style.display='inline-block';
+        }else{
+          selectBtn.style.display='inline-block';
+          cancelBtn.style.display='none';
+        }
+      }
+      selectBtn.onclick=function(){
+        var arr = getSelected();
+        if(arr.length>=5){alert('最多只能选择5种香料');return;}
+        if(!arr.includes(imgSrc)) arr.push(imgSrc);
+        setSelected(arr);
+        updateBtn();
+      };
+      cancelBtn.onclick=function(){
+        var arr = getSelected();
+        arr=arr.filter(x=>x!==imgSrc);
+        setSelected(arr);
+        updateBtn();
+      };
+      updateBtn();
+    })();
+    </script>
 </body>
 </html> 

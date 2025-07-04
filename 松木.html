@@ -1,0 +1,141 @@
+<!--
+🌸 香料介绍页面
+Last updated: 2025-07-01 15:27
+Author: Perfume Workshop Team
+Description: 香料详细介绍页面
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>松木（Pine） - 香料介绍</title>
+    <link rel="stylesheet" href="css/base_15-30.css">
+</head>
+<body style="background: var(--background-color);">
+    <main class="linear-main">
+        <div class="linear-card" style="max-width:520px;margin:auto;">
+            <img src="images/ingredients/松木.jpeg" alt="松木" style="width:100%;border-radius:var(--border-radius);margin-bottom:var(--spacing);">
+            <h1 style="margin-bottom:8px;">松木（Pine）</h1>
+            <section style="margin-bottom:var(--spacing);">
+                <b>主要产地与香气差异：</b>
+                <ul style="margin:8px 0 0 1.2em;padding:0;color:var(--muted-text);">
+                    <li>主要产于北欧、俄罗斯、加拿大等寒带地区。</li>
+                    <li>不同产区的松木香气差异主要体现在树脂感的浓度、清新度和木质调的深浅。</li>
+                </ul>
+            </section>
+            <section style="margin-bottom:var(--spacing);">
+                <b>共通香气特征：</b>
+                <div style="margin-top:8px;color:var(--muted-text);">
+                    清新的针叶香气，带有明显的树脂感、绿叶调和微微的木质感。整体香气清冽、自然，带有森林的清新气息和微微的辛辣感。
+                </div>
+            </section>
+            <section>
+                <b>使用场景：</b>
+                <div style="margin-top:8px;color:var(--muted-text);">
+                    常用于木质调、清新调、森林调香水，赋予作品自然、清新、森林气息。适合秋冬季节的日常香氛、户外香氛、男士香水。也常作为前调或中调，与雪松、柏木、桦木等木质香料搭配，增强层次感和自然感。
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- 选择按钮 -->
+    <div class="select-button-container">
+        <button id="selectBtn" class="select-button">选择</button>
+    </div>
+
+    <script>
+        // 显示成功提示
+        function showSuccessToast(message) {
+            // 移除已存在的提示
+            const existingToast = document.querySelector('.success-toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = 'success-toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // 显示动画
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            // 3秒后隐藏
+            setTimeout(() => {
+                toast.classList.remove('show');
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // 获取当前香料信息
+        const currentIngredient = {
+            name: '松木',
+            image: 'images/ingredients/松木.jpeg'
+        };
+
+        // 获取按钮元素
+        const selectBtn = document.getElementById('selectBtn');
+
+        // 从localStorage获取已选择的香料
+        function getSelectedIngredients() {
+            const selected = localStorage.getItem('selectedIngredients');
+            return selected ? JSON.parse(selected) : [];
+        }
+
+        // 保存选择的香料到localStorage
+        function saveSelectedIngredients(ingredients) {
+            localStorage.setItem('selectedIngredients', JSON.stringify(ingredients));
+        }
+
+        // 检查当前香料是否已被选择
+        function isCurrentIngredientSelected() {
+            const selected = getSelectedIngredients();
+            return selected.some(ingredient => ingredient.name === currentIngredient.name);
+        }
+
+        // 更新按钮状态
+        function updateButtonState() {
+            if (isCurrentIngredientSelected()) {
+                selectBtn.textContent = '取消选择';
+                selectBtn.classList.add('selected');
+            } else {
+                selectBtn.textContent = '选择';
+                selectBtn.classList.remove('selected');
+            }
+        }
+
+        // 选择/取消选择香料
+        function toggleSelection() {
+            let selected = getSelectedIngredients();
+            
+            if (isCurrentIngredientSelected()) {
+                // 取消选择
+                selected = selected.filter(ingredient => ingredient.name !== currentIngredient.name);
+                saveSelectedIngredients(selected);
+                updateButtonState();
+                showSuccessToast('已取消选择 ' + currentIngredient.name);
+            } else {
+                // 检查是否已达到最大选择数量
+                if (selected.length >= 5) {
+                    showSuccessToast('最多只能选择5种香料');
+                    return;
+                }
+                
+                // 添加选择
+                selected.push(currentIngredient);
+                saveSelectedIngredients(selected);
+                updateButtonState();
+                showSuccessToast('已选择 ' + currentIngredient.name + ' (' + selected.length + '/5)');
+            }
+        }
+
+        // 绑定按钮点击事件
+        selectBtn.addEventListener('click', toggleSelection);
+
+        // 页面加载时更新按钮状态
+        document.addEventListener('DOMContentLoaded', updateButtonState);
+    </script>
+</body>
+</html> 

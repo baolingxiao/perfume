@@ -43,10 +43,7 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
             background: #eee;
             border: 2px dashed #ccc;
         }
-        .ingredient-item[disabled] {
-            opacity: 0.5;
-            pointer-events: none;
-        }
+
     </style>
 </head>
 <body>
@@ -463,39 +460,7 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
         });
 
         (function(){
-            // 1. 判断是否已选前/中/尾调
-            function getSelectedNote() {
-                const btn = document.querySelector('.note-btn.active');
-                const note = btn ? btn.dataset.note : null;
-                return (note === 'top' || note === 'middle' || note === 'base') ? note : null;
-            }
-            function updateIngredientItemsState() {
-                const note = getSelectedNote();
-                document.querySelectorAll('.ingredient-item').forEach(item => {
-                    if (!note) {
-                        item.setAttribute('disabled', 'disabled');
-                    } else {
-                        item.removeAttribute('disabled');
-                    }
-                });
-            }
-            // 2. 点击卡片时判断
-            document.querySelectorAll('.ingredient-item img').forEach(img => {
-                img.addEventListener('click', function(e) {
-                    const note = getSelectedNote();
-                    if (!note) {
-                        alert('请先选择前调、中调或尾调');
-                        e.preventDefault();
-                        return false;
-                    }
-                }, true);
-            });
-            // 3. note-btn切换时刷新卡片状态
-            document.querySelectorAll('.note-btn').forEach(btn => {
-                btn.addEventListener('click', updateIngredientItemsState);
-            });
-            updateIngredientItemsState();
-            // 4. 渲染已选香料
+            // 渲染已选香料
             function renderSelectedIngredients() {
                 const list = document.querySelector('.selected-list');
                 if (!list) return;

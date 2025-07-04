@@ -20,20 +20,21 @@ Description: 香料详细介绍页面
             <section style="margin-bottom:var(--spacing);">
                 <b>主要产地与香气差异：</b>
                 <ul style="margin:8px 0 0 1.2em;padding:0;color:var(--muted-text);">
-                    <li>主要产于北欧、俄罗斯、加拿大等寒带地区。</li>
-                    <li>不同产区的松木香气差异主要体现在树脂感的浓度、清新度和木质调的深浅。</li>
+                    <li><b>北欧松木</b>：清新森林感，带有微甜的松脂香。</li>
+                    <li><b>西伯利亚松木</b>：更为干燥，带有明显的针叶感。</li>
+                    <li><b>美国松木</b>：温和的木质香，略带香草感。</li>
                 </ul>
             </section>
             <section style="margin-bottom:var(--spacing);">
                 <b>共通香气特征：</b>
                 <div style="margin-top:8px;color:var(--muted-text);">
-                    清新的针叶香气，带有明显的树脂感、绿叶调和微微的木质感。整体香气清冽、自然，带有森林的清新气息和微微的辛辣感。
+                    清新森林感、针叶香、松脂甜香、干燥木质调。
                 </div>
             </section>
             <section>
                 <b>使用场景：</b>
                 <div style="margin-top:8px;color:var(--muted-text);">
-                    常用于木质调、清新调、森林调香水，赋予作品自然、清新、森林气息。适合秋冬季节的日常香氛、户外香氛、男士香水。也常作为前调或中调，与雪松、柏木、桦木等木质香料搭配，增强层次感和自然感。
+                    森林调香水、男香基调、冬季香氛、户外运动香水。常用于营造自然清新的森林氛围。
                 </div>
             </section>
         </div>
@@ -47,7 +48,6 @@ Description: 香料详细介绍页面
     <script>
         // 显示成功提示
         function showSuccessToast(message) {
-            // 移除已存在的提示
             const existingToast = document.querySelector('.success-toast');
             if (existingToast) {
                 existingToast.remove();
@@ -58,10 +58,8 @@ Description: 香料详细介绍页面
             toast.textContent = message;
             document.body.appendChild(toast);
             
-            // 显示动画
             setTimeout(() => toast.classList.add('show'), 10);
             
-            // 3秒后隐藏
             setTimeout(() => {
                 toast.classList.remove('show');
                 toast.classList.add('hide');

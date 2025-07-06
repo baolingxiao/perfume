@@ -411,12 +411,45 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
 
         <!-- 已选香料展示区 -->
         <div class="selected-ingredients">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                 <h2 style="margin: 0;">已选择的香料</h2>
-                <button id="clearFirstTwo" class="clear-btn" style="padding: 6px 12px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">清空前两个</button>
+                <button id="clearAll" class="clear-btn" style="padding: 6px 12px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">清空全部</button>
             </div>
-            <div class="selected-list">
-                <!-- 这里将通过JavaScript动态添加选中的香料 -->
+            
+            <!-- 前调区域 -->
+            <div class="note-section">
+                <h3 style="margin: 0 0 8px 0; font-size: 16px; color: #333;">前调 Top Notes</h3>
+                <div class="note-slots" data-note="top">
+                    <div class="slot-item" data-index="0"><div class="placeholder"></div></div>
+                    <div class="slot-item" data-index="1"><div class="placeholder"></div></div>
+                    <div class="slot-item" data-index="2"><div class="placeholder"></div></div>
+                    <div class="slot-item" data-index="3"><div class="placeholder"></div></div>
+                    <div class="slot-item" data-index="4"><div class="placeholder"></div></div>
+                </div>
+            </div>
+            
+            <!-- 中调区域 -->
+            <div class="note-section">
+                <h3 style="margin: 16px 0 8px 0; font-size: 16px; color: #333;">中调 Heart Notes</h3>
+                <div class="note-slots" data-note="heart">
+                    <div class="slot-item" data-index="0"><div class="placeholder"></div></div>
+                    <div class="slot-item" data-index="1"><div class="placeholder"></div></div>
+                    <div class="slot-item" data-index="2"><div class="placeholder"></div></div>
+                    <div class="slot-item" data-index="3"><div class="placeholder"></div></div>
+                    <div class="slot-item" data-index="4"><div class="placeholder"></div></div>
+                </div>
+            </div>
+            
+            <!-- 尾调区域 -->
+            <div class="note-section">
+                <h3 style="margin: 16px 0 8px 0; font-size: 16px; color: #333;">尾调 Base Notes</h3>
+                <div class="note-slots" data-note="base">
+                    <div class="slot-item" data-index="0"><div class="placeholder"></div></div>
+                    <div class="slot-item" data-index="1"><div class="placeholder"></div></div>
+                    <div class="slot-item" data-index="2"><div class="placeholder"></div></div>
+                    <div class="slot-item" data-index="3"><div class="placeholder"></div></div>
+                    <div class="slot-item" data-index="4"><div class="placeholder"></div></div>
+                </div>
             </div>
         </div>
     </main>
@@ -478,81 +511,151 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
         });
 
         (function(){
-            // 渲染已选香料
-            function renderSelectedIngredients() {
-                const list = document.querySelector('.selected-list');
-                if (!list) return;
-                list.innerHTML = '';
-                let selected = [];
+            // 新的数据结构：按香调分类存储
+            function getSelectedIngredients() {
                 try {
-                    selected = JSON.parse(localStorage.getItem('selectedIngredients')||'[]');
-                } catch(e) {}
-                selected = selected.slice(0,5);
-                selected.forEach(ingredient => {
-                    const img = document.createElement('img');
-                    // 处理新旧数据格式兼容
-                    if (typeof ingredient === 'string') {
-                        img.src = ingredient;
-                        img.title = '点击查看详情';
-                        // 从图片路径推断HTML文件名
-                        const fileName = ingredient.split('/').pop().replace(/\.(jpeg|jpg)$/i, '.html');
-                        img.style.cursor = 'pointer';
-                        img.addEventListener('click', () => {
-                            window.location.href = fileName;
-                        });
-                    } else if (ingredient && ingredient.image) {
-                        img.src = ingredient.image;
-                        img.title = '点击查看 ' + (ingredient.name || '香料') + ' 详情';
-                        img.style.cursor = 'pointer';
-                        // 使用香料名称生成HTML文件名
-                        const fileName = (ingredient.name || '') + '.html';
-                        img.addEventListener('click', () => {
-                            window.location.href = fileName;
-                        });
-                    }
-                    img.className = 'selected-img';
-                    list.appendChild(img);
-                });
-                for(let i=selected.length;i<5;i++){
-                    const ph = document.createElement('div');
-                    ph.className = 'placeholder';
-                    list.appendChild(ph);
+                    const data = JSON.parse(localStorage.getItem('selectedIngredientsByNote') || '{}');
+                    return {
+                        top: data.top || [],
+                        heart: data.heart || [],
+                        base: data.base || []
+                    };
+                } catch(e) {
+                    return { top: [], heart: [], base: [] };
                 }
             }
-            // 清空前两个香料的功能
-            function clearFirstTwoIngredients() {
-                let selected = [];
-                try {
-                    selected = JSON.parse(localStorage.getItem('selectedIngredients')||'[]');
-                } catch(e) {}
+            
+            function saveSelectedIngredients(data) {
+                localStorage.setItem('selectedIngredientsByNote', JSON.stringify(data));
+            }
+            
+            // 渲染已选香料
+            function renderSelectedIngredients() {
+                const selected = getSelectedIngredients();
                 
-                if (selected.length >= 2) {
-                    // 移除前两个
-                    selected = selected.slice(2);
-                    localStorage.setItem('selectedIngredients', JSON.stringify(selected));
-                    renderSelectedIngredients();
+                ['top', 'heart', 'base'].forEach(noteType => {
+                    const noteSlots = document.querySelector(`[data-note="${noteType}"]`);
+                    if (!noteSlots) return;
                     
-                    // 显示提示
-                    alert('已清空前两个香料选择');
-                } else if (selected.length === 1) {
-                    // 只有一个，清空它
-                    selected = [];
-                    localStorage.setItem('selectedIngredients', JSON.stringify(selected));
-                    renderSelectedIngredients();
+                    const slots = noteSlots.querySelectorAll('.slot-item');
+                    const ingredients = selected[noteType] || [];
                     
-                    // 显示提示
-                    alert('已清空第一个香料选择');
-                } else {
-                    alert('没有已选择的香料');
+                    slots.forEach((slot, index) => {
+                        const ingredient = ingredients[index];
+                        slot.innerHTML = '';
+                        
+                        if (ingredient) {
+                            // 有香料时显示图片
+                            const img = document.createElement('img');
+                            img.src = ingredient.image;
+                            img.title = `点击查看 ${ingredient.name} 详情`;
+                            img.style.cursor = 'pointer';
+                            img.addEventListener('click', () => {
+                                window.location.href = ingredient.name + '.html';
+                            });
+                            
+                            // 添加删除按钮
+                            const removeBtn = document.createElement('button');
+                            removeBtn.className = 'remove-btn';
+                            removeBtn.innerHTML = '×';
+                            removeBtn.title = '移除香料';
+                            removeBtn.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                removeIngredient(noteType, index);
+                            });
+                            
+                            slot.appendChild(img);
+                            slot.appendChild(removeBtn);
+                            slot.classList.add('filled');
+                        } else {
+                            // 空位显示占位符
+                            const placeholder = document.createElement('div');
+                            placeholder.className = 'placeholder';
+                            placeholder.textContent = index + 1;
+                            slot.appendChild(placeholder);
+                            slot.classList.remove('filled');
+                        }
+                    });
+                });
+            }
+            
+            // 移除香料
+            function removeIngredient(noteType, index) {
+                const selected = getSelectedIngredients();
+                selected[noteType].splice(index, 1);
+                saveSelectedIngredients(selected);
+                renderSelectedIngredients();
+                
+                // 显示提示
+                const noteNames = { top: '前调', heart: '中调', base: '尾调' };
+                alert(`已从${noteNames[noteType]}中移除香料`);
+            }
+            
+            // 清空所有香料
+            function clearAllIngredients() {
+                if (confirm('确定要清空所有已选择的香料吗？')) {
+                    const emptyData = { top: [], heart: [], base: [] };
+                    saveSelectedIngredients(emptyData);
+                    renderSelectedIngredients();
+                    alert('已清空所有香料选择');
+                }
+            }
+            
+            // 添加香料到指定香调
+            function addIngredientToNote(ingredient, noteType) {
+                const selected = getSelectedIngredients();
+                const noteIngredients = selected[noteType];
+                
+                // 检查是否已存在
+                const exists = noteIngredients.some(item => item.name === ingredient.name);
+                if (exists) {
+                    alert('该香料已在此香调中');
+                    return false;
+                }
+                
+                // 检查是否已满
+                if (noteIngredients.length >= 5) {
+                    alert('该香调已满，最多只能选择5种香料');
+                    return false;
+                }
+                
+                // 添加香料
+                noteIngredients.push(ingredient);
+                saveSelectedIngredients(selected);
+                renderSelectedIngredients();
+                
+                const noteNames = { top: '前调', heart: '中调', base: '尾调' };
+                alert(`已将 ${ingredient.name} 添加到${noteNames[noteType]} (${noteIngredients.length}/5)`);
+                return true;
+            }
+            
+            // 从旧格式迁移数据
+            function migrateOldData() {
+                const oldData = localStorage.getItem('selectedIngredients');
+                if (oldData) {
+                    try {
+                        const ingredients = JSON.parse(oldData);
+                        if (ingredients.length > 0) {
+                            // 将旧数据清空，用户需要重新选择并指定香调
+                            localStorage.removeItem('selectedIngredients');
+                            console.log('已清理旧的选择数据，请重新选择香料并指定香调');
+                        }
+                    } catch(e) {}
                 }
             }
 
+            // 导出函数到全局
             window.renderSelectedIngredients = renderSelectedIngredients;
-            window.clearFirstTwoIngredients = clearFirstTwoIngredients;
+            window.clearAllIngredients = clearAllIngredients;
+            window.addIngredientToNote = addIngredientToNote;
+            window.getSelectedIngredients = getSelectedIngredients;
+            
+            // 初始化
+            migrateOldData();
             renderSelectedIngredients();
             
             // 绑定清空按钮事件
-            document.getElementById('clearFirstTwo').addEventListener('click', clearFirstTwoIngredients);
+            document.getElementById('clearAll').addEventListener('click', clearAllIngredients);
             
             // 页面加载时同步选择状态
             document.addEventListener('DOMContentLoaded', function() {
@@ -561,7 +664,7 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
             
             // 监听localStorage变化，实时更新显示
             window.addEventListener('storage', function(e) {
-                if (e.key === 'selectedIngredients') {
+                if (e.key === 'selectedIngredientsByNote') {
                     renderSelectedIngredients();
                 }
             });

@@ -411,7 +411,10 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
 
         <!-- 已选香料展示区 -->
         <div class="selected-ingredients">
-            <h2>已选择的香料</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <h2 style="margin: 0;">已选择的香料</h2>
+                <button id="clearFirstTwo" class="clear-btn" style="padding: 6px 12px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">清空前两个</button>
+            </div>
             <div class="selected-list">
                 <!-- 这里将通过JavaScript动态添加选中的香料 -->
             </div>
@@ -516,8 +519,40 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                     list.appendChild(ph);
                 }
             }
+            // 清空前两个香料的功能
+            function clearFirstTwoIngredients() {
+                let selected = [];
+                try {
+                    selected = JSON.parse(localStorage.getItem('selectedIngredients')||'[]');
+                } catch(e) {}
+                
+                if (selected.length >= 2) {
+                    // 移除前两个
+                    selected = selected.slice(2);
+                    localStorage.setItem('selectedIngredients', JSON.stringify(selected));
+                    renderSelectedIngredients();
+                    
+                    // 显示提示
+                    alert('已清空前两个香料选择');
+                } else if (selected.length === 1) {
+                    // 只有一个，清空它
+                    selected = [];
+                    localStorage.setItem('selectedIngredients', JSON.stringify(selected));
+                    renderSelectedIngredients();
+                    
+                    // 显示提示
+                    alert('已清空第一个香料选择');
+                } else {
+                    alert('没有已选择的香料');
+                }
+            }
+
             window.renderSelectedIngredients = renderSelectedIngredients;
+            window.clearFirstTwoIngredients = clearFirstTwoIngredients;
             renderSelectedIngredients();
+            
+            // 绑定清空按钮事件
+            document.getElementById('clearFirstTwo').addEventListener('click', clearFirstTwoIngredients);
             
             // 页面加载时同步选择状态
             document.addEventListener('DOMContentLoaded', function() {

@@ -35,6 +35,12 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
             clip-path: circle(50% at 50% 50%);
             border: 2px solid #fff;
             box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            transition: all 0.3s ease;
+        }
+        .selected-list .selected-img:hover {
+            transform: scale(1.1);
+            border-color: #007bff;
+            box-shadow: 0 4px 16px rgba(0,123,255,0.3);
         }
         .selected-list .placeholder {
             width: 64px;
@@ -484,11 +490,24 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                     // 处理新旧数据格式兼容
                     if (typeof ingredient === 'string') {
                         img.src = ingredient;
+                        img.title = '点击查看详情';
+                        // 从图片路径推断HTML文件名
+                        const fileName = ingredient.split('/').pop().replace(/\.(jpeg|jpg)$/i, '.html');
+                        img.style.cursor = 'pointer';
+                        img.addEventListener('click', () => {
+                            window.location.href = fileName;
+                        });
                     } else if (ingredient && ingredient.image) {
                         img.src = ingredient.image;
+                        img.title = '点击查看 ' + (ingredient.name || '香料') + ' 详情';
+                        img.style.cursor = 'pointer';
+                        // 使用香料名称生成HTML文件名
+                        const fileName = (ingredient.name || '') + '.html';
+                        img.addEventListener('click', () => {
+                            window.location.href = fileName;
+                        });
                     }
                     img.className = 'selected-img';
-                    img.title = typeof ingredient === 'string' ? '已选择' : (ingredient.name || '已选择');
                     list.appendChild(img);
                 });
                 for(let i=selected.length;i<5;i++){

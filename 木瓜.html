@@ -37,49 +37,184 @@ Description: 香料详细介绍页面
                 </div>
             </section>
         </div>
-        <div class="select-action" style="display:flex;justify-content:center;margin:24px 0;">
-            <button id="select-btn" class="linear-btn">选择</button>
-            <button id="cancel-btn" class="linear-btn" style="margin-left:16px;display:none;">取消选择</button>
+                <div class="select-action" style="display:flex;justify-content:center;margin:24px 0;">
+            <div class="note-selection" style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+                <div style="font-size:14px;color:#666;margin-bottom:4px;">选择香调（三选一）：</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+                    <button class="note-select-btn exclusive" data-note="top">选择前调</button>
+                    <button class="note-select-btn exclusive" data-note="heart">选择中调</button>
+                    <button class="note-select-btn exclusive" data-note="base">选择尾调</button>
+                </div>
+                <div id="current-selection" style="font-size:12px;color:#28a745;margin-top:4px;display:none;">
+                    <!-- 当前选择状态 -->
+                </div>
+            </div>
         </div>
     </main>
-    <script>
-    (function(){
-      var img = document.querySelector('.linear-card img');
-      var imgSrc = img ? img.src : '';
-      var selectBtn = document.getElementById('select-btn');
-      var cancelBtn = document.getElementById('cancel-btn');
-      function getSelected(){
-        try{return JSON.parse(localStorage.getItem('selectedIngredients')||'[]');}catch(e){return[];}
-      }
-      function setSelected(arr){
-        localStorage.setItem('selectedIngredients',JSON.stringify(arr));
-        if(window.opener && window.opener.renderSelectedIngredients) window.opener.renderSelectedIngredients();
-      }
-      function updateBtn(){
-        var arr = getSelected();
-        if(arr.includes(imgSrc)){
-          selectBtn.style.display='none';
-          cancelBtn.style.display='inline-block';
-        }else{
-          selectBtn.style.display='inline-block';
-          cancelBtn.style.display='none';
+        <script>
+        // 显示成功提示
+        function showSuccessToast(message) {
+            // 移除已存在的提示
+            const existingToast = document.querySelector('.success-toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = 'success-toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // 显示动画
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            // 3秒后隐藏
+            setTimeout(() => {
+                toast.classList.remove('show');
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
-      }
-      selectBtn.onclick=function(){
-        var arr = getSelected();
-        if(arr.length>=5){alert('最多只能选择5种香料');return;}
-        if(!arr.includes(imgSrc)) arr.push(imgSrc);
-        setSelected(arr);
-        updateBtn();
-      };
-      cancelBtn.onclick=function(){
-        var arr = getSelected();
-        arr=arr.filter(x=>x!==imgSrc);
-        setSelected(arr);
-        updateBtn();
-      };
-      updateBtn();
-    })();
+
+        // 获取已选择的香料数据
+        function getSelectedIngredients() {
+            try {
+                const data = JSON.parse(localStorage.getItem('selectedIngredientsByNote') || '{}');
+                return {
+                    top: data.top || [],
+                    heart: data.heart || [],
+                    base: data.base || []
+                };
+            } catch(e) {
+                return { top: [], heart: [], base: [] };
+            }
+        }
+        
+        // 保存已选择的香料数据
+        function saveSelectedIngredients(data) {
+            localStorage.setItem('selectedIngredientsByNote', JSON.stringify(data));
+        }
+
+        // 选择香料到指定香调（三选一模式）
+        function selectIngredientToNote(noteType) {
+            const ingredientName = '木瓜';
+            const ingredientImage = 'images/ingredients/木瓜.jpeg';
+            
+            const ingredient = {
+                name: ingredientName,
+                image: ingredientImage
+            };
+            
+            const selected = getSelectedIngredients();
+            
+            // 检查是否已经在其他香调中选择了这个香料
+            const currentNote = getCurrentSelectedNote();
+            if (currentNote && currentNote !== noteType) {
+                // 从当前香调中移除
+                const currentIngredients = selected[currentNote];
+                const index = currentIngredients.findIndex(item => item.name === ingredient.name);
+                if (index > -1) {
+                    currentIngredients.splice(index, 1);
+                }
+            }
+            
+            const noteIngredients = selected[noteType];
+            
+            // 检查是否已存在于该香调
+            const exists = noteIngredients.some(item => item.name === ingredient.name);
+            if (exists) {
+                // 如果已存在，则移除（取消选择）
+                const index = noteIngredients.findIndex(item => item.name === ingredient.name);
+                noteIngredients.splice(index, 1);
+                saveSelectedIngredients(selected);
+                
+                const noteNames = { top: '前调', heart: '中调', base: '尾调' };
+                showSuccessToast(`已从${noteNames[noteType]}中移除 ${ingredient.name}`);
+                
+                updateButtonStates();
+                return;
+            }
+            
+            // 检查是否已满
+            if (noteIngredients.length >= 5) {
+                showSuccessToast('该香调已满，最多只能选择5种香料');
+                return;
+            }
+            
+            // 添加香料
+            noteIngredients.push(ingredient);
+            saveSelectedIngredients(selected);
+            
+            const noteNames = { top: '前调', heart: '中调', base: '尾调' };
+            showSuccessToast(`已将 ${ingredient.name} 添加到${noteNames[noteType]} (${noteIngredients.length}/5)`);
+            
+            updateButtonStates();
+        }
+        
+        // 获取当前香料选择在哪个香调中
+        function getCurrentSelectedNote() {
+            const ingredientName = '木瓜';
+            const selected = getSelectedIngredients();
+            
+            for (const [noteType, ingredients] of Object.entries(selected)) {
+                if (ingredients.some(item => item.name === ingredientName)) {
+                    return noteType;
+                }
+            }
+            return null;
+        }
+        
+        // 更新按钮状态
+        function updateButtonStates() {
+            const ingredientName = '木瓜';
+            const selected = getSelectedIngredients();
+            const currentNote = getCurrentSelectedNote();
+            const currentSelectionDiv = document.getElementById('current-selection');
+            
+            document.querySelectorAll('.note-select-btn').forEach(btn => {
+                const noteType = btn.dataset.note;
+                const noteIngredients = selected[noteType];
+                
+                // 检查是否已在该香调中
+                const exists = noteIngredients.some(item => item.name === ingredientName);
+                
+                if (exists) {
+                    btn.textContent = btn.dataset.note === 'top' ? '已选前调 ✓' : 
+                                     btn.dataset.note === 'heart' ? '已选中调 ✓' : '已选尾调 ✓';
+                    btn.style.background = '#28a745';
+                    btn.style.color = 'white';
+                    btn.style.border = '2px solid #28a745';
+                } else {
+                    btn.textContent = btn.dataset.note === 'top' ? '选择前调' : 
+                                     btn.dataset.note === 'heart' ? '选择中调' : '选择尾调';
+                    btn.style.background = '';
+                    btn.style.color = '';
+                    btn.style.border = '';
+                }
+            });
+            
+            // 更新当前选择状态显示
+            if (currentNote) {
+                const noteNames = { top: '前调', heart: '中调', base: '尾调' };
+                currentSelectionDiv.textContent = `当前选择：${noteNames[currentNote]}`;
+                currentSelectionDiv.style.display = 'block';
+            } else {
+                currentSelectionDiv.style.display = 'none';
+            }
+        }
+        
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 绑定按钮事件
+            document.querySelectorAll('.note-select-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    selectIngredientToNote(btn.dataset.note);
+                });
+            });
+            
+            // 更新按钮状态
+            updateButtonStates();
+        });
     </script>
 </body>
 </html> 

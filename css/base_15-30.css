@@ -409,7 +409,7 @@ body {
     cursor: pointer;
     font-size: 14px;
     transition: all 0.3s ease;
-    min-width: 60px;
+    min-width: 80px;
 }
 
 .note-select-btn:hover {
@@ -420,6 +420,16 @@ body {
 
 .note-select-btn:active {
     transform: translateY(0);
+}
+
+/* 独占选择模式样式 */
+.note-select-btn.exclusive {
+    min-width: 90px;
+    font-weight: 500;
+}
+
+.note-select-btn.exclusive:hover {
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
 }
 
 /* 移动端适配 */

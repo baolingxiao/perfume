@@ -105,7 +105,7 @@ Description: 香料详细介绍页面
             localStorage.setItem('selectedIngredientsByNote', JSON.stringify(data));
         }
 
-        // 选择香料到指定香调（三选一模式）
+        // 选择香料到指定香调（点击切换模式）
         function selectIngredientToNote(noteType) {
             const ingredientName = '雪松';
             const ingredientImage = 'images/ingredients/雪松.jpeg';
@@ -116,18 +116,6 @@ Description: 香料详细介绍页面
             };
             
             const selected = getSelectedIngredients();
-            
-            // 检查是否已经在其他香调中选择了这个香料
-            const currentNote = getCurrentSelectedNote();
-            if (currentNote && currentNote !== noteType) {
-                // 从当前香调中移除
-                const currentIngredients = selected[currentNote];
-                const index = currentIngredients.findIndex(item => item.name === ingredient.name);
-                if (index > -1) {
-                    currentIngredients.splice(index, 1);
-                }
-            }
-            
             const noteIngredients = selected[noteType];
             
             // 检查是否已存在于该香调
@@ -143,6 +131,17 @@ Description: 香料详细介绍页面
                 
                 updateButtonStates();
                 return;
+            }
+            
+            // 检查是否已经在其他香调中选择了这个香料
+            const currentNote = getCurrentSelectedNote();
+            if (currentNote && currentNote !== noteType) {
+                // 从当前香调中移除
+                const currentIngredients = selected[currentNote];
+                const index = currentIngredients.findIndex(item => item.name === ingredient.name);
+                if (index > -1) {
+                    currentIngredients.splice(index, 1);
+                }
             }
             
             // 检查是否已满
@@ -191,15 +190,11 @@ Description: 香料详细介绍页面
                 if (exists) {
                     btn.textContent = btn.dataset.note === 'top' ? '已选前调 ✓' : 
                                      btn.dataset.note === 'heart' ? '已选中调 ✓' : '已选尾调 ✓';
-                    btn.style.background = '#28a745';
-                    btn.style.color = 'white';
-                    btn.style.border = '2px solid #28a745';
+                    btn.classList.add('selected');
                 } else {
                     btn.textContent = btn.dataset.note === 'top' ? '选择前调' : 
                                      btn.dataset.note === 'heart' ? '选择中调' : '选择尾调';
-                    btn.style.background = '';
-                    btn.style.color = '';
-                    btn.style.border = '';
+                    btn.classList.remove('selected');
                 }
             });
             

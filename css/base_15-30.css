@@ -402,9 +402,9 @@ body {
 /* 香调选择按钮样式 */
 .note-select-btn {
     padding: 8px 16px;
-    border: 2px solid #007bff;
+    border: 2px solid #ff6b35;
     background: white;
-    color: #007bff;
+    color: #ff6b35;
     border-radius: 20px;
     cursor: pointer;
     font-size: 14px;
@@ -413,9 +413,10 @@ body {
 }
 
 .note-select-btn:hover {
-    background: #007bff;
+    background: linear-gradient(45deg, #8e44ad, #ff6b35);
     color: white;
     transform: translateY(-2px);
+    border-color: #8e44ad;
 }
 
 .note-select-btn:active {
@@ -429,7 +430,14 @@ body {
 }
 
 .note-select-btn.exclusive:hover {
-    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+}
+
+/* 已选择状态的紫橙色 */
+.note-select-btn.selected {
+    background: linear-gradient(45deg, #8e44ad, #ff6b35);
+    color: white;
+    border-color: #8e44ad;
 }
 
 /* 移动端适配 */

@@ -500,4 +500,18 @@
         height: 16px;
         font-size: 8px;
     }
+}
+
+/* AI故事生成按钮样式 */
+.story-btn {
+    transition: all 0.3s ease;
+}
+
+.story-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(142, 68, 173, 0.3);
+}
+
+.story-btn:active {
+    transform: translateY(0);
 } 

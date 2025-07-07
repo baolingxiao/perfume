@@ -16,13 +16,41 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectedIngredients = JSON.parse(localStorage.getItem('selectedIngredients') || '[]');
   const sliderForm = document.getElementById('slider-form');
   const totalWarning = document.getElementById('total-warning');
+  
+  // 检查是否有从香料选择页面传递过来的数据
   if (sliderForm && selectedIngredients.length > 0) {
-    sliderForm.innerHTML = selectedIngredients.map(ing => `
-      <div class="mb-4">
-        <label class="block font-bold mb-1">${ing.name} <span id="val-${ing.id}">0</span>%</label>
-        <input type="range" min="0" max="100" value="0" step="0.1" data-id="${ing.id}" class="w-full accent-primary" />
+    // 显示香料滑块界面
+    sliderForm.innerHTML = `
+      <h2 class="text-lg sm:text-xl font-bold text-dark mb-3 sm:mb-4 flex items-center">
+        <i class="fa fa-sliders text-primary mr-2"></i>调整香料比例
+      </h2>
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+        <p class="text-blue-800 text-sm mb-2">
+          <i class="fa fa-info-circle mr-1"></i>
+          检测到您从香料选择页面传递的香料，请调整各香料的比例（总和需为100%）
+        </p>
       </div>
-    `).join('');
+      ${selectedIngredients.map(ing => `
+        <div class="mb-4">
+          <label class="block font-bold mb-1 flex items-center">
+            <span class="mr-2">${ing.name}</span>
+            <span id="val-${ing.id}" class="text-primary font-mono">0</span>%
+          </label>
+          <input type="range" min="0" max="100" value="0" step="0.1" data-id="${ing.id}" class="w-full accent-primary slider" />
+        </div>
+      `).join('')}
+    `;
+    
+    // 隐藏传统的香调选择器
+    const scentSelector = document.querySelector('.scent-selector');
+    if (scentSelector) {
+      const traditionalSelectors = scentSelector.querySelectorAll('h2, .grid');
+      traditionalSelectors.forEach(element => {
+        if (!element.closest('#slider-form')) {
+          element.style.display = 'none';
+        }
+      });
+    }
   }
   function updateTotal() {
     let total = 0;
@@ -107,6 +135,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     });
+  }
+  
+  // 更新生成按钮文本
+  if (generateBtn && selectedIngredients.length > 0) {
+    generateBtn.innerHTML = '<i class="fa fa-magic mr-2"></i>根据您的香料生成故事';
   }
   
   // 生成按钮事件

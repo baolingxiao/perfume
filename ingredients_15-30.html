@@ -413,7 +413,10 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
         <div class="selected-ingredients">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                 <h2 style="margin: 0;">已选择的香料</h2>
-                <button id="clearAll" class="clear-btn" style="padding: 6px 12px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">清空全部</button>
+                <div style="display: flex; gap: 8px;">
+                    <button id="generateStory" class="story-btn" style="padding: 6px 12px; background: linear-gradient(45deg, #8e44ad, #ff6b35); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">生成AI故事</button>
+                    <button id="clearAll" class="clear-btn" style="padding: 6px 12px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">清空全部</button>
+                </div>
             </div>
             
             <!-- 前调区域 -->
@@ -601,6 +604,31 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                 }
             }
             
+            // 生成AI故事
+            function generateAIStory() {
+                const selected = getSelectedIngredients();
+                const allIngredients = [...selected.top, ...selected.heart, ...selected.base];
+                
+                if (allIngredients.length === 0) {
+                    alert('请先选择一些香料！');
+                    return;
+                }
+                
+                // 转换数据格式为AI故事生成器所需的格式
+                const storyIngredients = allIngredients.map((ingredient, index) => ({
+                    id: `ingredient_${index}`,
+                    name: ingredient.name,
+                    image: ingredient.image,
+                    ratio: 0 // 初始比例为0，用户可在故事生成页面调整
+                }));
+                
+                // 保存到localStorage供AI故事生成器使用
+                localStorage.setItem('selectedIngredients', JSON.stringify(storyIngredients));
+                
+                // 跳转到AI故事生成页面
+                window.open('scent-story-generator/static/scent_story_generator.html', '_blank');
+            }
+            
             // 添加香料到指定香调
             function addIngredientToNote(ingredient, noteType) {
                 const selected = getSelectedIngredients();
@@ -656,6 +684,9 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
             
             // 绑定清空按钮事件
             document.getElementById('clearAll').addEventListener('click', clearAllIngredients);
+            
+            // 绑定生成AI故事按钮事件
+            document.getElementById('generateStory').addEventListener('click', generateAIStory);
             
             // 页面加载时同步选择状态
             document.addEventListener('DOMContentLoaded', function() {

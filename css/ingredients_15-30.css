@@ -510,6 +510,8 @@
 .story-btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(142, 68, 173, 0.3);
+    background: linear-gradient(45deg, #8e44ad, #ff6b35) !important;
+    color: white !important;
 }
 
 .story-btn:active {

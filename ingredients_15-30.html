@@ -513,6 +513,44 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
             });
         });
 
+        // 香料直接选择功能
+        document.querySelectorAll('.ingredient-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // 获取当前选中的香调
+                const activeNoteBtn = document.querySelector('.note-btn.active');
+                const selectedNote = activeNoteBtn ? activeNoteBtn.dataset.note : 'all';
+                
+                // 如果选择的是"全部"，则跳转到香料详情页
+                if (selectedNote === 'all') {
+                    window.location.href = item.dataset.href;
+                    return;
+                }
+                
+                // 获取香料信息
+                const ingredientName = item.querySelector('h3').textContent.split('\n')[0];
+                const ingredientImage = item.querySelector('img').src;
+                
+                const ingredient = {
+                    name: ingredientName,
+                    image: ingredientImage.replace(window.location.origin + '/', '')
+                };
+                
+                // 将香料添加到选中的香调
+                const noteTypeMap = {
+                    'top': 'top',
+                    'middle': 'heart',
+                    'base': 'base'
+                };
+                
+                const noteType = noteTypeMap[selectedNote];
+                if (noteType) {
+                    addIngredientToSelectedNote(ingredient, noteType);
+                }
+            });
+        });
+
         (function(){
             // 新的数据结构：按香调分类存储
             function getSelectedIngredients() {
@@ -538,6 +576,23 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                 
                 // 添加调试信息
                 console.log('渲染已选香料:', selected);
+                
+                // 首先清除所有香料项的选中状态
+                document.querySelectorAll('.ingredient-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                
+                // 高亮显示已选择的香料
+                const allSelectedIngredients = [...selected.top, ...selected.heart, ...selected.base];
+                allSelectedIngredients.forEach(ingredient => {
+                    const ingredientItem = Array.from(document.querySelectorAll('.ingredient-item')).find(item => {
+                        const name = item.querySelector('h3').textContent.split('\n')[0];
+                        return name === ingredient.name;
+                    });
+                    if (ingredientItem) {
+                        ingredientItem.classList.add('selected');
+                    }
+                });
                 
                 ['top', 'heart', 'base'].forEach(noteType => {
                     const noteSlots = document.querySelector(`[data-note="${noteType}"]`);
@@ -663,6 +718,98 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                 const noteNames = { top: '前调', heart: '中调', base: '尾调' };
                 alert(`已将 ${ingredient.name} 添加到${noteNames[noteType]} (${noteIngredients.length}/5)`);
                 return true;
+            }
+            
+            // 添加香料到选中的香调（用于主页面直接选择）
+            function addIngredientToSelectedNote(ingredient, noteType) {
+                const selected = getSelectedIngredients();
+                
+                // 检查是否已经在其他香调中选择了这个香料
+                let existingNote = null;
+                for (const [note, ingredients] of Object.entries(selected)) {
+                    if (ingredients.some(item => item.name === ingredient.name)) {
+                        existingNote = note;
+                        break;
+                    }
+                }
+                
+                // 如果已经在其他香调中，先移除
+                if (existingNote && existingNote !== noteType) {
+                    const index = selected[existingNote].findIndex(item => item.name === ingredient.name);
+                    if (index > -1) {
+                        selected[existingNote].splice(index, 1);
+                    }
+                }
+                
+                const noteIngredients = selected[noteType];
+                
+                // 检查是否已存在于该香调
+                const exists = noteIngredients.some(item => item.name === ingredient.name);
+                if (exists) {
+                    // 如果已存在，则移除（取消选择）
+                    const index = noteIngredients.findIndex(item => item.name === ingredient.name);
+                    noteIngredients.splice(index, 1);
+                    saveSelectedIngredients(selected);
+                    renderSelectedIngredients();
+                    
+                    const noteNames = { top: '前调', heart: '中调', base: '尾调' };
+                    showToast(`已从${noteNames[noteType]}中移除 ${ingredient.name}`);
+                    return;
+                }
+                
+                // 检查是否已满
+                if (noteIngredients.length >= 5) {
+                    showToast('该香调已满，最多只能选择5种香料');
+                    return;
+                }
+                
+                // 添加香料
+                noteIngredients.push(ingredient);
+                saveSelectedIngredients(selected);
+                renderSelectedIngredients();
+                
+                const noteNames = { top: '前调', heart: '中调', base: '尾调' };
+                showToast(`已将 ${ingredient.name} 添加到${noteNames[noteType]} (${noteIngredients.length}/5)`);
+            }
+            
+            // 显示提示信息
+            function showToast(message) {
+                // 移除已存在的提示
+                const existingToast = document.querySelector('.toast-message');
+                if (existingToast) {
+                    existingToast.remove();
+                }
+                
+                const toast = document.createElement('div');
+                toast.className = 'toast-message';
+                toast.textContent = message;
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #28a745;
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 4px;
+                    z-index: 1000;
+                    font-size: 14px;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                    transform: translateX(100%);
+                    transition: transform 0.3s ease;
+                `;
+                
+                document.body.appendChild(toast);
+                
+                // 显示动画
+                setTimeout(() => {
+                    toast.style.transform = 'translateX(0)';
+                }, 10);
+                
+                // 3秒后隐藏
+                setTimeout(() => {
+                    toast.style.transform = 'translateX(100%)';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
             }
             
             // 从旧格式迁移数据

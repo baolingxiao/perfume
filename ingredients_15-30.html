@@ -577,6 +577,7 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                 
                 // 添加调试信息
                 console.log('渲染已选香料:', selected);
+                console.log('尾调数据:', selected.base);
                 
                 // 首先清除所有香料项的选中状态
                 document.querySelectorAll('.ingredient-item').forEach(item => {
@@ -597,6 +598,8 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                 
                 ['top', 'heart', 'base'].forEach(noteType => {
                     const noteSlots = document.querySelector(`[data-note="${noteType}"]`);
+                    console.log(`查找 ${noteType} 插槽容器:`, noteSlots);
+                    
                     if (!noteSlots) {
                         console.warn(`找不到 ${noteType} 的插槽容器`);
                         return;
@@ -606,12 +609,17 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                     const ingredients = selected[noteType] || [];
                     
                     console.log(`${noteType} 香调有 ${ingredients.length} 个香料:`, ingredients);
+                    console.log(`${noteType} 找到 ${slots.length} 个插槽`);
                     
                     slots.forEach((slot, index) => {
                         const ingredient = ingredients[index];
+                        console.log(`${noteType} 插槽 ${index}:`, ingredient);
+                        
                         slot.innerHTML = '';
                         
                         if (ingredient) {
+                            console.log(`渲染 ${noteType} 插槽 ${index} 的香料:`, ingredient.name);
+                            
                             // 有香料时显示图片
                             const img = document.createElement('img');
                             img.src = ingredient.image;

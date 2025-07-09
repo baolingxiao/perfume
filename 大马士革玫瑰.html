@@ -133,6 +133,17 @@ Description: 香料详细介绍页面
                 showSuccessToast(`已从${noteNames[noteType]}中移除 ${ingredient.name}`);
                 
                 updateButtonStates();
+                
+                // 通知主页面数据已更新
+                try {
+                    if (window.opener && window.opener.renderSelectedIngredients) {
+                        window.opener.renderSelectedIngredients();
+                    }
+                    // 尝试通过localStorage事件通知
+                    localStorage.setItem('selectedIngredientsByNote_trigger', Date.now().toString());
+                } catch(e) {
+                    console.log('无法通知主页面更新');
+                }
                 return;
             }
             
@@ -150,6 +161,17 @@ Description: 香料详细介绍页面
             showSuccessToast(`已将 ${ingredient.name} 添加到${noteNames[noteType]} (${noteIngredients.length}/5)`);
             
             updateButtonStates();
+            
+            // 通知主页面数据已更新
+            try {
+                if (window.opener && window.opener.renderSelectedIngredients) {
+                    window.opener.renderSelectedIngredients();
+                }
+                // 尝试通过localStorage事件通知
+                localStorage.setItem('selectedIngredientsByNote_trigger', Date.now().toString());
+            } catch(e) {
+                console.log('无法通知主页面更新');
+            }
         }
         
         // 获取当前香料选择在哪个香调中

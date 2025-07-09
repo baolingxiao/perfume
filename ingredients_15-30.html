@@ -714,7 +714,36 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                 if (e.key === 'selectedIngredientsByNote') {
                     renderSelectedIngredients();
                 }
+                if (e.key === 'selectedIngredientsByNote_trigger') {
+                    console.log('收到触发器信号，重新渲染选择状态');
+                    renderSelectedIngredients();
+                }
             });
+            
+            // 监听页面焦点恢复，重新渲染选择状态
+            window.addEventListener('focus', function() {
+                console.log('页面恢复焦点，重新渲染选择状态');
+                renderSelectedIngredients();
+            });
+            
+            // 监听页面可见性变化
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    console.log('页面变为可见，重新渲染选择状态');
+                    renderSelectedIngredients();
+                }
+            });
+            
+            // 定期检查localStorage变化（备用方案）
+            let lastDataString = JSON.stringify(getSelectedIngredients());
+            setInterval(function() {
+                const currentDataString = JSON.stringify(getSelectedIngredients());
+                if (currentDataString !== lastDataString) {
+                    console.log('检测到localStorage数据变化，重新渲染');
+                    renderSelectedIngredients();
+                    lastDataString = currentDataString;
+                }
+            }, 1000); // 每秒检查一次
         })();
     </script>
     <script src="perfume-workshop/static/scent_story_interaction.js"></script>

@@ -29,16 +29,56 @@ document.addEventListener('DOMContentLoaded', () => {
           <i class="fa fa-info-circle mr-1"></i>
           检测到您从香料选择页面传递的香料，请调整各香料的比例（总和需为100%）
         </p>
+        <p class="text-blue-700 text-xs">
+          <i class="fa fa-lightbulb-o mr-1"></i>
+          您可以使用滑块或直接输入数字来调整比例
+        </p>
       </div>
       ${selectedIngredients.map(ing => `
-        <div class="mb-4">
-          <label class="block font-bold mb-1 flex items-center">
-            <span class="mr-2">${ing.name}</span>
-            <span id="val-${ing.id}" class="text-primary font-mono">0</span>%
+        <div class="mb-4 p-3 bg-gray-50 rounded-lg">
+          <label class="block font-bold mb-2 flex items-center justify-between">
+            <span class="flex items-center">
+              <img src="${ing.image.startsWith('/') ? ing.image : '/' + ing.image}" alt="${ing.name}" class="w-6 h-6 rounded-full mr-2 object-cover">
+              ${ing.name}
+            </span>
+            <div class="flex items-center space-x-2">
+              <input type="number" 
+                     min="0" 
+                     max="100" 
+                     step="0.1" 
+                     value="0" 
+                     data-input-id="${ing.id}" 
+                     class="w-16 px-2 py-1 text-sm border border-gray-300 rounded text-center focus:outline-none focus:ring-2 focus:ring-primary/50"
+                     placeholder="0">
+              <span class="text-primary font-mono text-sm">%</span>
+            </div>
           </label>
-          <input type="range" min="0" max="100" value="0" step="0.1" data-id="${ing.id}" class="w-full accent-primary slider" />
+          <div class="flex items-center space-x-3">
+            <input type="range" 
+                   min="0" 
+                   max="100" 
+                   value="0" 
+                   step="0.1" 
+                   data-id="${ing.id}" 
+                   class="flex-1 accent-primary slider" />
+            <span id="val-${ing.id}" class="text-primary font-mono text-sm min-w-[3rem] text-center">0%</span>
+          </div>
         </div>
       `).join('')}
+      <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <div class="flex items-center justify-between">
+          <span class="text-yellow-800 font-medium">总比例：</span>
+          <span id="total-percentage" class="text-yellow-800 font-bold text-lg">0%</span>
+        </div>
+        <div class="mt-2">
+          <button id="auto-distribute-btn" class="text-xs bg-yellow-100 hover:bg-yellow-200 text-yellow-800 px-3 py-1 rounded transition-colors">
+            <i class="fa fa-magic mr-1"></i>平均分配
+          </button>
+          <button id="reset-btn" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded ml-2 transition-colors">
+            <i class="fa fa-refresh mr-1"></i>重置
+          </button>
+        </div>
+      </div>
     `;
     
     // 隐藏传统的香调选择器
@@ -55,16 +95,108 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateTotal() {
     let total = 0;
     selectedIngredients.forEach(ing => {
-      const val = parseFloat(document.querySelector(`input[data-id="${ing.id}"]`).value);
-      document.getElementById(`val-${ing.id}`).textContent = val;
+      const slider = document.querySelector(`input[data-id="${ing.id}"]`);
+      const input = document.querySelector(`input[data-input-id="${ing.id}"]`);
+      const val = parseFloat(slider.value);
+      
+      // 同步滑块和输入框的值
+      if (input) {
+        input.value = val.toFixed(1);
+      }
+      
+      document.getElementById(`val-${ing.id}`).textContent = val.toFixed(1);
       ing.ratio = val;
       total += val;
     });
+    
+    // 更新总比例显示
+    const totalElement = document.getElementById('total-percentage');
+    if (totalElement) {
+      totalElement.textContent = total.toFixed(1) + '%';
+      if (Math.abs(total - 100) <= 0.01) {
+        totalElement.className = 'text-green-600 font-bold text-lg';
+      } else if (total > 100) {
+        totalElement.className = 'text-red-600 font-bold text-lg';
+      } else {
+        totalElement.className = 'text-yellow-800 font-bold text-lg';
+      }
+    }
+    
     if (totalWarning) totalWarning.style.display = (Math.abs(total-100)>0.01) ? 'block' : 'none';
     return total;
   }
+  
+  // 添加输入框事件监听
+  function setupInputEvents() {
+    selectedIngredients.forEach(ing => {
+      const slider = document.querySelector(`input[data-id="${ing.id}"]`);
+      const input = document.querySelector(`input[data-input-id="${ing.id}"]`);
+      
+      if (slider && input) {
+        // 滑块变化时更新输入框
+        slider.addEventListener('input', () => {
+          input.value = parseFloat(slider.value).toFixed(1);
+          updateTotal();
+        });
+        
+        // 输入框变化时更新滑块
+        input.addEventListener('input', () => {
+          let val = parseFloat(input.value) || 0;
+          val = Math.max(0, Math.min(100, val)); // 限制在0-100之间
+          slider.value = val;
+          updateTotal();
+        });
+        
+        // 输入框失去焦点时格式化
+        input.addEventListener('blur', () => {
+          input.value = parseFloat(input.value || 0).toFixed(1);
+        });
+      }
+    });
+  }
+  
+  // 平均分配功能
+  function setupAutoDistribute() {
+    const autoDistributeBtn = document.getElementById('auto-distribute-btn');
+    if (autoDistributeBtn) {
+      autoDistributeBtn.addEventListener('click', () => {
+        const equalRatio = (100 / selectedIngredients.length).toFixed(1);
+        selectedIngredients.forEach(ing => {
+          const slider = document.querySelector(`input[data-id="${ing.id}"]`);
+          const input = document.querySelector(`input[data-input-id="${ing.id}"]`);
+          if (slider && input) {
+            slider.value = equalRatio;
+            input.value = equalRatio;
+          }
+        });
+        updateTotal();
+      });
+    }
+  }
+  
+  // 重置功能
+  function setupReset() {
+    const resetBtn = document.getElementById('reset-btn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        selectedIngredients.forEach(ing => {
+          const slider = document.querySelector(`input[data-id="${ing.id}"]`);
+          const input = document.querySelector(`input[data-input-id="${ing.id}"]`);
+          if (slider && input) {
+            slider.value = 0;
+            input.value = 0;
+          }
+        });
+        updateTotal();
+      });
+    }
+  }
+  
   if (sliderForm && selectedIngredients.length > 0) {
-    sliderForm.oninput = updateTotal;
+    // 初始化事件监听
+    setupInputEvents();
+    setupAutoDistribute();
+    setupReset();
     updateTotal();
   }
   // --- END 新增 ---

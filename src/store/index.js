@@ -1,6 +1,17 @@
 import { createStore } from 'vuex'
 
-export default createStore({
+// 自动从localStorage读取并映射key
+function mapLocalStorageToStore() {
+  const raw = JSON.parse(localStorage.getItem('selectedIngredients'))
+  if (!raw) return null
+  return {
+    topNotes: raw.top || [],
+    middleNotes: raw.heart || [],
+    baseNotes: raw.base || []
+  }
+}
+
+const store = createStore({
   state: {
     selectedIngredients: {
       topNotes: [],
@@ -37,6 +48,9 @@ export default createStore({
         story: '',
         similarPerfumes: []
       }
+    },
+    setSelectedIngredients(state, payload) {
+      state.selectedIngredients = payload
     }
   },
   actions: {
@@ -58,4 +72,11 @@ export default createStore({
         .reduce((total, notes) => total + notes.length, 0)
     }
   }
-}) 
+})
+
+const mapped = mapLocalStorageToStore()
+if (mapped) {
+  store.commit('setSelectedIngredients', mapped)
+}
+
+export default store 

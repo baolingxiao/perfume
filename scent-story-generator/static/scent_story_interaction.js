@@ -4,12 +4,102 @@
 // Author: Perfume Workshop Team
 // Description: AI香气故事生成器的前端交互逻辑
 //
+
+// 幻界卡系统配置
+const FANTASY_CARDS = {
+  // 花香调幻界卡
+  witch: {
+    name: '女巫卡',
+    description: '花香调≥70%，神秘而强大的女巫力量',
+    color: '#9C27B0',
+    bgColor: 'linear-gradient(135deg, #E1BEE7 0%, #CE93D8 100%)',
+    icon: 'fa-magic',
+    borderColor: '#7B1FA2'
+  },
+  dream: {
+    name: '梦界卡',
+    description: '花香调50%-70%，如梦似幻的梦境世界',
+    color: '#E91E63',
+    bgColor: 'linear-gradient(135deg, #F8BBD9 0%, #F48FB1 100%)',
+    icon: 'fa-cloud',
+    borderColor: '#C2185B'
+  },
+  flower: {
+    name: '花卡',
+    description: '花香调<50%，温柔绽放的花之精灵',
+    color: '#FF5722',
+    bgColor: 'linear-gradient(135deg, #FFCCBC 0%, #FFAB91 100%)',
+    icon: 'fa-heart',
+    borderColor: '#E64A19'
+  },
+  
+  // 果香调幻界卡
+  child: {
+    name: '童子卡',
+    description: '果香调≥70%，天真烂漫的精灵童子',
+    color: '#4CAF50',
+    bgColor: 'linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%)',
+    icon: 'fa-child',
+    borderColor: '#388E3C'
+  },
+  fox: {
+    name: '狐狸卡',
+    description: '果香调50%-70%，狡黠聪慧的九尾狐',
+    color: '#FF9800',
+    bgColor: 'linear-gradient(135deg, #FFE0B2 0%, #FFCC80 100%)',
+    icon: 'fa-paw',
+    borderColor: '#F57C00'
+  },
+  fruit: {
+    name: '果卡',
+    description: '果香调<50%，甜美诱人的果实精灵',
+    color: '#FF5722',
+    bgColor: 'linear-gradient(135deg, #FFCDD2 0%, #EF9A9A 100%)',
+    icon: 'fa-apple',
+    borderColor: '#D32F2F'
+  },
+  
+  // 木香调幻界卡
+  bard: {
+    name: '咏者卡',
+    description: '木香调≥70%，古老智慧的森林咏者',
+    color: '#795548',
+    bgColor: 'linear-gradient(135deg, #D7CCC8 0%, #BCAAA4 100%)',
+    icon: 'fa-music',
+    borderColor: '#5D4037'
+  },
+  deer: {
+    name: '岩鹿卡',
+    description: '木香调50%-70%，优雅高贵的岩鹿',
+    color: '#8D6E63',
+    bgColor: 'linear-gradient(135deg, #D7CCC8 0%, #A1887F 100%)',
+    icon: 'fa-leaf',
+    borderColor: '#6D4C41'
+  },
+  smoke: {
+    name: '烟卡',
+    description: '木香调<50%，缥缈神秘的烟雾精灵',
+    color: '#607D8B',
+    bgColor: 'linear-gradient(135deg, #CFD8DC 0%, #B0BEC5 100%)',
+    icon: 'fa-smoke',
+    borderColor: '#455A64'
+  }
+};
+
+// 香调分类规则
+const SCENT_CATEGORIES = {
+  floral: ['玫瑰', '茉莉', '薰衣草', '紫罗兰', '百合', '栀子花', '小苍兰', '铃兰', '风信子', '夜来香', '橙花', '鸳鸯茉莉', '金合欢', '金银花', '鸡蛋花', '鸢尾花', '白兰花', '红姜花'],
+  fruity: ['苹果', '桃子', '柠檬', '青柠', '血橙', '柚子', '橙子', '柑橘', '金桔', '青苹果', '香柠檬', '草莓', '蓝莓', '覆盆子', '樱桃', '梨', '杏子', '李子', '芒果', '香蕉', '菠萝', '百香果', '椰子', '木瓜'],
+  woody: ['檀香', '雪松', '广藿香', '岩兰草', '乌木', '橡木苔', '杉木', '柏木', '松木', '桦木焦油', '古巴香脂木', '橡苔', '雪松苔', '雪松醇']
+};
+
 // 全局状态变量
 let selectedMainScent = null;
 let selectedAccents = [];
 let selectedAIProvider = 'deepseek';
 let lastGeneratedTime = 0;
 const GENERATION_COOLDOWN = 600000; // 10分钟
+let currentCardType = 'story'; // 'story' 或 'fantasy'
 
 document.addEventListener('DOMContentLoaded', () => {
   // --- 新增：香料滑块UI与数据流 ---
@@ -356,8 +446,170 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
   
+  // 幻界卡分类逻辑
+  function calculateScentRatios(ingredients) {
+    const ratios = { floral: 0, fruity: 0, woody: 0 };
+    let totalRatio = 0;
+    
+    ingredients.forEach(ing => {
+      const ratio = ing.ratio || 0;
+      totalRatio += ratio;
+      
+      // 根据香料名称分类
+      if (SCENT_CATEGORIES.floral.includes(ing.name)) {
+        ratios.floral += ratio;
+      } else if (SCENT_CATEGORIES.fruity.includes(ing.name)) {
+        ratios.fruity += ratio;
+      } else if (SCENT_CATEGORIES.woody.includes(ing.name)) {
+        ratios.woody += ratio;
+      }
+    });
+    
+    // 转换为百分比
+    if (totalRatio > 0) {
+      ratios.floral = (ratios.floral / totalRatio) * 100;
+      ratios.fruity = (ratios.fruity / totalRatio) * 100;
+      ratios.woody = (ratios.woody / totalRatio) * 100;
+    }
+    
+    return ratios;
+  }
+  
+  function determineFantasyCard(ratios) {
+    // 找出占比最高的香调
+    const maxScent = Object.keys(ratios).reduce((a, b) => ratios[a] > ratios[b] ? a : b);
+    const maxRatio = ratios[maxScent];
+    
+    // 根据占比确定幻界卡类型
+    if (maxScent === 'floral') {
+      if (maxRatio >= 70) return 'witch';
+      else if (maxRatio >= 50) return 'dream';
+      else return 'flower';
+    } else if (maxScent === 'fruity') {
+      if (maxRatio >= 70) return 'child';
+      else if (maxRatio >= 50) return 'fox';
+      else return 'fruit';
+    } else if (maxScent === 'woody') {
+      if (maxRatio >= 70) return 'bard';
+      else if (maxRatio >= 50) return 'deer';
+      else return 'smoke';
+    }
+    
+    return 'flower'; // 默认返回花卡
+  }
+  
+  function createFantasyCard(cardType, ratios, storyData) {
+    const card = FANTASY_CARDS[cardType];
+    const generatedAt = new Date(storyData.generated_at * 1000).toLocaleString();
+    
+    return `
+      <div class="fantasy-card animate-fade-in" style="background: ${card.bgColor}; border: 3px solid ${card.borderColor};">
+        <div class="relative overflow-hidden rounded-xl">
+          <!-- 卡片头部 -->
+          <div class="flex justify-between items-start mb-6 p-6" style="color: ${card.color};">
+            <div class="flex items-center">
+              <i class="fa ${card.icon} text-4xl mr-4"></i>
+              <div>
+                <h3 class="text-3xl font-bold mb-2">${card.name}</h3>
+                <p class="text-lg opacity-90">${card.description}</p>
+              </div>
+            </div>
+            <span class="text-sm opacity-70">生成于 ${generatedAt}</span>
+          </div>
+          
+          <!-- 香调占比展示 -->
+          <div class="px-6 mb-6">
+            <h4 class="text-xl font-bold mb-4" style="color: ${card.color};">香调占比分析</h4>
+            <div class="space-y-4">
+              <!-- 花香调 -->
+              <div class="bg-white/20 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="font-semibold" style="color: ${card.color};">花香调</span>
+                  <span class="font-bold text-lg" style="color: ${card.color};">${ratios.floral.toFixed(1)}%</span>
+                </div>
+                <div class="scent-progress">
+                  <div class="scent-progress-bar" style="width: ${ratios.floral}%; background: linear-gradient(90deg, #E91E63, #9C27B0);"></div>
+                </div>
+              </div>
+              
+              <!-- 果香调 -->
+              <div class="bg-white/20 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="font-semibold" style="color: ${card.color};">果香调</span>
+                  <span class="font-bold text-lg" style="color: ${card.color};">${ratios.fruity.toFixed(1)}%</span>
+                </div>
+                <div class="scent-progress">
+                  <div class="scent-progress-bar" style="width: ${ratios.fruity}%; background: linear-gradient(90deg, #FF9800, #4CAF50);"></div>
+                </div>
+              </div>
+              
+              <!-- 木香调 -->
+              <div class="bg-white/20 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="font-semibold" style="color: ${card.color};">木香调</span>
+                  <span class="font-bold text-lg" style="color: ${card.color};">${ratios.woody.toFixed(1)}%</span>
+                </div>
+                <div class="scent-progress">
+                  <div class="scent-progress-bar" style="width: ${ratios.woody}%; background: linear-gradient(90deg, #795548, #8D6E63);"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 故事内容 -->
+          <div class="px-6 mb-6">
+            <h4 class="text-xl font-bold mb-3" style="color: ${card.color};">香气故事</h4>
+            <div class="bg-white/30 p-4 rounded-lg backdrop-blur-sm">
+              <p class="text-gray-800 leading-relaxed">${storyData.content}</p>
+            </div>
+          </div>
+          
+          <!-- 卡片底部操作 -->
+          <div class="px-6 pb-6 flex justify-between items-center">
+            <button id="switch-to-story-btn" class="px-4 py-2 rounded-lg transition-all duration-300 flex items-center hover:scale-105" 
+                    style="background: ${card.color}; color: white; box-shadow: 0 4px 12px ${card.color}40;">
+              <i class="fa fa-book mr-2"></i> 查看故事卡
+            </button>
+            
+            <div class="flex space-x-3">
+              <button class="text-gray-700 hover:text-white transition-colors duration-300 hover:scale-110">
+                <i class="fa fa-heart-o"></i>
+              </button>
+              <button class="text-gray-700 hover:text-white transition-colors duration-300 hover:scale-110">
+                <i class="fa fa-share-alt"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  
+  function switchCardType() {
+    if (currentCardType === 'story') {
+      // 切换到幻界卡
+      const ratios = calculateScentRatios(selectedIngredients);
+      const cardType = determineFantasyCard(ratios);
+      const fantasyCardHTML = createFantasyCard(cardType, ratios, window.lastStoryData);
+      storyOutput.innerHTML = fantasyCardHTML;
+      currentCardType = 'fantasy';
+      
+      // 添加切换回故事卡的事件
+      document.getElementById('switch-to-story-btn').addEventListener('click', () => {
+        switchCardType();
+      });
+    } else {
+      // 切换回故事卡
+      displayStory(window.lastStoryData);
+      currentCardType = 'story';
+    }
+  }
+  
   // 显示生成的故事
   function displayStory(storyData) {
+    // 保存故事数据到全局变量，供幻界卡使用
+    window.lastStoryData = storyData;
+    
     // 构建香调标签
     let scentTags = `<span class="inline-block px-3 py-1 bg-${storyData.scent}/10 text-${storyData.scent} rounded-full text-sm mr-2 mb-2">${getScentName(storyData.scent)}</span>`;
     
@@ -370,6 +622,21 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 格式化生成时间
     const generatedAt = new Date(storyData.generated_at * 1000).toLocaleString();
+    
+    // 如果有香料数据，添加幻界卡切换按钮
+    let fantasyCardButton = '';
+    if (selectedIngredients && selectedIngredients.length > 0) {
+      const ratios = calculateScentRatios(selectedIngredients);
+      const cardType = determineFantasyCard(ratios);
+      const card = FANTASY_CARDS[cardType];
+      
+      fantasyCardButton = `
+        <button id="switch-to-fantasy-btn" class="px-4 py-2 rounded-lg transition-all duration-300 flex items-center" 
+                style="background: ${card.color}; color: white;">
+          <i class="fa ${card.icon} mr-2"></i> 查看${card.name}
+        </button>
+      `;
+    }
     
     storyOutput.innerHTML = `
       <div class="story-card animate-fade-in">
@@ -387,9 +654,12 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         
         <div class="mt-6 pt-4 border-t border-gray-100 flex justify-between items-center">
-          <button id="regenerate-btn" class="text-primary hover:text-primary/80 transition-colors duration-300 flex items-center">
-            <i class="fa fa-refresh mr-1"></i> 换一个故事
-          </button>
+          <div class="flex space-x-3">
+            <button id="regenerate-btn" class="text-primary hover:text-primary/80 transition-colors duration-300 flex items-center">
+              <i class="fa fa-refresh mr-1"></i> 换一个故事
+            </button>
+            ${fantasyCardButton}
+          </div>
           
           <div class="flex space-x-3">
             <button class="text-dark/50 hover:text-primary transition-colors duration-300">
@@ -407,6 +677,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('regenerate-btn').addEventListener('click', () => {
       generateBtn.click();
     });
+    
+    // 为幻界卡切换按钮添加事件
+    const fantasyBtn = document.getElementById('switch-to-fantasy-btn');
+    if (fantasyBtn) {
+      fantasyBtn.addEventListener('click', () => {
+        switchCardType();
+      });
+    }
+    
+    // 重置卡片类型状态
+    currentCardType = 'story';
   }
   
   // 显示错误故事

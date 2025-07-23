@@ -71,53 +71,44 @@
           <v-card-text>
             <!-- 前调 -->
             <div v-if="selectedTopNotes.length > 0" class="mb-4">
-              <h3 class="text-h6 mb-2">前调</h3>
-              <v-chip-group>
-                <v-chip
-                  v-for="ingredient in selectedTopNotes"
-                  :key="ingredient.id"
-                  closable
-                  @click:close="removeIngredient('topNotes', ingredient)"
-                  color="primary"
-                  variant="outlined"
-                >
-                  {{ ingredient.name }}
-                </v-chip>
-              </v-chip-group>
+              <h3 class="text-h6 mb-2">前调 Top Notes</h3>
+              <div class="selected-note-list">
+                <div v-for="(ingredient, idx) in selectedTopNotes" :key="ingredient.name + idx" class="selected-note-item">
+                  <v-avatar size="48">
+                    <v-img :src="ingredient.image.startsWith('/') ? ingredient.image : '/' + ingredient.image" :alt="ingredient.name" />
+                  </v-avatar>
+                  <span class="selected-note-name">{{ ingredient.name }}</span>
+                  <v-btn icon size="x-small" @click="removeIngredient('topNotes', ingredient)"><v-icon>mdi-close</v-icon></v-btn>
+                </div>
+              </div>
             </div>
 
             <!-- 中调 -->
             <div v-if="selectedMiddleNotes.length > 0" class="mb-4">
-              <h3 class="text-h6 mb-2">中调</h3>
-              <v-chip-group>
-                <v-chip
-                  v-for="ingredient in selectedMiddleNotes"
-                  :key="ingredient.id"
-                  closable
-                  @click:close="removeIngredient('middleNotes', ingredient)"
-                  color="secondary"
-                  variant="outlined"
-                >
-                  {{ ingredient.name }}
-                </v-chip>
-              </v-chip-group>
+              <h3 class="text-h6 mb-2">中调 Heart Notes</h3>
+              <div class="selected-note-list">
+                <div v-for="(ingredient, idx) in selectedMiddleNotes" :key="ingredient.name + idx" class="selected-note-item">
+                  <v-avatar size="48">
+                    <v-img :src="ingredient.image.startsWith('/') ? ingredient.image : '/' + ingredient.image" :alt="ingredient.name" />
+                  </v-avatar>
+                  <span class="selected-note-name">{{ ingredient.name }}</span>
+                  <v-btn icon size="x-small" @click="removeIngredient('middleNotes', ingredient)"><v-icon>mdi-close</v-icon></v-btn>
+                </div>
+              </div>
             </div>
 
             <!-- 尾调 -->
             <div v-if="selectedBaseNotes.length > 0" class="mb-4">
-              <h3 class="text-h6 mb-2">尾调</h3>
-              <v-chip-group>
-                <v-chip
-                  v-for="ingredient in selectedBaseNotes"
-                  :key="ingredient.id"
-                  closable
-                  @click:close="removeIngredient('baseNotes', ingredient)"
-                  color="accent"
-                  variant="outlined"
-                >
-                  {{ ingredient.name }}
-                </v-chip>
-              </v-chip-group>
+              <h3 class="text-h6 mb-2">尾调 Base Notes</h3>
+              <div class="selected-note-list">
+                <div v-for="(ingredient, idx) in selectedBaseNotes" :key="ingredient.name + idx" class="selected-note-item">
+                  <v-avatar size="48">
+                    <v-img :src="ingredient.image.startsWith('/') ? ingredient.image : '/' + ingredient.image" :alt="ingredient.name" />
+                  </v-avatar>
+                  <span class="selected-note-name">{{ ingredient.name }}</span>
+                  <v-btn icon size="x-small" @click="removeIngredient('baseNotes', ingredient)"><v-icon>mdi-close</v-icon></v-btn>
+                </div>
+              </div>
             </div>
 
             <!-- 空状态 -->
@@ -249,5 +240,22 @@ export default {
 
 .v-chip-group {
   flex-wrap: wrap;
+}
+.selected-note-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.selected-note-item {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 24px;
+  padding: 4px 12px 4px 4px;
+  margin-bottom: 4px;
+}
+.selected-note-name {
+  margin: 0 8px;
+  font-size: 15px;
 }
 </style> 

@@ -38,6 +38,94 @@ Description: AI驱动的香气故事生成器，支持多种AI模型和个性化
         content-visibility: auto;
       }
     }
+    
+    /* 幻界卡样式 */
+    .fantasy-card {
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+    
+    .fantasy-card:hover {
+      transform: translateY(-5px) rotateX(2deg);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    }
+    
+    .story-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .story-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    }
+    
+    /* 卡片切换动画 */
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    /* 卡片翻转动画 */
+    .card-flip {
+      animation: cardFlip 0.8s ease-in-out;
+    }
+    
+    @keyframes cardFlip {
+      0% {
+        transform: rotateY(0deg);
+      }
+      50% {
+        transform: rotateY(90deg);
+      }
+      100% {
+        transform: rotateY(0deg);
+      }
+    }
+    
+    /* 香调占比进度条 */
+    .scent-progress {
+      height: 8px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.3);
+      overflow: hidden;
+    }
+    
+    .scent-progress-bar {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.8s ease-out;
+    }
+    
+    /* 响应式调整 */
+    @media (max-width: 768px) {
+      .fantasy-card {
+        margin: 0 10px;
+      }
+      
+      .fantasy-card .text-3xl {
+        font-size: 1.5rem;
+      }
+      
+      .fantasy-card .text-4xl {
+        font-size: 2rem;
+      }
+    }
   </style>
 </head>
 <body class="bg-gradient-to-br from-light to-secondary/20 min-h-screen font-inter">

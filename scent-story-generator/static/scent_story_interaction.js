@@ -14,7 +14,8 @@ const FANTASY_CARDS = {
     color: '#9C27B0',
     bgColor: 'linear-gradient(135deg, #E1BEE7 0%, #CE93D8 100%)',
     icon: 'fa-magic',
-    borderColor: '#7B1FA2'
+    borderColor: '#7B1FA2',
+    image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=600&fit=crop&crop=center'
   },
   dream: {
     name: '梦界卡',
@@ -502,6 +503,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const card = FANTASY_CARDS[cardType];
     const generatedAt = new Date(storyData.generated_at * 1000).toLocaleString();
     
+    // 构建图片显示区域
+    let imageSection = '';
+    if (card.image) {
+      imageSection = `
+        <div class="px-6 mb-6">
+          <div class="flex justify-center">
+            <div class="relative">
+              <img src="${card.image}" alt="${card.name}" class="w-48 h-64 object-cover rounded-lg shadow-lg" style="border: 2px solid ${card.borderColor};">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    
     return `
       <div class="fantasy-card animate-fade-in" style="background: ${card.bgColor}; border: 3px solid ${card.borderColor};">
         <div class="relative overflow-hidden rounded-xl">
@@ -516,6 +532,8 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <span class="text-sm opacity-70">生成于 ${generatedAt}</span>
           </div>
+          
+          ${imageSection}
           
           <!-- 香调占比展示 -->
           <div class="px-6 mb-6">

@@ -819,9 +819,17 @@ def generate_story():
         
         # 解析请求数据
         data = request.json
+        ai_provider = data.get('aiProvider', 'deepseek')  # 默认使用DeepSeek
+        
+        # 检查是否有ingredients参数（新的香料比例方式）
+        ingredients = data.get('ingredients', [])
+        if ingredients:
+            # 使用香料比例方式
+            return generate_story_from_ingredients(ingredients, ai_provider, user_ip, current_time)
+        
+        # 传统香调选择方式
         main_scent = data.get('mainScent')
         accents = data.get('accents', [])
-        ai_provider = data.get('aiProvider', 'deepseek')  # 默认使用DeepSeek
         
         if not main_scent:
             return jsonify({"error": "请选择主香调"}), 400
@@ -879,6 +887,110 @@ def generate_story():
             "error": "生成故事失败，请稍后再试",
             "details": str(e)
         }), 500
+
+def generate_story_from_ingredients(ingredients, ai_provider, user_ip, current_time):
+    """根据香料比例生成故事"""
+    try:
+        # 构建缓存键（基于香料比例）
+        ingredients_key = '_'.join([f"{ing['name']}_{ing.get('ratio', 0)}" for ing in ingredients])
+        combo_key = f"{ai_provider}_ingredients_{ingredients_key}"
+        
+        # 检查缓存
+        if combo_key in story_cache and current_time - cache_expire[combo_key] < CACHE_DURATION:
+            return jsonify(story_cache[combo_key])
+        
+        # 构建基于香料比例的提示词
+        prompt = build_prompt_from_ingredients(ingredients)
+        
+        # 根据选择的AI提供商生成故事
+        if ai_provider == 'huggingface':
+            story = generate_with_huggingface(prompt)
+        else:
+            story = generate_with_deepseek(prompt)
+        
+        # 内容过滤
+        filtered_story = filter_content(story)
+        
+        # 提取标题
+        title = filtered_story[:15].strip()
+        if len(filtered_story) > 15 and not filtered_story[15].isspace():
+            title += "..."
+        
+        # 构建响应数据
+        story_data = {
+            "title": title,
+            "content": filtered_story,
+            "ingredients": ingredients,
+            "ai_provider": ai_provider,
+            "generated_at": int(current_time)
+        }
+        
+        # 存储到缓存
+        story_cache[combo_key] = story_data
+        cache_expire[combo_key] = current_time
+        
+        return jsonify(story_data)
+        
+    except Exception as e:
+        print(f"Error generating story from ingredients: {str(e)}")
+        return jsonify({
+            "error": "根据香料比例生成故事失败，请稍后再试",
+            "details": str(e)
+        }), 500
+
+def build_prompt_from_ingredients(ingredients):
+    """根据香料比例构建提示词"""
+    # 构建香料描述
+    ingredient_desc = []
+    for ing in ingredients:
+        if ing.get('ratio', 0) > 0:
+            ingredient_desc.append(f"{ing['name']}({ing['ratio']}%)")
+    
+    # 分析主要香调
+    floral_ratio = 0
+    fruity_ratio = 0
+    woody_ratio = 0
+    
+    for ing in ingredients:
+        ratio = ing.get('ratio', 0)
+        name = ing['name']
+        
+        # 根据香料名称分类
+        if name in ['玫瑰', '茉莉', '薰衣草', '紫罗兰', '百合', '栀子花', '小苍兰', '铃兰', '风信子', '夜来香', '橙花', '鸳鸯茉莉', '金合欢', '金银花', '鸡蛋花', '鸢尾花', '白兰花', '红姜花']:
+            floral_ratio += ratio
+        elif name in ['苹果', '桃子', '柠檬', '青柠', '血橙', '柚子', '橙子', '柑橘', '金桔', '青苹果', '香柠檬', '草莓', '蓝莓', '覆盆子', '樱桃', '梨', '杏子', '芒果', '香蕉', '菠萝', '百香果', '椰子', '木瓜']:
+            fruity_ratio += ratio
+        elif name in ['檀香', '雪松', '广藿香', '岩兰草', '乌木', '橡木苔', '杉木', '柏木', '松木', '桦木焦油', '古巴香脂木', '橡苔', '雪松苔', '雪松醇']:
+            woody_ratio += ratio
+    
+    # 确定主要香调
+    main_scent = 'floral' if floral_ratio > fruity_ratio and floral_ratio > woody_ratio else \
+                 'fruity' if fruity_ratio > woody_ratio else 'woody'
+    
+    prompt = f"""
+请为以下香料组合创作一个富有诗意的香水故事：
+
+香料组合：{', '.join(ingredient_desc)}
+
+香调分析：
+- 花香调：{floral_ratio:.1f}%
+- 果香调：{fruity_ratio:.1f}%
+- 木香调：{woody_ratio:.1f}%
+
+主要香调：{main_scent}
+
+要求：
+1. 故事要体现每种香料的特性和比例重要性
+2. 根据主要香调营造相应的氛围和情感
+3. 语言要优美，富有想象力和诗意
+4. 字数控制在300-500字
+5. 故事要有完整的叙事结构，包含开头、发展、高潮和结尾
+6. 要体现香料的层次感和变化过程
+
+请创作一个独特的香气故事：
+"""
+    
+    return prompt
 
 def generate_with_huggingface(prompt):
     """使用Hugging Face API生成故事"""

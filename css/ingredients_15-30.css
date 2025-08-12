@@ -203,9 +203,9 @@
     background: white;
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    padding: 20px;
+    padding: 16px;
     margin: 0;
-    margin-top: 20px;
+    margin-top: 16px;
     width: 100%;
     position: relative;
 }
@@ -214,24 +214,26 @@
     color: #333;
     font-weight: 600;
     margin: 0;
-    font-size: 18px;
+    font-size: 16px;
     display: inline-block;
+    line-height: 1.2;
 }
 
 .selected-ingredients .action-buttons {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     float: right;
 }
 
 .selected-ingredients .action-buttons button {
-    padding: 6px 12px;
+    padding: 4px 8px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 500;
     transition: all 0.3s ease;
+    line-height: 1.2;
 }
 
 .selected-ingredients .action-buttons .story-btn {
@@ -263,27 +265,28 @@
 
 /* 按香调分类的已选择香料样式 */
 .note-section {
-    margin-top: 16px;
-    margin-bottom: 16px;
+    margin-top: 12px;
+    margin-bottom: 12px;
 }
 
 .note-section h3 {
-    margin: 0 0 8px 0;
-    font-size: 16px;
+    margin: 0 0 6px 0;
+    font-size: 14px;
     color: #333;
     font-weight: 500;
+    line-height: 1.2;
 }
 
 .note-slots {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     justify-content: flex-start;
     flex-wrap: wrap;
 }
 
 .slot-item {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     overflow: hidden;
     border: 2px solid #ddd;
@@ -310,9 +313,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 11px;
     color: #6c757d;
     font-weight: 500;
+    line-height: 1;
 }
 
 .slot-item img {
@@ -324,15 +328,15 @@
 
 .slot-item .remove-btn {
     position: absolute;
-    top: -5px;
-    right: -5px;
-    width: 18px;
-    height: 18px;
+    top: -4px;
+    right: -4px;
+    width: 16px;
+    height: 16px;
     background: #dc3545;
     color: white;
     border: none;
     border-radius: 50%;
-    font-size: 10px;
+    font-size: 9px;
     cursor: pointer;
     display: none;
     align-items: center;
@@ -584,37 +588,8 @@
 /* 移动端适配 */
 @media (max-width: 768px) {
     .slot-item {
-        width: 45px;
-        height: 45px;
-    }
-    
-    .note-slots {
-        gap: 6px;
-    }
-    
-    .note-section {
-        margin-bottom: 16px;
-    }
-    
-    .selected-ingredients {
-        padding: 16px;
-        margin-top: 16px;
-    }
-    
-    .selected-ingredients h2 {
-        font-size: 16px;
-    }
-    
-    .selected-ingredients .action-buttons button {
-        padding: 5px 10px;
-        font-size: 11px;
-    }
-}
-
-@media (max-width: 480px) {
-    .slot-item {
-        width: 40px;
-        height: 40px;
+        width: 42px;
+        height: 42px;
     }
     
     .note-slots {
@@ -626,8 +601,8 @@
     }
     
     .selected-ingredients {
-        padding: 12px;
-        margin-top: 12px;
+        padding: 14px;
+        margin-top: 14px;
     }
     
     .selected-ingredients h2 {
@@ -635,14 +610,61 @@
     }
     
     .selected-ingredients .action-buttons button {
-        padding: 4px 8px;
+        padding: 3px 7px;
+        font-size: 9px;
+    }
+    
+    .note-section h3 {
+        font-size: 13px;
+        margin-bottom: 5px;
+    }
+    
+    .slot-item .placeholder {
         font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .slot-item {
+        width: 38px;
+        height: 38px;
+    }
+    
+    .note-slots {
+        gap: 4px;
+    }
+    
+    .note-section {
+        margin-bottom: 10px;
+    }
+    
+    .selected-ingredients {
+        padding: 12px;
+        margin-top: 12px;
+    }
+    
+    .selected-ingredients h2 {
+        font-size: 14px;
+    }
+    
+    .selected-ingredients .action-buttons button {
+        padding: 2px 6px;
+        font-size: 8px;
+    }
+    
+    .note-section h3 {
+        font-size: 12px;
+        margin-bottom: 4px;
+    }
+    
+    .slot-item .placeholder {
+        font-size: 9px;
     }
     
     .slot-item .remove-btn {
-        width: 16px;
-        height: 16px;
-        font-size: 8px;
+        width: 14px;
+        height: 14px;
+        font-size: 7px;
     }
 }
 

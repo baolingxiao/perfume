@@ -16,8 +16,8 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>选择香料 - 香水工坊</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/base_15-30.css?v=12">
-    <link rel="stylesheet" href="css/ingredients_15-30.css?v=12">
+    <link rel="stylesheet" href="css/base_15-30.css?v=13">
+    <link rel="stylesheet" href="css/ingredients_15-30.css?v=13">
     <style>
         .selected-list {
             display: flex;
@@ -599,6 +599,13 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                 });
                 
                 ['top', 'heart', 'base'].forEach(noteType => {
+                    // 调试：查看所有data-note属性的元素
+                    const allDataNoteElements = document.querySelectorAll('[data-note]');
+                    console.log(`所有data-note元素:`, allDataNoteElements);
+                    allDataNoteElements.forEach(el => {
+                        console.log(`元素:`, el, `data-note值:`, el.getAttribute('data-note'));
+                    });
+                    
                     const noteSlots = document.querySelector(`[data-note="${noteType}"]`);
                     console.log(`查找 ${noteType} 插槽容器:`, noteSlots);
                     

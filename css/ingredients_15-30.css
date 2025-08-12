@@ -108,71 +108,168 @@
     box-shadow: 0 4px 16px rgba(94, 53, 177, 0.3);
 }
 
-/* 🎯 统一矩阵网格布局 - 主要修改部分 */
+/* 🎯 阶梯状网格布局 - 重新设计 */
 .ingredients-page .ingredients-grid {
-    display: grid !important;
-    grid-template-columns: repeat(5, 1fr) !important;
-    gap: 2rem;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.5rem;
     margin-bottom: var(--spacing);
-    max-width: 1200px;
+    max-width: 1400px;
     margin-left: auto;
     margin-right: auto;
     padding: 0 2rem;
 }
 
 .ingredients-page .ingredient-category {
-    /* 移除原有的网格设置，让所有香材在同一个网格中 */
-    display: contents;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
 }
 
+/* 阶梯状行布局 */
+.ingredients-page .ingredient-category:nth-child(1) {
+    margin-left: 0;
+}
+
+.ingredients-page .ingredient-category:nth-child(2) {
+    margin-left: 8%;
+}
+
+.ingredients-page .ingredient-category:nth-child(3) {
+    margin-left: 16%;
+}
+
+.ingredients-page .ingredient-category:nth-child(4) {
+    margin-left: 24%;
+}
+
+.ingredients-page .ingredient-category:nth-child(5) {
+    margin-left: 32%;
+}
+
+.ingredients-page .ingredient-category:nth-child(6) {
+    margin-left: 40%;
+}
+
+.ingredients-page .ingredient-category:nth-child(7) {
+    margin-left: 48%;
+}
+
+.ingredients-page .ingredient-category:nth-child(8) {
+    margin-left: 56%;
+}
+
+.ingredients-page .ingredient-category:nth-child(9) {
+    margin-left: 64%;
+}
+
+.ingredients-page .ingredient-category:nth-child(10) {
+    margin-left: 72%;
+}
+
+/* 统一卡片设计 - 50%紫色50%白色 */
 .ingredients-page .ingredient-item {
-    background: white;
-    border-radius: 16px;
+    background: linear-gradient(135deg, #5e35b1 0%, #7c4dff 50%, #ffffff 50%, #ffffff 100%);
+    border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    transition: all 0.3s ease;
+    box-shadow: 0 12px 32px rgba(94, 53, 177, 0.15);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     position: relative;
-    min-height: 280px;
+    width: 200px;
+    height: 280px;
     display: flex;
     flex-direction: column;
+    border: 3px solid #5e35b1;
+}
+
+.ingredients-page .ingredient-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(94, 53, 177, 0.1) 0%, rgba(124, 77, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.05) 100%);
+    pointer-events: none;
+    z-index: 1;
 }
 
 .ingredients-page .ingredient-item:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 20px 48px rgba(94, 53, 177, 0.25);
+    border-color: #7c4dff;
 }
 
+.ingredients-page .ingredient-item:hover::before {
+    background: linear-gradient(135deg, rgba(94, 53, 177, 0.15) 0%, rgba(124, 77, 255, 0.15) 50%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.08) 100%);
+}
+
+/* 图片区域 - 上半部分紫色渐变 */
 .ingredients-page .ingredient-item img {
     width: 100%;
-    height: 200px;
+    height: 140px; /* 50%的高度 */
     object-fit: cover;
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 2;
+    border-bottom: 2px solid rgba(94, 53, 177, 0.2);
 }
 
 .ingredients-page .ingredient-item:hover img {
-    transform: scale(1.05);
+    transform: scale(1.08);
+    filter: brightness(1.1) contrast(1.1);
 }
 
+/* 文字区域 - 下半部分白色 */
 .ingredients-page .ingredient-item h3 {
-    padding: 1rem;
+    padding: 1.2rem 1rem;
     margin: 0;
     font-size: 1.1rem;
-    font-weight: 600;
-    color: #333;
+    font-weight: 700;
+    color: #5e35b1;
     text-align: center;
     line-height: 1.4;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background: white;
+    position: relative;
+    z-index: 2;
+    border-top: 2px solid rgba(94, 53, 177, 0.1);
 }
 
 .ingredients-page .ingredient-item .en {
     font-size: 0.9rem;
-    color: #666;
-    font-weight: 400;
-    margin-top: 0.25rem;
+    color: #7c4dff;
+    font-weight: 500;
+    margin-top: 0.3rem;
+    opacity: 0.8;
+}
+
+/* 卡片装饰元素 */
+.ingredients-page .ingredient-item::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4px;
+    height: 4px;
+    background: #7c4dff;
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 3;
+}
+
+.ingredients-page .ingredient-item:hover::after {
+    opacity: 1;
+    width: 8px;
+    height: 8px;
+    box-shadow: 0 0 12px rgba(124, 77, 255, 0.6);
 }
 
 /* 已选香料区域 */

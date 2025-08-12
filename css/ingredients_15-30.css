@@ -108,64 +108,20 @@
     box-shadow: 0 4px 16px rgba(94, 53, 177, 0.3);
 }
 
-/* 🎯 阶梯状网格布局 - 重新设计 */
+/* 🎯 统一网格布局 - 重新设计 */
 .ingredients-page .ingredients-grid {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 1.5rem;
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 2rem;
     margin-bottom: var(--spacing);
-    max-width: 1400px;
+    max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
     padding: 0 2rem;
 }
 
 .ingredients-page .ingredient-category {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-}
-
-/* 阶梯状行布局 */
-.ingredients-page .ingredient-category:nth-child(1) {
-    margin-left: 0;
-}
-
-.ingredients-page .ingredient-category:nth-child(2) {
-    margin-left: 8%;
-}
-
-.ingredients-page .ingredient-category:nth-child(3) {
-    margin-left: 16%;
-}
-
-.ingredients-page .ingredient-category:nth-child(4) {
-    margin-left: 24%;
-}
-
-.ingredients-page .ingredient-category:nth-child(5) {
-    margin-left: 32%;
-}
-
-.ingredients-page .ingredient-category:nth-child(6) {
-    margin-left: 40%;
-}
-
-.ingredients-page .ingredient-category:nth-child(7) {
-    margin-left: 48%;
-}
-
-.ingredients-page .ingredient-category:nth-child(8) {
-    margin-left: 56%;
-}
-
-.ingredients-page .ingredient-category:nth-child(9) {
-    margin-left: 64%;
-}
-
-.ingredients-page .ingredient-category:nth-child(10) {
-    margin-left: 72%;
+    display: contents;
 }
 
 /* 统一卡片设计 - 50%紫色50%白色 */
@@ -177,8 +133,7 @@
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     position: relative;
-    width: 200px;
-    height: 280px;
+    min-height: 280px;
     display: flex;
     flex-direction: column;
     border: 3px solid #5e35b1;

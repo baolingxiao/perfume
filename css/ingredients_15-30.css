@@ -147,13 +147,14 @@
 
 /* 图片区域 - 上半部分，固定高度，不遮挡文字 */
 .ingredients-page .ingredient-item img {
-    width: 100%;
-    height: 140px; /* 固定高度，确保不遮挡文字 */
-    object-fit: cover;
-    object-position: center;
+    width: 100% !important;
+    height: 140px !important; /* 固定高度，确保不遮挡文字 */
+    object-fit: cover !important;
+    object-position: center !important;
     transition: all 0.3s ease;
     background: linear-gradient(135deg, #5e35b1 0%, #7c4dff 100%);
     border-bottom: 2px solid rgba(94, 53, 177, 0.2);
+    display: block !important;
 }
 
 .ingredients-page .ingredient-item:hover img {
@@ -187,21 +188,9 @@
     opacity: 0.8;
 }
 
-/* 卡片装饰元素 */
-.ingredients-page .ingredient-item::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 140px;
-    background: linear-gradient(135deg, rgba(94, 53, 177, 0.1) 0%, rgba(124, 77, 255, 0.1) 100%);
-    pointer-events: none;
-    z-index: 1;
-}
-
-.ingredients-page .ingredient-item:hover::before {
-    background: linear-gradient(135deg, rgba(94, 53, 177, 0.15) 0%, rgba(124, 77, 255, 0.15) 100%);
+/* 移除有问题的装饰元素 */
+.ingredients-page .ingredient-bottom {
+    display: none;
 }
 
 /* 已选香料区域 */

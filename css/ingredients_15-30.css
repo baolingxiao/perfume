@@ -145,10 +145,10 @@
     border-color: #7c4dff;
 }
 
-/* 图片区域 - 上半部分，固定高度，不遮挡文字 */
+/* 图片区域 - 上半部分，70%占比 */
 .ingredients-page .ingredient-item img {
     width: 100% !important;
-    height: 140px !important; /* 固定高度，确保不遮挡文字 */
+    height: 196px !important; /* 70%的高度 (280px * 0.7) */
     object-fit: cover !important;
     object-position: center !important;
     transition: all 0.3s ease;
@@ -162,9 +162,9 @@
     filter: brightness(1.1);
 }
 
-/* 文字区域 - 下半部分，固定高度，确保文字完全可见 */
+/* 文字区域 - 下半部分，30%占比 */
 .ingredients-page .ingredient-item h3 {
-    padding: 1.5rem 1rem;
+    padding: 1rem;
     margin: 0;
     font-size: 1.1rem;
     font-weight: 700;
@@ -176,7 +176,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 140px; /* 确保文字区域有足够空间 */
+    min-height: 84px; /* 30%的高度 (280px * 0.3) */
     border-top: 2px solid rgba(94, 53, 177, 0.1);
 }
 

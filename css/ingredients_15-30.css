@@ -193,6 +193,11 @@
     display: none;
 }
 
+/* 隐藏筛选后的香料卡片 */
+.ingredients-page .ingredient-item.hidden {
+    display: none !important;
+}
+
 /* 已选香料区域 */
 .selected-ingredients {
     background: var(--card-bg);

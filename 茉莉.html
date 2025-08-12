@@ -12,14 +12,14 @@ Description: 香料详细介绍页面
     <title>茉莉（Jasmine） - 香料介绍</title>
     <link rel="stylesheet" href="css/base_15-30.css">
 </head>
-<body style="background: var(--background-color);">
+<body style="background: var(--background-color);" class="ingredient-detail">
     <main class="linear-main">
         <div class="linear-card" style="max-width:520px;margin:auto;">
             <img src="images/ingredients/茉莉.jpeg" alt="茉莉" style="width:100%;border-radius:var(--border-radius);margin-bottom:var(--spacing);">
             <h1 style="margin-bottom:8px;">茉莉（Jasmine）</h1>
             <section style="margin-bottom:var(--spacing);">
                 <b>主要产地与香气差异：</b>
-                <ul style="margin:8px 0 0 1.2em;padding:0;color:var(--muted-text);">
+                <ul style="margin: 8px 0 0 1.2em;padding:0;color:var(--muted-text);">
                     <li><b>印度（Jasmine Sambac）</b>：动物感强、浓烈、略带青绿和奶味，性感而奔放。</li>
                     <li><b>埃及（Jasmine Grandiflorum）</b>：柔和、花香纯净，稍带果香。</li>
                     <li><b>法国格拉斯</b>：香气细腻平衡、白花感突出，动物感被弱化。</li>
@@ -36,7 +36,7 @@ Description: 香料详细介绍页面
                 <div style="margin-top:8px;color:var(--muted-text);">
                     中调主花，常见于东方调、性感女香、白花香调、夜香系香水。
                 </div>
-            </section>        <div class="select-action" style="display:flex;justify-content:center;margin:8px 0;">
+            </section>        <div class="select-action" style="display:flex;justify-content:center;margin: 8px 0;">
             <div class="note-selection" style="display:flex;flex-direction:column;align-items:center;gap:12px;">
                 <div style="font-size:14px;color:#666;margin-bottom:4px;">选择香调（三选一）：</div>
     </main>
@@ -46,7 +46,7 @@ Description: 香料详细介绍页面
                     <button class="note-select-btn exclusive" data-note="heart">选择中调</button>
                     <button class="note-select-btn exclusive" data-note="base">选择尾调</button>
                 </div>
-                <div id="current-selection" style="font-size:12px;color:#28a745;margin-top:4px;display:none;">
+                <div id="current-selection" style="font-size:12px;color:#28a745;margin-top:4px;display: flex;">
                     <!-- 当前选择状态 -->
                 </div>
             </div>

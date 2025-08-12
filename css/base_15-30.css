@@ -456,3 +456,53 @@ body {
         min-width: 45px;
     }
 } 
+
+/* 香料详情页面专用样式 */
+/* 确保选择按钮在香料详情页面始终显示 */
+body:not(.ingredients-page) .select-action {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* 香料详情页面的选择按钮样式 */
+body:not(.ingredients-page) .note-select-btn {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* 香料详情页面的note-selection容器样式 */
+body:not(.ingredients-page) .note-selection {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* 香料详情页面的current-selection样式 */
+body:not(.ingredients-page) #current-selection {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* 香料详情页面的间距优化 */
+body:not(.ingredients-page) .select-action {
+    margin: 8px 0 !important;
+    padding: 0 !important;
+}
+
+/* 确保香料详情页面的main标签内容正常显示 */
+body:not(.ingredients-page) main {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* 香料详情页面的linear-card样式优化 */
+body:not(.ingredients-page) .linear-card {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+} 

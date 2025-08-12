@@ -41,39 +41,44 @@ Description: AI驱动的香气故事生成器，支持多种AI模型和个性化
     
     /* 幻界卡样式 */
     .fantasy-card {
-      border-radius: 16px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
       transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       transform-style: preserve-3d;
       perspective: 1000px;
+      max-width: 900px;
+      margin: 0 auto;
     }
     
     .fantasy-card:hover {
-      transform: translateY(-5px) rotateX(2deg);
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+      transform: translateY(-8px) rotateX(3deg);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
     }
     
     .story-card {
       background: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
       transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
     }
     
     .story-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
     }
     
     /* 卡片切换动画 */
     .animate-fade-in {
-      animation: fadeIn 0.6s ease-out;
+      animation: fadeIn 0.8s ease-out;
     }
     
     @keyframes fadeIn {
       from {
         opacity: 0;
-        transform: translateY(20px) scale(0.95);
+        transform: translateY(30px) scale(0.95);
       }
       to {
         opacity: 1;
@@ -83,7 +88,7 @@ Description: AI驱动的香气故事生成器，支持多种AI模型和个性化
     
     /* 卡片翻转动画 */
     .card-flip {
-      animation: cardFlip 0.8s ease-in-out;
+      animation: cardFlip 1s ease-in-out;
     }
     
     @keyframes cardFlip {
@@ -100,22 +105,42 @@ Description: AI驱动的香气故事生成器，支持多种AI模型和个性化
     
     /* 香调占比进度条 */
     .scent-progress {
-      height: 8px;
-      border-radius: 4px;
+      height: 12px;
+      border-radius: 6px;
       background: rgba(255, 255, 255, 0.3);
       overflow: hidden;
     }
     
     .scent-progress-bar {
       height: 100%;
-      border-radius: 4px;
-      transition: width 0.8s ease-out;
+      border-radius: 6px;
+      transition: width 1s ease-out;
+    }
+    
+    /* 电脑端优化 */
+    @media (min-width: 1024px) {
+      .fantasy-card {
+        padding: 2rem;
+      }
+      
+      .fantasy-card .text-3xl {
+        font-size: 2.25rem;
+      }
+      
+      .fantasy-card .text-4xl {
+        font-size: 2.5rem;
+      }
+      
+      .story-card {
+        padding: 3rem;
+      }
     }
     
     /* 响应式调整 */
     @media (max-width: 768px) {
       .fantasy-card {
         margin: 0 10px;
+        max-width: none;
       }
       
       .fantasy-card .text-3xl {
@@ -125,99 +150,108 @@ Description: AI驱动的香气故事生成器，支持多种AI模型和个性化
       .fantasy-card .text-4xl {
         font-size: 2rem;
       }
+      
+      .story-card {
+        margin: 0 10px;
+        max-width: none;
+        padding: 1.5rem;
+      }
     }
   </style>
 </head>
 <body class="bg-gradient-to-br from-light to-secondary/20 min-h-screen font-inter">
-  <div class="container mx-auto w-full max-w-full px-2 sm:px-4 py-4 sm:py-8">
+  <div class="container mx-auto w-full max-w-7xl px-6 py-8">
     <!-- 头部 -->
-    <header class="text-center mb-6 sm:mb-10">
-      <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-2">
-        <i class="fa fa-leaf mr-2"></i>香气故事生成器
+    <header class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-primary mb-4">
+        <i class="fa fa-leaf mr-3"></i>香气故事生成器
       </h1>
-      <p class="text-dark/70 text-base sm:text-lg max-w-2xl mx-auto">
+      <p class="text-dark/70 text-lg max-w-3xl mx-auto leading-relaxed">
         选择您喜爱的香调组合，探索专属于它们的奇幻故事
       </p>
     </header>
     
     <!-- 主内容区 -->
-    <main class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-3 sm:p-6 md:p-8 mb-8">
+    <main class="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 mb-12">
       <!-- AI提供商选择器 -->
-      <div class="ai-selector mb-6 sm:mb-8">
-        <h2 class="text-lg sm:text-xl font-bold text-dark mb-3 sm:mb-4 flex items-center">
-          <i class="fa fa-robot text-primary mr-2"></i>选择AI提供商
+      <div class="ai-selector mb-10">
+        <h2 class="text-2xl font-bold text-dark mb-6 flex items-center">
+          <i class="fa fa-robot text-primary mr-3 text-2xl"></i>选择AI提供商
         </h2>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 sm:mb-6">
-          <button class="ai-btn bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg p-3 sm:p-4 transition-all duration-300 flex items-center justify-center text-base sm:text-lg" data-ai="huggingface">
+        <div class="grid grid-cols-2 gap-6 mb-8 max-w-2xl mx-auto">
+          <button class="ai-btn bg-blue-50 hover:bg-blue-100 border-2 border-blue-200 rounded-xl p-6 transition-all duration-300 flex items-center justify-center text-lg hover:scale-105" data-ai="huggingface">
             <div class="flex items-center justify-center">
-              <i class="fa fa-globe text-blue-600 mr-2 text-lg"></i>
+              <i class="fa fa-globe text-blue-600 mr-3 text-2xl"></i>
               <div class="text-left">
-                <div class="font-semibold text-blue-800">美国AI</div>
-                <div class="text-sm text-blue-600">Hugging Face</div>
+                <div class="font-bold text-blue-800 text-xl">美国AI</div>
+                <div class="text-blue-600">Hugging Face</div>
               </div>
             </div>
           </button>
-          <button class="ai-btn bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg p-3 sm:p-4 transition-all duration-300 flex items-center justify-center text-base sm:text-lg" data-ai="deepseek">
+          <button class="ai-btn bg-green-50 hover:bg-green-100 border-2 border-green-200 rounded-xl p-6 transition-all duration-300 flex items-center justify-center text-lg hover:scale-105" data-ai="deepseek">
             <div class="flex items-center justify-center">
-              <i class="fa fa-leaf text-green-600 mr-2 text-lg"></i>
+              <i class="fa fa-leaf text-green-600 mr-3 text-2xl"></i>
               <div class="text-left">
-                <div class="font-semibold text-green-800">中国AI</div>
-                <div class="text-sm text-green-600">DeepSeek</div>
+                <div class="font-bold text-green-800 text-xl">中国AI</div>
+                <div class="text-green-600">DeepSeek</div>
               </div>
             </div>
           </button>
         </div>
       </div>
-      <div id="slider-form" class="mb-6 sm:mb-8"></div>
-      <div id="total-warning" class="text-red-600 mb-4 hidden">比例总和必须为100%</div>
+      
+      <div id="slider-form" class="mb-10"></div>
+      <div id="total-warning" class="text-red-600 mb-6 hidden text-center text-lg font-semibold">比例总和必须为100%</div>
       
       <!-- 香调选择器 -->
-      <div class="scent-selector mb-6 sm:mb-8">
-        <h2 class="text-lg sm:text-xl font-bold text-dark mb-3 sm:mb-4 flex items-center">
-          <i class="fa fa-paint-brush text-primary mr-2"></i>选择主香调
+      <div class="scent-selector mb-10">
+        <h2 class="text-2xl font-bold text-dark mb-6 flex items-center">
+          <i class="fa fa-paint-brush text-primary mr-3 text-2xl"></i>选择主香调
         </h2>
         
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4 sm:mb-6">
-          <button class="scent-btn px-4 py-2 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 bg-floral/10 hover:bg-floral/30 border border-floral/30 text-base sm:text-lg" data-scent="floral">
-            <i class="fa fa-heart text-floral mr-1"></i> 花香调
+        <div class="grid grid-cols-4 gap-4 mb-8 max-w-4xl mx-auto">
+          <button class="scent-btn px-6 py-4 rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 bg-floral/10 hover:bg-floral/30 border-2 border-floral/30 text-lg font-semibold hover:scale-105" data-scent="floral">
+            <i class="fa fa-heart text-floral mr-2"></i> 花香调
           </button>
-          <button class="scent-btn px-4 py-2 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 bg-woody/10 hover:bg-woody/30 border border-woody/30 text-base sm:text-lg" data-scent="woody">
-            <i class="fa fa-tree text-woody mr-1"></i> 木香调
+          <button class="scent-btn px-6 py-4 rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 bg-woody/10 hover:bg-woody/30 border-2 border-woody/30 text-lg font-semibold hover:scale-105" data-scent="woody">
+            <i class="fa fa-tree text-woody mr-2"></i> 木香调
           </button>
-          <button class="scent-btn px-4 py-2 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 bg-fruity/10 hover:bg-fruity/30 border border-fruity/30 text-base sm:text-lg" data-scent="fruity">
-            <i class="fa fa-apple text-fruity mr-1"></i> 果香调
+          <button class="scent-btn px-6 py-4 rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 bg-fruity/10 hover:bg-fruity/30 border-2 border-fruity/30 text-lg font-semibold hover:scale-105" data-scent="fruity">
+            <i class="fa fa-apple text-fruity mr-2"></i> 果香调
           </button>
-          <button class="scent-btn px-4 py-2 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 bg-oriental/10 hover:bg-oriental/30 border border-oriental/30 text-base sm:text-lg" data-scent="oriental">
-            <i class="fa fa-compass text-oriental mr-1"></i> 东方调
+          <button class="scent-btn px-6 py-4 rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 bg-oriental/10 hover:bg-oriental/30 border-2 border-oriental/30 text-lg font-semibold hover:scale-105" data-scent="oriental">
+            <i class="fa fa-compass text-oriental mr-2"></i> 东方调
           </button>
         </div>
         
-        <h2 class="text-lg sm:text-xl font-bold text-dark mb-3 sm:mb-4 flex items-center">
-          <i class="fa fa-plus-circle text-primary mr-2"></i>选择辅料（可多选）
+        <h2 class="text-2xl font-bold text-dark mb-6 flex items-center">
+          <i class="fa fa-plus-circle text-primary mr-3 text-2xl"></i>选择辅料（可多选）
         </h2>
         
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-6 sm:mb-8" id="accent-buttons">
+        <div class="grid grid-cols-6 gap-4 mb-10 max-w-6xl mx-auto" id="accent-buttons">
           <!-- 辅料按钮将由JavaScript动态生成 -->
         </div>
         
-        <button id="generate-btn" class="w-full py-3 px-4 sm:px-6 bg-primary hover:bg-primary/90 text-white rounded-lg shadow-md transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary/50 text-base sm:text-lg">
-          <i class="fa fa-magic mr-2"></i>生成香气故事
-        </button>
+        <div class="text-center">
+          <button id="generate-btn" class="px-12 py-4 bg-primary hover:bg-primary/90 text-white rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/50 text-xl font-bold">
+            <i class="fa fa-magic mr-3"></i>生成香气故事
+          </button>
+        </div>
       </div>
       
       <!-- 故事展示区 -->
-      <div id="story-output" class="story-output mt-8 sm:mt-10">
-        <div class="story-placeholder bg-light rounded-xl p-6 sm:p-8 text-center text-dark/50">
-          <i class="fa fa-book text-4xl mb-4 text-primary/30"></i>
-          <p class="text-base sm:text-lg">选择您喜爱的香调组合，点击"生成香气故事"按钮</p>
-          <p class="text-xs sm:text-sm mt-2">我们将为您创造一个专属于这种香调的奇幻故事</p>
+      <div id="story-output" class="story-output mt-12">
+        <div class="story-placeholder bg-light rounded-2xl p-12 text-center text-dark/50">
+          <i class="fa fa-book text-6xl mb-6 text-primary/30"></i>
+          <p class="text-xl mb-4">选择您喜爱的香调组合，点击"生成香气故事"按钮</p>
+          <p class="text-base">我们将为您创造一个专属于这种香调的奇幻故事</p>
         </div>
       </div>
     </main>
     
     <!-- 页脚 -->
-    <footer class="text-center text-dark/50 text-xs sm:text-sm py-3 sm:py-4">
+    <footer class="text-center text-dark/50 text-sm py-6">
       <p>© 2025 香水工坊 | 使用AI技术创造独特的嗅觉叙事体验</p>
     </footer>
   </div>

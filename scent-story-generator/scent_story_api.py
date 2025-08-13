@@ -1043,7 +1043,7 @@ def generate_with_openai(prompt):
     }
     
     data = {
-        "model": "gpt-3.5-turbo", # 示例模型，实际项目可配置
+        "model": "gpt-5", # 使用GPT-5模型
         "messages": [
             {
                 "role": "user",

@@ -1,58 +1,17 @@
-<!--
-🌸 香料介绍页面
-Last updated: 2025-07-01 15:27
-Author: Perfume Workshop Team
-Description: 香料详细介绍页面
--->
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>红姜花（Red Ginger Lily） - 香料介绍</title>
-    <link rel="stylesheet" href="css/base_15-30.css">
-</head>
-<body style="background: var(--background-color);" class="ingredient-detail">
-    <main class="linear-main">
-        <div class="linear-card" style="max-width:520px;margin:auto;">
-            <img src="images/ingredients/红姜花.jpeg" alt="红姜花" style="width:100%;border-radius:var(--border-radius);margin-bottom:var(--spacing);">
-            <h1 style="margin-bottom:8px;">红姜花（Red Ginger Lily）</h1>
-            <section style="margin-bottom:var(--spacing);">
-                <b>主要产地与香气差异：</b>
-                <ul style="margin:8px 0 0 1.2em;padding:0;color:var(--muted-text);">
-                    <li><b>东南亚</b>：花香浓郁，带有明显的姜香。</li>
-                    <li><b>合成</b>：以Ginger Lily等分子为主，增强花香和姜香感。</li>
-                </ul>
-            </section>
-            <section style="margin-bottom:var(--spacing);">
-                <b>共通香气特征：</b>
-                <div style="margin-top:8px;color:var(--muted-text);">
-                    花香浓郁，带有明显的姜香。
-                </div>
-            </section>
-            <section>
-                <b>使用场景：</b>
-                <div style="margin-top:8px;color:var(--muted-text);">
-                    花香调、姜香调、东方调香水。
-                </div>
-            </section>
-        </div>
-        <div class="select-action" style="display: flex;justify-content:center;margin:8px 0;">
-            <div class="note-selection" style="display: flex;flex-direction:column;align-items:center;gap:12px;">
-                <div style="font-size:14px;color:#666;margin-bottom:4px;">选择香调（三选一）：</div>
-                <div style="display: flex;gap:8px;flex-wrap:wrap;justify-content:center;">
-                    <button class="note-select-btn exclusive" data-note="top">选择前调</button>
-                    <button class="note-select-btn exclusive" data-note="heart">选择中调</button>
-                    <button class="note-select-btn exclusive" data-note="base">选择尾调</button>
-                </div>
-                <div id="current-selection" style="font-size:12px;color:#28a745;margin-top:4px;display:none;">
-                    <!-- 当前选择状态 -->
-                </div>
-            </div>
-        </div>
-    </main>
+const fs = require('fs');
 
-    <script>
+// 剩余的页面和对应的香料数据
+const remainingPages = [
+    { file: '夜来香.html', name: '夜来香', image: 'images/ingredients/夜来香.jpeg' },
+    { file: '鸳鸯茉莉.html', name: '鸳鸯茉莉', image: 'images/ingredients/鸳鸯茉莉.jpeg' },
+    { file: '檀香.html', name: '檀香', image: 'images/ingredients/檀香.jpeg' },
+    { file: '橡苔.html', name: '橡苔', image: 'images/ingredients/橡苔.jpeg' },
+    { file: '桦木焦油.html', name: '桦木焦油', image: 'images/ingredients/桦木焦油.jpeg' },
+    { file: '雪松醇.html', name: '雪松醇', image: 'images/ingredients/雪松醇.jpeg' }
+];
+
+function generateJavaScript(ingredientName, ingredientImage) {
+    return `
         // 显示成功提示
         function showSuccessToast(message) {
             // 移除已存在的提示
@@ -98,8 +57,8 @@ Description: 香料详细介绍页面
 
         // 选择香料到指定香调（三选一模式）
         function selectIngredientToNote(noteType) {
-            const ingredientName = '红姜花';
-            const ingredientImage = 'images/ingredients/红姜花.jpeg';
+            const ingredientName = '${ingredientName}';
+            const ingredientImage = '${ingredientImage}';
             
             const ingredient = {
                 name: ingredientName,
@@ -130,7 +89,7 @@ Description: 香料详细介绍页面
                 saveSelectedIngredients(selected);
                 
                 const noteNames = { top: '前调', heart: '中调', base: '尾调' };
-                showSuccessToast(`已从${noteNames[noteType]}中移除 ${ingredient.name}`);
+                showSuccessToast(\`已从\${noteNames[noteType]}中移除 \${ingredient.name}\`);
                 
                 updateButtonStates();
                 
@@ -158,7 +117,7 @@ Description: 香料详细介绍页面
             saveSelectedIngredients(selected);
             
             const noteNames = { top: '前调', heart: '中调', base: '尾调' };
-            showSuccessToast(`已将 ${ingredient.name} 添加到${noteNames[noteType]} (${noteIngredients.length}/5)`);
+            showSuccessToast(\`已将 \${ingredient.name} 添加到\${noteNames[noteType]} (\${noteIngredients.length}/5)\`);
             
             updateButtonStates();
             
@@ -176,7 +135,7 @@ Description: 香料详细介绍页面
         
         // 获取当前香料选择在哪个香调中
         function getCurrentSelectedNote() {
-            const ingredientName = '红姜花';
+            const ingredientName = '${ingredientName}';
             const selected = getSelectedIngredients();
             
             for (const [noteType, ingredients] of Object.entries(selected)) {
@@ -189,7 +148,7 @@ Description: 香料详细介绍页面
         
         // 更新按钮状态
         function updateButtonStates() {
-            const ingredientName = '红姜花';
+            const ingredientName = '${ingredientName}';
             const selected = getSelectedIngredients();
             const currentNote = getCurrentSelectedNote();
             const currentSelectionDiv = document.getElementById('current-selection');
@@ -219,7 +178,7 @@ Description: 香料详细介绍页面
             // 更新当前选择状态显示
             if (currentNote) {
                 const noteNames = { top: '前调', heart: '中调', base: '尾调' };
-                currentSelectionDiv.textContent = `当前选择：${noteNames[currentNote]}`;
+                currentSelectionDiv.textContent = \`当前选择：\${noteNames[currentNote]}\`;
                 currentSelectionDiv.style.display = 'block';
             } else {
                 currentSelectionDiv.style.display = 'none';
@@ -237,7 +196,76 @@ Description: 香料详细介绍页面
             
             // 更新按钮状态
             updateButtonStates();
-        });
-    </script>
-</body>
-</html>
+        });`;
+}
+
+function fixPage(pageData) {
+    try {
+        const { file, name, image } = pageData;
+        let content = fs.readFileSync(file, 'utf8');
+        
+        // 检查是否需要添加select-action
+        if (!content.includes('select-action')) {
+            const selectActionHTML = `
+        <div class="select-action" style="display: flex;justify-content:center;margin:8px 0;">
+            <div class="note-selection" style="display: flex;flex-direction:column;align-items:center;gap:12px;">
+                <div style="font-size:14px;color:#666;margin-bottom:4px;">选择香调（三选一）：</div>
+                <div style="display: flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+                    <button class="note-select-btn exclusive" data-note="top">选择前调</button>
+                    <button class="note-select-btn exclusive" data-note="heart">选择中调</button>
+                    <button class="note-select-btn exclusive" data-note="base">选择尾调</button>
+                </div>
+                <div id="current-selection" style="font-size:12px;color:#28a745;margin-top:4px;display:none;">
+                    <!-- 当前选择状态 -->
+                </div>
+            </div>
+        </div>`;
+            
+            // 在</main>标签前插入select-action
+            const mainEndIndex = content.indexOf('</main>');
+            if (mainEndIndex !== -1) {
+                const beforeMain = content.substring(0, mainEndIndex);
+                const afterMain = content.substring(mainEndIndex);
+                content = beforeMain + selectActionHTML + afterMain;
+            }
+        }
+        
+        // 检查是否需要添加JavaScript逻辑
+        if (!content.includes('selectIngredientToNote')) {
+            const scriptIndex = content.indexOf('<script>');
+            if (scriptIndex !== -1) {
+                const scriptEndIndex = content.indexOf('</script>', scriptIndex);
+                if (scriptEndIndex !== -1) {
+                    // 替换空的script标签
+                    const beforeScript = content.substring(0, scriptIndex);
+                    const afterScript = content.substring(scriptEndIndex + 8);
+                    const newScript = '<script>' + generateJavaScript(name, image) + '</script>';
+                    content = beforeScript + newScript + afterScript;
+                }
+            }
+        }
+        
+        // 确保有正确的HTML结构
+        if (!content.includes('</body>')) {
+            content = content.replace('</html>', '</body>\n</html>');
+        }
+        
+        fs.writeFileSync(file, content, 'utf8');
+        console.log(`✅ ${file}: 修复完成`);
+        
+    } catch (error) {
+        console.error(`❌ ${file}: 修复失败 - ${error.message}`);
+    }
+}
+
+console.log('🔧 开始一次性修复剩余页面...\n');
+
+remainingPages.forEach(pageData => {
+    if (fs.existsSync(pageData.file)) {
+        fixPage(pageData);
+    } else {
+        console.log(`⚠️  ${pageData.file}: 文件不存在`);
+    }
+});
+
+console.log('\n🎉 所有剩余页面修复完成！');

@@ -5,12 +5,17 @@ import time
 import threading
 import requests
 import json
+from dotenv import load_dotenv
+
+# 加载环境变量
+load_dotenv()
 
 app = Flask(__name__, static_folder='static')
 
 # 配置API密钥
 # HF_API_KEY = os.environ.get('HF_API_KEY')  # 暂时注释掉
 DEEPSEEK_API_KEY = "sk-c6e6960c80184e3cabfa7f8bf9aaa042"  # 直接设置DeepSeek API密钥
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')  # 新增：ChatGPT API密钥
 
 # 初始化Hugging Face客户端（暂时禁用）
 # hf_client = None
@@ -26,15 +31,18 @@ DEEPSEEK_API_KEY = "sk-c6e6960c80184e3cabfa7f8bf9aaa042"  # 直接设置DeepSeek
 # DeepSeek API配置
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
+# 新增：OpenAI ChatGPT API配置
+OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
+
 # 内存缓存（带过期机制）
 story_cache = {}
 cache_expire = {}
 CACHE_DURATION = 86400  # 24小时
 
-# 频率限制（每用户每10分钟1次）
+# 频率限制（每用户每1分钟3次）
 user_requests = {}
-REQUEST_LIMIT = 1
-REQUEST_WINDOW = 600  # 10分钟
+REQUEST_LIMIT = 3
+REQUEST_WINDOW = 60  # 1分钟
 
 # 预生成内容池（启动时加载）
 PRE_GENERATED_POOL = {}
@@ -753,8 +761,8 @@ PERFUME_BANNED_TERMS = [
     "血腥", "腥气", "腐坏", "腐烂", "变质", "酸败", "刺鼻", "恶臭", "怪异", "恶心",
     # 过度夸张或绝对化表述
     "绝对安全", "医疗效果", "治愈", "杀菌", "抗癌", "包治百病",
-    # 宗教相关
-    "上帝", "耶稣", "佛", "菩萨", "十字架", "教堂", "清真寺", "庙宇", "宗教仪式",
+    # 宗教相关（放宽限制，只过滤明显宗教词汇）
+    "上帝", "耶稣", "十字架", "教堂", "清真寺", "庙宇", "宗教仪式",
     # 政治相关
     "独裁", "专政", "革命", "暴动", "国旗", "国徽", "政党",
     # 伦理与道德敏感
@@ -780,10 +788,10 @@ def is_story_compliant(story):
     for term in PERFUME_BANNED_TERMS:
         if term in story:
             return False, f"内容包含敏感词：{term}"
-    # 绝对化表述
-    absolute_words = ["最", "绝对", "完美"]
+    # 绝对化表述（放宽限制）
+    absolute_words = ["绝对安全", "绝对完美", "绝对正确"]
     for word in absolute_words:
-        if f"{word}" in story:
+        if word in story:
             return False, f"内容包含绝对化表述：{word}"
     # 医疗暗示
     medical_words = ["缓解", "治疗", "改善", "保健", "治愈", "抗癌", "杀菌"]
@@ -848,9 +856,9 @@ def generate_story():
         # 构建提示词
         prompt = build_prompt(main_scent, accents)
         
-        # 根据选择的AI提供商生成故事（现在主要使用DeepSeek）
-        if ai_provider == 'huggingface':
-            story = generate_with_huggingface(prompt)
+        # 根据选择的AI提供商生成故事
+        if ai_provider == 'openai':
+            story = generate_with_openai(prompt)
         else:
             story = generate_with_deepseek(prompt)
         
@@ -903,8 +911,8 @@ def generate_story_from_ingredients(ingredients, ai_provider, user_ip, current_t
         prompt = build_prompt_from_ingredients(ingredients)
         
         # 根据选择的AI提供商生成故事
-        if ai_provider == 'huggingface':
-            story = generate_with_huggingface(prompt)
+        if ai_provider == 'openai':
+            story = generate_with_openai(prompt)
         else:
             story = generate_with_deepseek(prompt)
         
@@ -992,20 +1000,7 @@ def build_prompt_from_ingredients(ingredients):
     
     return prompt
 
-def generate_with_huggingface(prompt):
-    """使用Hugging Face API生成故事"""
-    # if not hf_client:
-    #     raise Exception("Hugging Face API未配置或初始化失败")
-    
-    # response = hf_client.text_generation(
-    #     prompt,
-    #     max_new_tokens=300,
-    #     temperature=0.7,
-    #     top_p=0.9,
-    #     wait_for_model=True
-    # )
-    # return response.strip()
-    return "Hugging Face API未配置或初始化失败"
+
 
 def generate_with_deepseek(prompt):
     """使用DeepSeek API生成故事"""
@@ -1033,6 +1028,36 @@ def generate_with_deepseek(prompt):
     
     if response.status_code != 200:
         raise Exception(f"DeepSeek API请求失败: {response.status_code} - {response.text}")
+    
+    result = response.json()
+    return result['choices'][0]['message']['content'].strip()
+
+def generate_with_openai(prompt):
+    """使用OpenAI ChatGPT API生成故事"""
+    if not OPENAI_API_KEY:
+        raise Exception("OpenAI API密钥未配置")
+    
+    headers = {
+        "Authorization": f"Bearer {OPENAI_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    data = {
+        "model": "gpt-3.5-turbo", # 示例模型，实际项目可配置
+        "messages": [
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        "temperature": 0.7,
+        "max_tokens": 300
+    }
+    
+    response = requests.post(OPENAI_API_URL, headers=headers, json=data)
+    
+    if response.status_code != 200:
+        raise Exception(f"OpenAI API请求失败: {response.status_code} - {response.text}")
     
     result = response.json()
     return result['choices'][0]['message']['content'].strip()

@@ -97,9 +97,9 @@ const SCENT_CATEGORIES = {
 // 全局状态变量
 let selectedMainScent = null;
 let selectedAccents = [];
-let selectedAIProvider = 'deepseek';
+let selectedAIProvider = 'openai'; // 默认使用ChatGPT
 let lastGeneratedTime = 0;
-const GENERATION_COOLDOWN = 600000; // 10分钟
+const GENERATION_COOLDOWN = 20000; // 20秒
 let currentCardType = 'story'; // 'story' 或 'fantasy'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -325,9 +325,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // AI提供商按钮初始化和切换逻辑
   const aiBtns = document.querySelectorAll('.ai-btn');
   aiBtns.forEach(b => b.classList.remove('ring-2', 'ring-primary'));
-  const deepseekBtn = document.querySelector('[data-ai="deepseek"]');
-  if (deepseekBtn) deepseekBtn.classList.add('ring-2', 'ring-primary');
-  selectedAIProvider = 'deepseek';
+  const openaiBtn = document.querySelector('[data-ai="openai"]');
+  if (openaiBtn) openaiBtn.classList.add('ring-2', 'ring-primary');
+  selectedAIProvider = 'openai';
   aiBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       aiBtns.forEach(b => b.classList.remove('ring-2', 'ring-primary'));

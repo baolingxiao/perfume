@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI提供商选择测试</title>
+  <link rel="stylesheet" href="static/tailwind.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-8">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8 text-center">AI提供商选择测试</h1>
+    
+    <!-- AI提供商选择器 -->
+    <div class="ai-selector mb-10">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+        <i class="fa fa-robot text-blue-600 mr-3 text-2xl"></i>选择AI提供商
+      </h2>
+      
+      <div class="grid grid-cols-2 gap-6 mb-8 max-w-2xl mx-auto">
+        <button class="ai-btn bg-green-50 hover:bg-green-100 border-2 border-green-200 rounded-xl p-6 transition-all duration-300 flex items-center justify-center text-lg hover:scale-105" data-ai="deepseek">
+          <div class="flex items-center justify-center">
+            <i class="fa fa-leaf text-green-600 mr-3 text-2xl"></i>
+            <div class="text-left">
+              <div class="font-bold text-green-800 text-xl">中国AI</div>
+              <div class="text-green-600">DeepSeek</div>
+            </div>
+          </div>
+        </button>
+        <button class="ai-btn bg-purple-50 hover:bg-purple-100 border-2 border-purple-200 rounded-xl p-6 transition-all duration-300 flex items-center justify-center text-lg hover:scale-105" data-ai="openai">
+          <div class="flex items-center justify-center">
+            <i class="fa fa-comments text-purple-600 mr-3 text-2xl"></i>
+            <div class="text-left">
+              <div class="font-bold text-purple-800 text-xl">ChatGPT</div>
+              <div class="text-purple-600">OpenAI</div>
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+    
+    <div class="text-center">
+      <p class="text-gray-600 mb-4">当前选择的AI提供商: <span id="selected-ai" class="font-bold text-blue-600">ChatGPT</span></p>
+      <button onclick="testSelection()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg">
+        测试选择
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // AI提供商按钮初始化和切换逻辑
+    const aiBtns = document.querySelectorAll('.ai-btn');
+    let selectedAIProvider = 'openai'; // 默认使用ChatGPT
+    
+    // 初始化：选择ChatGPT
+    aiBtns.forEach(b => b.classList.remove('ring-2', 'ring-blue-500'));
+    const openaiBtn = document.querySelector('[data-ai="openai"]');
+    if (openaiBtn) openaiBtn.classList.add('ring-2', 'ring-blue-500');
+    
+    aiBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        aiBtns.forEach(b => b.classList.remove('ring-2', 'ring-blue-500'));
+        btn.classList.add('ring-2', 'ring-blue-500');
+        selectedAIProvider = btn.dataset.ai;
+        document.getElementById('selected-ai').textContent = btn.dataset.ai === 'openai' ? 'ChatGPT' : 'DeepSeek';
+      });
+    });
+    
+    function testSelection() {
+      alert(`当前选择的AI提供商: ${selectedAIProvider === 'openai' ? 'ChatGPT' : 'DeepSeek'}`);
+    }
+  </script>
+</body>
+</html>

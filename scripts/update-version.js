@@ -23,6 +23,11 @@ const cssFiles = [
   'css/home_15-30.css'
 ];
 
+// JavaScript文件列表
+const jsFiles = [
+  'scent_story_interaction.js'
+];
+
 filesToUpdate.forEach(file => {
   if (fs.existsSync(file)) {
     let content = fs.readFileSync(file, 'utf8');
@@ -30,8 +35,25 @@ filesToUpdate.forEach(file => {
     // 更新CSS文件版本号
     cssFiles.forEach(cssFile => {
       const cssName = path.basename(cssFile);
-      const regex = new RegExp(`href="css/${cssName}\\?v=\\d+"`, 'g');
-      content = content.replace(regex, `href="css/${cssName}?v=${newVersion.replace('v', '')}"`);
+      // 处理已有版本号的情况
+      const regexWithVersion = new RegExp(`href="css/${cssName}\\?v=\\d+"`, 'g');
+      content = content.replace(regexWithVersion, `href="css/${cssName}?v=${newVersion.replace('v', '')}"`);
+      
+      // 处理没有版本号的情况
+      const regexWithoutVersion = new RegExp(`href="css/${cssName}"`, 'g');
+      content = content.replace(regexWithoutVersion, `href="css/${cssName}?v=${newVersion.replace('v', '')}"`);
+    });
+    
+    // 更新JavaScript文件版本号
+    jsFiles.forEach(jsFile => {
+      const jsName = path.basename(jsFile);
+      // 处理已有版本号的情况
+      const regexWithVersion = new RegExp(`src="${jsName}\\?v=\\d+"`, 'g');
+      content = content.replace(regexWithVersion, `src="${jsName}?v=${newVersion.replace('v', '')}"`);
+      
+      // 处理没有版本号的情况
+      const regexWithoutVersion = new RegExp(`src="${jsName}"`, 'g');
+      content = content.replace(regexWithoutVersion, `src="${jsName}?v=${newVersion.replace('v', '')}"`);
     });
     
     fs.writeFileSync(file, content);

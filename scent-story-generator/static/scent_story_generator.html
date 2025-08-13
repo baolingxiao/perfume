@@ -10,7 +10,7 @@ Description: AI驱动的香气故事生成器，支持多种AI模型和个性化
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>香气故事生成器 - 香水工坊</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="tailwind.min.css">
   <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
   
   <script>
@@ -180,21 +180,21 @@ Description: AI驱动的香气故事生成器，支持多种AI模型和个性化
         </h2>
         
         <div class="grid grid-cols-2 gap-6 mb-8 max-w-2xl mx-auto">
-          <button class="ai-btn bg-blue-50 hover:bg-blue-100 border-2 border-blue-200 rounded-xl p-6 transition-all duration-300 flex items-center justify-center text-lg hover:scale-105" data-ai="huggingface">
-            <div class="flex items-center justify-center">
-              <i class="fa fa-globe text-blue-600 mr-3 text-2xl"></i>
-              <div class="text-left">
-                <div class="font-bold text-blue-800 text-xl">美国AI</div>
-                <div class="text-blue-600">Hugging Face</div>
-              </div>
-            </div>
-          </button>
           <button class="ai-btn bg-green-50 hover:bg-green-100 border-2 border-green-200 rounded-xl p-6 transition-all duration-300 flex items-center justify-center text-lg hover:scale-105" data-ai="deepseek">
             <div class="flex items-center justify-center">
               <i class="fa fa-leaf text-green-600 mr-3 text-2xl"></i>
               <div class="text-left">
                 <div class="font-bold text-green-800 text-xl">中国AI</div>
                 <div class="text-green-600">DeepSeek</div>
+              </div>
+            </div>
+          </button>
+          <button class="ai-btn bg-purple-50 hover:bg-purple-100 border-2 border-purple-200 rounded-xl p-6 transition-all duration-300 flex items-center justify-center text-lg hover:scale-105" data-ai="openai">
+            <div class="flex items-center justify-center">
+              <i class="fa fa-comments text-purple-600 mr-3 text-2xl"></i>
+              <div class="text-left">
+                <div class="font-bold text-purple-800 text-xl">ChatGPT</div>
+                <div class="text-purple-600">OpenAI</div>
               </div>
             </div>
           </button>
@@ -256,6 +256,6 @@ Description: AI驱动的香气故事生成器，支持多种AI模型和个性化
     </footer>
   </div>
   
-  <script src="scent_story_interaction.js"></script>
+  <script src="scent_story_interaction.js?v=38"></script>
 </body>
 </html> 

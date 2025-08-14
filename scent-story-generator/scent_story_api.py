@@ -13,9 +13,7 @@ load_dotenv()
 app = Flask(__name__, static_folder='static')
 
 # 配置API密钥
-# HF_API_KEY = os.environ.get('HF_API_KEY')  # 暂时注释掉
-DEEPSEEK_API_KEY = "sk-c6e6960c80184e3cabfa7f8bf9aaa042"  # 直接设置DeepSeek API密钥
-OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')  # 新增：ChatGPT API密钥
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')  # ChatGPT API密钥
 
 # 初始化Hugging Face客户端（暂时禁用）
 # hf_client = None
@@ -28,10 +26,7 @@ OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')  # 新增：ChatGPT API密钥
 #     except Exception as e:
 #         print(f"Hugging Face客户端初始化失败: {e}")
 
-# DeepSeek API配置
-DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
-
-# 新增：OpenAI ChatGPT API配置
+# OpenAI ChatGPT API配置
 OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 
 # 内存缓存（带过期机制）
@@ -856,11 +851,8 @@ def generate_story():
         # 构建提示词
         prompt = build_prompt(main_scent, accents)
         
-        # 根据选择的AI提供商生成故事
-        if ai_provider == 'openai':
-            story = generate_with_openai(prompt)
-        else:
-            story = generate_with_deepseek(prompt)
+        # 生成故事（只使用ChatGPT）
+        story = generate_with_openai(prompt)
         
         # 内容过滤
         filtered_story = filter_content(story)
@@ -899,8 +891,32 @@ def generate_story():
 def generate_story_from_ingredients(ingredients, ai_provider, user_ip, current_time):
     """根据香料比例生成故事"""
     try:
+        # 处理前端传递的ingredients格式（可能是字符串数组或对象数组）
+        processed_ingredients = []
+        for ing in ingredients:
+            if isinstance(ing, str):
+                # 如果是字符串，创建默认对象
+                processed_ingredients.append({
+                    'name': ing,
+                    'ratio': 100.0 / len(ingredients)  # 平均分配
+                })
+            elif isinstance(ing, dict):
+                # 如果是对象，确保有name和ratio属性
+                processed_ingredients.append({
+                    'name': ing.get('name', str(ing)),
+                    'ratio': ing.get('ratio', 0)
+                })
+        
         # 构建缓存键（基于香料比例）
-        ingredients_key = '_'.join([f"{ing['name']}_{ing.get('ratio', 0)}" for ing in ingredients])
+        ingredients_key_parts = []
+        for ing in processed_ingredients:
+            if isinstance(ing, dict):
+                name = ing.get('name', '')
+                ratio = ing.get('ratio', 0)
+                ingredients_key_parts.append(f"{name}_{ratio}")
+            elif isinstance(ing, str):
+                ingredients_key_parts.append(f"{ing}_100")
+        ingredients_key = '_'.join(ingredients_key_parts)
         combo_key = f"{ai_provider}_ingredients_{ingredients_key}"
         
         # 检查缓存
@@ -908,13 +924,10 @@ def generate_story_from_ingredients(ingredients, ai_provider, user_ip, current_t
             return jsonify(story_cache[combo_key])
         
         # 构建基于香料比例的提示词
-        prompt = build_prompt_from_ingredients(ingredients)
+        prompt = build_prompt_from_ingredients(processed_ingredients)
         
-        # 根据选择的AI提供商生成故事
-        if ai_provider == 'openai':
-            story = generate_with_openai(prompt)
-        else:
-            story = generate_with_deepseek(prompt)
+        # 生成故事（只使用ChatGPT）
+        story = generate_with_openai(prompt)
         
         # 内容过滤
         filtered_story = filter_content(story)
@@ -928,7 +941,7 @@ def generate_story_from_ingredients(ingredients, ai_provider, user_ip, current_t
         story_data = {
             "title": title,
             "content": filtered_story,
-            "ingredients": ingredients,
+            "ingredients": processed_ingredients,
             "ai_provider": ai_provider,
             "generated_at": int(current_time)
         }
@@ -940,7 +953,9 @@ def generate_story_from_ingredients(ingredients, ai_provider, user_ip, current_t
         return jsonify(story_data)
         
     except Exception as e:
+        import traceback
         print(f"Error generating story from ingredients: {str(e)}")
+        print(f"Traceback: {traceback.format_exc()}")
         return jsonify({
             "error": "根据香料比例生成故事失败，请稍后再试",
             "details": str(e)
@@ -948,11 +963,21 @@ def generate_story_from_ingredients(ingredients, ai_provider, user_ip, current_t
 
 def build_prompt_from_ingredients(ingredients):
     """根据香料比例构建提示词"""
+    # 调试信息
+    print(f"Debug: ingredients = {ingredients}")
+    print(f"Debug: type of ingredients = {type(ingredients)}")
+    
     # 构建香料描述
     ingredient_desc = []
     for ing in ingredients:
-        if ing.get('ratio', 0) > 0:
-            ingredient_desc.append(f"{ing['name']}({ing['ratio']}%)")
+        print(f"Debug: ing = {ing}, type = {type(ing)}")
+        if isinstance(ing, dict):
+            name = ing.get('name', '')
+            ratio = ing.get('ratio', 0)
+            if ratio > 0:
+                ingredient_desc.append(f"{name}({ratio}%)")
+        elif isinstance(ing, str):
+            ingredient_desc.append(f"{ing}(100%)")
     
     # 分析主要香调
     floral_ratio = 0
@@ -960,8 +985,14 @@ def build_prompt_from_ingredients(ingredients):
     woody_ratio = 0
     
     for ing in ingredients:
-        ratio = ing.get('ratio', 0)
-        name = ing['name']
+        if isinstance(ing, dict):
+            ratio = ing.get('ratio', 0)
+            name = ing.get('name', '')
+        elif isinstance(ing, str):
+            ratio = 100.0 / len(ingredients)  # 平均分配
+            name = ing
+        else:
+            continue
         
         # 根据香料名称分类
         if name in ['玫瑰', '茉莉', '薰衣草', '紫罗兰', '百合', '栀子花', '小苍兰', '铃兰', '风信子', '夜来香', '橙花', '鸳鸯茉莉', '金合欢', '金银花', '鸡蛋花', '鸢尾花', '白兰花', '红姜花']:
@@ -1002,35 +1033,7 @@ def build_prompt_from_ingredients(ingredients):
 
 
 
-def generate_with_deepseek(prompt):
-    """使用DeepSeek API生成故事"""
-    if not DEEPSEEK_API_KEY:
-        raise Exception("DeepSeek API密钥未配置")
-    
-    headers = {
-        "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
-        "Content-Type": "application/json"
-    }
-    
-    data = {
-        "model": "deepseek-chat",
-        "messages": [
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        "temperature": 0.7,
-        "max_tokens": 300
-    }
-    
-    response = requests.post(DEEPSEEK_API_URL, headers=headers, json=data)
-    
-    if response.status_code != 200:
-        raise Exception(f"DeepSeek API请求失败: {response.status_code} - {response.text}")
-    
-    result = response.json()
-    return result['choices'][0]['message']['content'].strip()
+
 
 def generate_with_openai(prompt):
     """使用OpenAI ChatGPT API生成故事"""
@@ -1051,7 +1054,7 @@ def generate_with_openai(prompt):
             }
         ],
         "temperature": 0.7,
-        "max_tokens": 300
+        "max_completion_tokens": 300
     }
     
     response = requests.post(OPENAI_API_URL, headers=headers, json=data)

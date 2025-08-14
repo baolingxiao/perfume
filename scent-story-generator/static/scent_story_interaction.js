@@ -322,19 +322,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const storyOutput = document.getElementById('story-output');
   const accentButtonsContainer = document.getElementById('accent-buttons');
   
-  // AI提供商按钮初始化和切换逻辑
-  const aiBtns = document.querySelectorAll('.ai-btn');
-  aiBtns.forEach(b => b.classList.remove('ring-2', 'ring-primary'));
+  // AI提供商设置（只使用ChatGPT）
+  selectedAIProvider = 'openai';
   const openaiBtn = document.querySelector('[data-ai="openai"]');
   if (openaiBtn) openaiBtn.classList.add('ring-2', 'ring-primary');
-  selectedAIProvider = 'openai';
-  aiBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      aiBtns.forEach(b => b.classList.remove('ring-2', 'ring-primary'));
-      btn.classList.add('ring-2', 'ring-primary');
-      selectedAIProvider = btn.dataset.ai;
-    });
-  });
   
   // 主香调按钮事件
   document.querySelectorAll('[data-scent]').forEach(btn => {

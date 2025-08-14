@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 # from huggingface_hub import InferenceClient  # 暂时注释掉Hugging Face
 import os
 import time
@@ -11,6 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__, static_folder='static')
+CORS(app)  # 启用CORS支持
 
 # 配置API密钥
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')  # ChatGPT API密钥
@@ -822,7 +824,7 @@ def generate_story():
         
         # 解析请求数据
         data = request.json
-        ai_provider = data.get('aiProvider', 'deepseek')  # 默认使用DeepSeek
+        ai_provider = data.get('aiProvider', 'openai')  # 默认使用ChatGPT
         
         # 检查是否有ingredients参数（新的香料比例方式）
         ingredients = data.get('ingredients', [])

@@ -1046,7 +1046,7 @@ def generate_with_openai(prompt):
     }
     
     data = {
-        "model": "gpt-5", # 使用GPT-5模型
+        "model": "gpt-4o", # 使用GPT-4o模型
         "messages": [
             {
                 "role": "user",
@@ -1054,7 +1054,7 @@ def generate_with_openai(prompt):
             }
         ],
         "temperature": 0.7,
-        "max_completion_tokens": 300
+        "max_tokens": 300
     }
     
     response = requests.post(OPENAI_API_URL, headers=headers, json=data)

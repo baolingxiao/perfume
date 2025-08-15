@@ -103,23 +103,30 @@ const GENERATION_COOLDOWN = 20000; // 20秒
 let currentCardType = 'story'; // 'story' 或 'fantasy'
 
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('=== 香料检测调试开始 ===');
+  
   // --- 新增：香料滑块UI与数据流 ---
   // 从localStorage获取选择的香料（支持两种格式）
   let selectedIngredients = JSON.parse(localStorage.getItem('selectedIngredients') || '[]');
+  console.log('1. 从selectedIngredients获取:', selectedIngredients);
   
   // 如果没有找到，尝试从selectedIngredientsByNote获取
   if (selectedIngredients.length === 0) {
     const selectedByNote = localStorage.getItem('selectedIngredientsByNote');
+    console.log('2. selectedIngredientsByNote原始数据:', selectedByNote);
+    
     if (selectedByNote) {
       try {
         const noteData = JSON.parse(selectedByNote);
+        console.log('3. 解析后的noteData:', noteData);
+        
         // 合并所有香调的香料
         selectedIngredients = [
           ...(noteData.top || []),
           ...(noteData.heart || []),
           ...(noteData.base || [])
         ];
-        console.log('从selectedIngredientsByNote获取到香料:', selectedIngredients);
+        console.log('4. 合并后的香料:', selectedIngredients);
       } catch (e) {
         console.error('解析selectedIngredientsByNote失败:', e);
       }
@@ -130,6 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const sliderForm = document.getElementById('slider-form');
   const totalWarning = document.getElementById('total-warning');
+  
+  console.log('5. sliderForm元素:', sliderForm);
+  console.log('6. selectedIngredients长度:', selectedIngredients.length);
   
   // 检查是否有从香料选择页面传递过来的数据
   if (sliderForm && selectedIngredients.length > 0) {

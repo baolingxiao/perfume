@@ -104,7 +104,30 @@ let currentCardType = 'story'; // 'story' 或 'fantasy'
 
 document.addEventListener('DOMContentLoaded', () => {
   // --- 新增：香料滑块UI与数据流 ---
-  const selectedIngredients = JSON.parse(localStorage.getItem('selectedIngredients') || '[]');
+  // 从localStorage获取选择的香料（支持两种格式）
+  let selectedIngredients = JSON.parse(localStorage.getItem('selectedIngredients') || '[]');
+  
+  // 如果没有找到，尝试从selectedIngredientsByNote获取
+  if (selectedIngredients.length === 0) {
+    const selectedByNote = localStorage.getItem('selectedIngredientsByNote');
+    if (selectedByNote) {
+      try {
+        const noteData = JSON.parse(selectedByNote);
+        // 合并所有香调的香料
+        selectedIngredients = [
+          ...(noteData.top || []),
+          ...(noteData.heart || []),
+          ...(noteData.base || [])
+        ];
+        console.log('从selectedIngredientsByNote获取到香料:', selectedIngredients);
+      } catch (e) {
+        console.error('解析selectedIngredientsByNote失败:', e);
+      }
+    }
+  } else {
+    console.log('从selectedIngredients获取到香料:', selectedIngredients);
+  }
+  
   const sliderForm = document.getElementById('slider-form');
   const totalWarning = document.getElementById('total-warning');
   

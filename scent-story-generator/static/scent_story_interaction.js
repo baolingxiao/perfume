@@ -271,6 +271,9 @@ document.addEventListener('DOMContentLoaded', () => {
           <button id="auto-distribute-btn" class="text-xs bg-yellow-100 hover:bg-yellow-200 text-yellow-800 px-3 py-1 rounded transition-colors">
             <i class="fa fa-magic mr-1"></i>平均分配
           </button>
+          <button id="smart-distribute-btn" class="text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1 rounded ml-2 transition-colors">
+            <i class="fa fa-brain mr-1"></i>智能分配
+          </button>
           <button id="reset-btn" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded ml-2 transition-colors">
             <i class="fa fa-refresh mr-1"></i>重置
           </button>
@@ -352,39 +355,168 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // 平均分配功能
+  // 平均分配功能 - 优化版
   function setupAutoDistribute() {
     const autoDistributeBtn = document.getElementById('auto-distribute-btn');
     if (autoDistributeBtn) {
       autoDistributeBtn.addEventListener('click', () => {
-        const equalRatio = (100 / selectedIngredients.length).toFixed(1);
-        selectedIngredients.forEach(ing => {
+        const ingredientCount = selectedIngredients.length;
+        
+        if (ingredientCount === 0) {
+          showToast('没有可分配的香料', 'error');
+          return;
+        }
+        
+        // 计算精确的平均值
+        const exactAverage = 100 / ingredientCount;
+        
+        // 分配比例，确保总和为100%
+        const ratios = [];
+        let remainingPercentage = 100;
+        
+        for (let i = 0; i < ingredientCount; i++) {
+          if (i === ingredientCount - 1) {
+            // 最后一个香料获得剩余的所有百分比，确保总和为100%
+            ratios.push(remainingPercentage);
+          } else {
+            // 其他香料获得四舍五入的平均值
+            const ratio = Math.round(exactAverage * 10) / 10; // 保留一位小数
+            ratios.push(ratio);
+            remainingPercentage -= ratio;
+          }
+        }
+        
+        // 应用分配结果
+        selectedIngredients.forEach((ing, index) => {
           const slider = document.querySelector(`input[data-id="${ing.id}"]`);
           const input = document.querySelector(`input[data-input-id="${ing.id}"]`);
           if (slider && input) {
-            slider.value = equalRatio;
-            input.value = equalRatio;
+            const ratio = ratios[index];
+            slider.value = ratio;
+            input.value = ratio;
           }
         });
+        
         updateTotal();
+        
+        // 显示分配结果
+        const distributionText = selectedIngredients.map((ing, index) => 
+          `${ing.name}: ${ratios[index]}%`
+        ).join(', ');
+        
+        showToast(`平均分配完成：${distributionText}`, 'success');
       });
     }
   }
   
-  // 重置功能
+  // 智能分配功能 - 根据香调类型分配
+  function setupSmartDistribute() {
+    const smartDistributeBtn = document.getElementById('smart-distribute-btn');
+    if (smartDistributeBtn) {
+      smartDistributeBtn.addEventListener('click', () => {
+        const ingredientCount = selectedIngredients.length;
+        
+        if (ingredientCount === 0) {
+          showToast('没有可分配的香料', 'error');
+          return;
+        }
+        
+        // 按香调分类香料
+        const floralIngredients = [];
+        const fruityIngredients = [];
+        const woodyIngredients = [];
+        
+        selectedIngredients.forEach(ing => {
+          if (SCENT_CATEGORIES.floral.includes(ing.name)) {
+            floralIngredients.push(ing);
+          } else if (SCENT_CATEGORIES.fruity.includes(ing.name)) {
+            fruityIngredients.push(ing);
+          } else if (SCENT_CATEGORIES.woody.includes(ing.name)) {
+            woodyIngredients.push(ing);
+          }
+        });
+        
+        // 智能分配比例
+        const ratios = {};
+        let totalAssigned = 0;
+        
+        // 花香调：30-40%
+        if (floralIngredients.length > 0) {
+          const floralRatio = Math.min(40, Math.max(30, 35));
+          const perFloral = (floralRatio / floralIngredients.length);
+          floralIngredients.forEach(ing => {
+            ratios[ing.id] = Math.round(perFloral * 10) / 10;
+            totalAssigned += ratios[ing.id];
+          });
+        }
+        
+        // 果香调：25-35%
+        if (fruityIngredients.length > 0) {
+          const fruityRatio = Math.min(35, Math.max(25, 30));
+          const perFruity = (fruityRatio / fruityIngredients.length);
+          fruityIngredients.forEach(ing => {
+            ratios[ing.id] = Math.round(perFruity * 10) / 10;
+            totalAssigned += ratios[ing.id];
+          });
+        }
+        
+        // 木香调：25-35%
+        if (woodyIngredients.length > 0) {
+          const woodyRatio = Math.min(35, Math.max(25, 30));
+          const perWoody = (woodyRatio / woodyIngredients.length);
+          woodyIngredients.forEach(ing => {
+            ratios[ing.id] = Math.round(perWoody * 10) / 10;
+            totalAssigned += ratios[ing.id];
+          });
+        }
+        
+        // 调整最后一个香料，确保总和为100%
+        const lastIngredient = selectedIngredients[selectedIngredients.length - 1];
+        if (lastIngredient && ratios[lastIngredient.id] !== undefined) {
+          const adjustment = 100 - totalAssigned;
+          ratios[lastIngredient.id] = Math.round((ratios[lastIngredient.id] + adjustment) * 10) / 10;
+        }
+        
+        // 应用分配结果
+        selectedIngredients.forEach(ing => {
+          const slider = document.querySelector(`input[data-id="${ing.id}"]`);
+          const input = document.querySelector(`input[data-input-id="${ing.id}"]`);
+          if (slider && input && ratios[ing.id] !== undefined) {
+            slider.value = ratios[ing.id];
+            input.value = ratios[ing.id];
+          }
+        });
+        
+        updateTotal();
+        
+        // 显示分配结果
+        const distributionText = selectedIngredients.map(ing => 
+          `${ing.name}: ${ratios[ing.id] || 0}%`
+        ).join(', ');
+        
+        showToast(`智能分配完成：${distributionText}`, 'success');
+      });
+    }
+  }
+  
+  // 重置功能 - 优化版
   function setupReset() {
     const resetBtn = document.getElementById('reset-btn');
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
-        selectedIngredients.forEach(ing => {
-          const slider = document.querySelector(`input[data-id="${ing.id}"]`);
-          const input = document.querySelector(`input[data-input-id="${ing.id}"]`);
-          if (slider && input) {
-            slider.value = 0;
-            input.value = 0;
-          }
-        });
-        updateTotal();
+        // 确认重置操作
+        if (confirm('确定要重置所有香料比例为0吗？')) {
+          selectedIngredients.forEach(ing => {
+            const slider = document.querySelector(`input[data-id="${ing.id}"]`);
+            const input = document.querySelector(`input[data-input-id="${ing.id}"]`);
+            if (slider && input) {
+              slider.value = 0;
+              input.value = 0;
+            }
+          });
+          updateTotal();
+          showToast('所有香料比例已重置为0', 'info');
+        }
       });
     }
   }
@@ -393,6 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初始化事件监听
     setupInputEvents();
     setupAutoDistribute();
+    setupSmartDistribute();
     setupReset();
     updateTotal();
   }

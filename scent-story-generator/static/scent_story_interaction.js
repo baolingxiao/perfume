@@ -360,6 +360,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const autoDistributeBtn = document.getElementById('auto-distribute-btn');
     if (autoDistributeBtn) {
       autoDistributeBtn.addEventListener('click', () => {
+        console.log('=== 开始平均分配 ===');
+        console.log('香料数量:', selectedIngredients.length);
+        console.log('香料数据:', selectedIngredients);
+        
         const ingredientCount = selectedIngredients.length;
         
         if (ingredientCount === 0) {
@@ -369,6 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 计算精确的平均值
         const exactAverage = 100 / ingredientCount;
+        console.log('精确平均值:', exactAverage);
         
         // 分配比例，确保总和为100%
         const ratios = [];
@@ -386,6 +391,8 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
         
+        console.log('计算出的比例:', ratios);
+        
         // 应用分配结果
         selectedIngredients.forEach((ing, index) => {
           const slider = document.querySelector(`input[data-id="${ing.id}"]`);
@@ -394,6 +401,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const ratio = ratios[index];
             slider.value = ratio;
             input.value = ratio;
+            console.log(`设置 ${ing.name} (${ing.id}) 的比例为: ${ratio}%`);
+          } else {
+            console.error(`找不到香料 ${ing.name} (${ing.id}) 的DOM元素`);
           }
         });
         
@@ -484,6 +494,9 @@ document.addEventListener('DOMContentLoaded', () => {
           if (slider && input && ratios[ing.id] !== undefined) {
             slider.value = ratios[ing.id];
             input.value = ratios[ing.id];
+            console.log(`智能分配 ${ing.name} (${ing.id}) 的比例为: ${ratios[ing.id]}%`);
+          } else {
+            console.error(`找不到香料 ${ing.name} (${ing.id}) 的DOM元素或比例未定义`);
           }
         });
         

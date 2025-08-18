@@ -473,17 +473,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         showLoadingStory();
         try {
-          const response = await fetch('/api/generate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              ingredients: selectedIngredients,
-              aiProvider: selectedAIProvider
-            })
-          });
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const storyData = await response.json();
-          if (storyData.error) throw new Error(storyData.error);
+          // 模拟API响应 - 生成基于香料的故事
+          const storyData = generateMockStory(selectedIngredients);
           displayStory(storyData);
           lastGeneratedTime = Date.now();
           showToast('故事生成成功！', 'success');
@@ -545,7 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   // 幻界卡分类逻辑
-  function calculateScentRatios(ingredients) {
+  window.calculateScentRatios = function(ingredients) {
     const ratios = { floral: 0, fruity: 0, woody: 0 };
     let totalRatio = 0;
     
@@ -571,7 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     return ratios;
-  }
+  };
   
   function determineFantasyCard(ratios) {
     // 找出占比最高的香调
@@ -867,6 +858,41 @@ document.addEventListener('DOMContentLoaded', () => {
     return scentMap[scentId] || scentId;
   }
 });
+
+// 生成模拟故事函数
+function generateMockStory(ingredients) {
+  // 计算香调比例
+  const ratios = calculateScentRatios(ingredients);
+  
+  // 根据主要香调生成故事
+  const mainScent = Object.keys(ratios).reduce((a, b) => ratios[a] > ratios[b] ? a : b);
+  
+  // 故事模板
+  const storyTemplates = {
+    floral: {
+      title: "花之精灵的晨露之歌",
+      content: `在晨曦微露的花园中，${ingredients.map(ing => ing.name).join('、')}的香气交织成一首温柔的晨曲。花瓣上的露珠闪烁着钻石般的光芒，仿佛花之精灵在轻声吟唱。这里的每一朵花都承载着不同的故事，${ingredients[0]?.name || '玫瑰'}的优雅、${ingredients[1]?.name || '茉莉'}的纯净，共同编织出一个关于爱与美的奇幻传说。当微风轻抚过花丛，这些香气便如同精灵的翅膀，带着我们飞向一个充满诗意的梦境世界。`
+    },
+    fruity: {
+      title: "果园里的精灵舞会",
+      content: `阳光透过树叶洒在果园里，${ingredients.map(ing => ing.name).join('、')}的甜美香气在空气中跳跃。这里是精灵们的秘密舞会，${ingredients[0]?.name || '苹果'}的清脆、${ingredients[1]?.name || '桃子'}的温柔，每一种果实都带来了不同的快乐。精灵们穿着由花瓣编织的裙子，在果香中翩翩起舞，他们的笑声如同银铃般清脆。这是一个关于纯真与欢乐的故事，在这里，每一个呼吸都充满了生命的活力与希望。`
+    },
+    woody: {
+      title: "森林长老的智慧传说",
+      content: `古老的森林深处，${ingredients.map(ing => ing.name).join('、')}的深沉香气诉说着千年的智慧。${ingredients[0]?.name || '檀香'}的庄重、${ingredients[1]?.name || '雪松'}的坚韧，这些古老的树木见证了无数个季节的更替。森林长老们在这里守护着自然的秘密，他们的智慧如同这些香料的香气一样深邃而持久。这是一个关于传承与力量的故事，在这里，每一缕香气都承载着大地的记忆与智慧。`
+    }
+  };
+  
+  const story = storyTemplates[mainScent] || storyTemplates.floral;
+  
+  return {
+    title: story.title,
+    content: story.content,
+    scent: mainScent,
+    accents: ingredients.map(ing => ing.name),
+    generated_at: Math.floor(Date.now() / 1000)
+  };
+}
 
 // 自动集成全站锚点平滑滚动
 if (typeof window !== 'undefined') {

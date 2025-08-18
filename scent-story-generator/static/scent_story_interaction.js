@@ -216,6 +216,15 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // 检查是否有从香料选择页面传递过来的数据
   if (sliderForm && selectedIngredients.length > 0) {
+    // 确保每个香料都有正确的id字段
+    selectedIngredients = selectedIngredients.map((ing, index) => ({
+      ...ing,
+      id: ing.id || `ingredient_${index}`,
+      ratio: ing.ratio || 0
+    }));
+    
+    console.log('处理后的香料数据:', selectedIngredients);
+    
     // 显示香料滑块界面
     sliderForm.innerHTML = `
       <h2 class="text-lg sm:text-xl font-bold text-dark mb-3 sm:mb-4 flex items-center">
@@ -294,20 +303,35 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   function updateTotal() {
     let total = 0;
+    console.log('=== 更新总比例 ===');
+    
     selectedIngredients.forEach(ing => {
       const slider = document.querySelector(`input[data-id="${ing.id}"]`);
       const input = document.querySelector(`input[data-input-id="${ing.id}"]`);
-      const val = parseFloat(slider.value);
+      
+      if (!slider) {
+        console.error(`找不到香料 ${ing.name} (${ing.id}) 的滑块元素`);
+        return;
+      }
+      
+      const val = parseFloat(slider.value) || 0;
+      console.log(`${ing.name} (${ing.id}): 滑块值=${slider.value}, 解析值=${val}`);
       
       // 同步滑块和输入框的值
       if (input) {
         input.value = val.toFixed(1);
       }
       
-      document.getElementById(`val-${ing.id}`).textContent = val.toFixed(1);
+      const valElement = document.getElementById(`val-${ing.id}`);
+      if (valElement) {
+        valElement.textContent = val.toFixed(1);
+      }
+      
       ing.ratio = val;
       total += val;
     });
+    
+    console.log('总比例计算:', total);
     
     // 更新总比例显示
     const totalElement = document.getElementById('total-percentage');

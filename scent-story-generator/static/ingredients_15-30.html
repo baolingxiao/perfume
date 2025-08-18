@@ -50,7 +50,125 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
             border: 2px dashed #ccc;
         }
         
-
+        /* 香水故事区域样式 */
+        .perfume-story-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .perfume-story-section h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+        }
+        
+        .perfume-story-section h3::before {
+            content: "🌸";
+            margin-right: 8px;
+            font-size: 1.1em;
+        }
+        
+        .story-placeholder {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            padding: 20px;
+        }
+        
+        .story-loading {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .story-loading h3 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+        
+        .story-loading p {
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .story-result {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .story-result h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+        
+        .story-content {
+            line-height: 1.8;
+            color: #495057;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+        
+        .story-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-top: 1px solid #e9ecef;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .story-error {
+            text-align: center;
+            padding: 30px;
+            color: #dc3545;
+        }
+        
+        .story-error h3 {
+            color: #dc3545;
+            margin-bottom: 10px;
+        }
+        
+        .perfume-story-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+        
+        .perfume-story-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
 
     </style>
 </head>
@@ -416,6 +534,7 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
             <h2>已选择的香料</h2>
             <div class="action-buttons">
                 <button id="generateStory" class="story-btn">生成AI故事</button>
+                <button id="generatePerfumeStory" class="perfume-story-btn">生成香水故事</button>
                 <button id="debugBtn" class="debug-btn">调试</button>
                 <button id="clearAll" class="clear-btn">清空全部</button>
             </div>
@@ -456,7 +575,15 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                 </div>
             </div>
             
-
+            <!-- 香水故事生成区域 -->
+            <div class="perfume-story-section">
+                <h3>香水故事</h3>
+                <div id="perfume-story-container">
+                    <div class="story-placeholder">
+                        <p>选择香料后，点击"生成香水故事"按钮来创作您的专属香水故事</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -686,8 +813,6 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                 });
             }
             
-            console.log('=== 香料渲染函数执行完成 ===');
-            
             // 移除香料
             function removeIngredient(noteType, index) {
                 const selected = getSelectedIngredients();
@@ -710,7 +835,6 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                 }
             }
             
-            console.log('=== 到达generateAIStory函数定义 ===');
             // 生成AI故事
             function generateAIStory() {
                 const selected = getSelectedIngredients();
@@ -735,19 +859,94 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                 
                 console.log('转换后的香料数据:', storyIngredients);
                 
-                // 保存到sessionStorage（在同一个浏览器标签页中共享）
-                sessionStorage.setItem('selectedIngredients', JSON.stringify(storyIngredients));
-                console.log('已保存到sessionStorage selectedIngredients');
+                // 保存到localStorage供AI故事生成器使用
+                localStorage.setItem('selectedIngredients', JSON.stringify(storyIngredients));
+                console.log('已保存到selectedIngredients');
                 
-                // 同时保存原始格式
-                sessionStorage.setItem('selectedIngredientsByNote', JSON.stringify(selected));
-                console.log('已保存到sessionStorage selectedIngredientsByNote');
+                // 同时保存原始格式到selectedIngredientsByNote（以防万一）
+                localStorage.setItem('selectedIngredientsByNote', JSON.stringify(selected));
+                console.log('已保存到selectedIngredientsByNote');
                 
-                // 跳转到AI故事生成页面（使用Flask服务器路径）
-                window.open('http://localhost:8080/static/scent_story_generator.html', '_blank');
+                // 通过URL参数传递香料数据
+                const ingredientsParam = encodeURIComponent(JSON.stringify(storyIngredients));
+                const url = `http://localhost:8080/static/scent_story_generator.html?ingredients=${ingredientsParam}`;
+                console.log('跳转URL:', url);
+                
+                // 跳转到AI故事生成页面
+                window.open(url, '_blank');
             }
             
-
+            // 生成香水故事（新功能）
+            async function generatePerfumeStory() {
+                const selected = getSelectedIngredients();
+                const allIngredients = [...selected.top, ...selected.heart, ...selected.base];
+                
+                if (allIngredients.length === 0) {
+                    alert('请先选择一些香料！');
+                    return;
+                }
+                
+                // 显示加载状态
+                const storyContainer = document.getElementById('perfume-story-container');
+                storyContainer.innerHTML = `
+                    <div class="story-loading">
+                        <h3>正在创作您的香水故事...</h3>
+                        <p>AI正在根据您选择的香料组合构思一个独特的香水故事</p>
+                        <div class="loading-spinner"></div>
+                    </div>
+                `;
+                
+                try {
+                    // 准备香料数据
+                    const ingredients = allIngredients.map(ingredient => ingredient.name);
+                    
+                    // 调用API生成故事
+                    const response = await fetch('http://localhost:8080/api/generate', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            ingredients: ingredients,
+                            aiProvider: 'openai'
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const storyData = await response.json();
+                    
+                    if (storyData.error) {
+                        throw new Error(storyData.error);
+                    }
+                    
+                    // 显示生成的故事
+                    storyContainer.innerHTML = `
+                        <div class="story-result">
+                            <h3>${storyData.title}</h3>
+                            <div class="story-content">
+                                ${storyData.content.replace(/\n/g, '<br>')}
+                            </div>
+                            <div class="story-meta">
+                                <span class="story-time">生成时间: ${new Date(storyData.generated_at * 1000).toLocaleString()}</span>
+                                <span class="story-ai">AI: ChatGPT</span>
+                            </div>
+                            <button onclick="generatePerfumeStory()" class="btn btn-primary">重新生成</button>
+                        </div>
+                    `;
+                    
+                } catch (error) {
+                    console.error('生成香水故事失败:', error);
+                    storyContainer.innerHTML = `
+                        <div class="story-error">
+                            <h3>故事生成失败</h3>
+                            <p>错误信息: ${error.message}</p>
+                            <p>请检查网络连接或稍后再试</p>
+                            <button onclick="generatePerfumeStory()" class="btn btn-primary">重试</button>
+                        </div>
+                    `;
+                }
+            }
             
             // 添加香料到指定香调
             function addIngredientToNote(ingredient, noteType) {
@@ -887,28 +1086,11 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
                 }
             }
 
-            // 确保函数定义在导出之前
-            console.log('=== 检查函数定义 ===');
-            console.log('generateAIStory函数存在:', typeof generateAIStory);
-            
             // 导出函数到全局
-            console.log('=== 开始导出函数到全局 ===');
-            
             window.renderSelectedIngredients = renderSelectedIngredients;
             window.clearAllIngredients = clearAllIngredients;
             window.addIngredientToNote = addIngredientToNote;
             window.getSelectedIngredients = getSelectedIngredients;
-            
-            // 确保函数存在后再导出
-            if (typeof generateAIStory === 'function') {
-                window.generateAIStory = generateAIStory;
-                console.log('generateAIStory导出成功');
-            } else {
-                console.error('generateAIStory函数未定义！');
-            }
-            
-            console.log('=== 函数导出完成 ===');
-            console.log('window.generateAIStory:', typeof window.generateAIStory);
             
             // 初始化
             migrateOldData();
@@ -930,7 +1112,8 @@ Description: 香料选择页面，展示各种类型的香料供用户选择
             // 绑定生成AI故事按钮事件
             document.getElementById('generateStory').addEventListener('click', generateAIStory);
             
-
+            // 绑定生成香水故事按钮事件
+            document.getElementById('generatePerfumeStory').addEventListener('click', generatePerfumeStory);
             
             // 页面加载时同步选择状态
             document.addEventListener('DOMContentLoaded', function() {

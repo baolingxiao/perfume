@@ -106,14 +106,17 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('=== 香料检测调试开始 ===');
   
   // --- 新增：香料滑块UI与数据流 ---
-  // 从localStorage获取选择的香料（支持两种格式）
-  let selectedIngredients = JSON.parse(localStorage.getItem('selectedIngredients') || '[]');
-  console.log('1. 从selectedIngredients获取:', selectedIngredients);
+  // 首先尝试从sessionStorage获取香料数据
+  let selectedIngredients = [];
   
-  // 如果没有找到，尝试从selectedIngredientsByNote获取
+  console.log('1. 尝试从sessionStorage获取香料数据');
+  selectedIngredients = JSON.parse(sessionStorage.getItem('selectedIngredients') || '[]');
+  console.log('从sessionStorage selectedIngredients获取:', selectedIngredients);
+  
+  // 如果没有找到，尝试从sessionStorage selectedIngredientsByNote获取
   if (selectedIngredients.length === 0) {
-    const selectedByNote = localStorage.getItem('selectedIngredientsByNote');
-    console.log('2. selectedIngredientsByNote原始数据:', selectedByNote);
+    const selectedByNote = sessionStorage.getItem('selectedIngredientsByNote');
+    console.log('2. sessionStorage selectedIngredientsByNote原始数据:', selectedByNote);
     
     if (selectedByNote) {
       try {
@@ -128,11 +131,65 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
         console.log('4. 合并后的香料:', selectedIngredients);
       } catch (e) {
-        console.error('解析selectedIngredientsByNote失败:', e);
+        console.error('解析sessionStorage selectedIngredientsByNote失败:', e);
       }
     }
   } else {
-    console.log('从selectedIngredients获取到香料:', selectedIngredients);
+    console.log('从sessionStorage selectedIngredients获取到香料:', selectedIngredients);
+    // 如果从selectedIngredients获取到数据，需要转换为标准格式
+    if (selectedIngredients.length > 0 && selectedIngredients[0].id) {
+      console.log('检测到selectedIngredients格式，转换为标准格式');
+      selectedIngredients = selectedIngredients.map(ing => ({
+        name: ing.name,
+        image: ing.image
+      }));
+      console.log('转换后的香料:', selectedIngredients);
+    }
+  }
+  
+  // 如果sessionStorage没有数据，尝试从localStorage获取（备用方案）
+  if (selectedIngredients.length === 0) {
+    console.log('5. sessionStorage无数据，尝试localStorage');
+    selectedIngredients = JSON.parse(localStorage.getItem('selectedIngredients') || '[]');
+    console.log('从localStorage selectedIngredients获取:', selectedIngredients);
+    
+    if (selectedIngredients.length === 0) {
+      const selectedByNote = localStorage.getItem('selectedIngredientsByNote');
+      console.log('6. localStorage selectedIngredientsByNote原始数据:', selectedByNote);
+      
+      if (selectedByNote) {
+        try {
+          const noteData = JSON.parse(selectedByNote);
+          console.log('7. 解析后的noteData:', noteData);
+          
+          // 合并所有香调的香料
+          selectedIngredients = [
+            ...(noteData.top || []),
+            ...(noteData.heart || []),
+            ...(noteData.base || [])
+          ];
+          console.log('8. 合并后的香料:', selectedIngredients);
+        } catch (e) {
+          console.error('解析localStorage selectedIngredientsByNote失败:', e);
+        }
+      }
+    }
+  }
+  
+  // 如果还是没有找到，尝试从香料选择页面的数据格式获取
+  if (selectedIngredients.length === 0) {
+    console.log('5. 尝试其他方式获取香料数据...');
+    // 检查是否有其他格式的数据
+    const allKeys = Object.keys(localStorage);
+    console.log('6. localStorage中的所有键:', allKeys);
+    
+    // 查找包含ingredient的键
+    const ingredientKeys = allKeys.filter(key => key.includes('ingredient') || key.includes('selected'));
+    console.log('7. 包含ingredient的键:', ingredientKeys);
+    
+    ingredientKeys.forEach(key => {
+      console.log(`8. ${key}:`, localStorage.getItem(key));
+    });
   }
   
   const sliderForm = document.getElementById('slider-form');

@@ -106,12 +106,28 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('=== 香料检测调试开始 ===');
   
   // --- 新增：香料滑块UI与数据流 ---
-  // 首先尝试从sessionStorage获取香料数据
+  // 首先尝试从URL参数获取香料数据
   let selectedIngredients = [];
   
-  console.log('1. 尝试从sessionStorage获取香料数据');
-  selectedIngredients = JSON.parse(sessionStorage.getItem('selectedIngredients') || '[]');
-  console.log('从sessionStorage selectedIngredients获取:', selectedIngredients);
+  console.log('1. 尝试从URL参数获取香料数据');
+  const urlParams = new URLSearchParams(window.location.search);
+  const ingredientsParam = urlParams.get('ingredients');
+  
+  if (ingredientsParam) {
+    try {
+      selectedIngredients = JSON.parse(decodeURIComponent(ingredientsParam));
+      console.log('从URL参数获取到香料数据:', selectedIngredients);
+    } catch (e) {
+      console.error('解析URL参数失败:', e);
+    }
+  }
+  
+  // 如果URL参数没有数据，尝试从sessionStorage获取香料数据
+  if (selectedIngredients.length === 0) {
+    console.log('2. URL参数无数据，尝试从sessionStorage获取香料数据');
+    selectedIngredients = JSON.parse(sessionStorage.getItem('selectedIngredients') || '[]');
+    console.log('从sessionStorage selectedIngredients获取:', selectedIngredients);
+  }
   
   // 如果没有找到，尝试从sessionStorage selectedIngredientsByNote获取
   if (selectedIngredients.length === 0) {

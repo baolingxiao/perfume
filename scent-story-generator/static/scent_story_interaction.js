@@ -15,7 +15,7 @@ const FANTASY_CARDS = {
     bgColor: 'linear-gradient(135deg, #E1BEE7 0%, #CE93D8 100%)',
     icon: 'fa-magic',
     borderColor: '#7B1FA2',
-    image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=600&fit=crop&crop=center'
+    image: 'images/cards/witch-card.jpg'
   },
   dream: {
     name: '梦界卡',

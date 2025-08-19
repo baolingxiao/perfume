@@ -15,7 +15,7 @@ const FANTASY_CARDS = {
     bgColor: 'linear-gradient(135deg, #E1BEE7 0%, #CE93D8 100%)',
     icon: 'fa-magic',
     borderColor: '#7B1FA2',
-    image: 'images/cards/floral/witch.jpg'
+    image: '../../images/cards/floral/witch.jpg'
   },
   dream: {
     name: '梦界卡',
@@ -24,7 +24,7 @@ const FANTASY_CARDS = {
     bgColor: 'linear-gradient(135deg, #F8BBD9 0%, #F48FB1 100%)',
     icon: 'fa-cloud',
     borderColor: '#C2185B',
-    image: 'images/cards/floral/dream.jpg'
+    image: '../../images/cards/floral/dream.jpg'
   },
   flower: {
     name: '花卡',
@@ -33,7 +33,7 @@ const FANTASY_CARDS = {
     bgColor: 'linear-gradient(135deg, #FFCCBC 0%, #FFAB91 100%)',
     icon: 'fa-heart',
     borderColor: '#E64A19',
-    image: 'images/cards/floral/flower.jpg'
+    image: '../../images/cards/floral/flower.jpg'
   },
   
   // 果香调幻界卡
@@ -44,7 +44,7 @@ const FANTASY_CARDS = {
     bgColor: 'linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%)',
     icon: 'fa-child',
     borderColor: '#388E3C',
-    image: 'images/cards/fruity/child.jpg'
+    image: '../../images/cards/fruity/child.jpg'
   },
   fox: {
     name: '狐狸卡',
@@ -53,7 +53,7 @@ const FANTASY_CARDS = {
     bgColor: 'linear-gradient(135deg, #FFE0B2 0%, #FFCC80 100%)',
     icon: 'fa-paw',
     borderColor: '#F57C00',
-    image: 'images/cards/fruity/fox.jpg'
+    image: '../../images/cards/fruity/fox.jpg'
   },
   fruit: {
     name: '果卡',
@@ -62,7 +62,7 @@ const FANTASY_CARDS = {
     bgColor: 'linear-gradient(135deg, #FFCDD2 0%, #EF9A9A 100%)',
     icon: 'fa-apple',
     borderColor: '#D32F2F',
-    image: 'images/cards/fruity/fruit.jpg'
+    image: '../../images/cards/fruity/fruit.jpg'
   },
   
   // 木香调幻界卡
@@ -73,7 +73,7 @@ const FANTASY_CARDS = {
     bgColor: 'linear-gradient(135deg, #D7CCC8 0%, #BCAAA4 100%)',
     icon: 'fa-music',
     borderColor: '#5D4037',
-    image: 'images/cards/woody/bard.jpg'
+    image: '../../images/cards/woody/bard.jpg'
   },
   deer: {
     name: '岩鹿卡',
@@ -82,7 +82,7 @@ const FANTASY_CARDS = {
     bgColor: 'linear-gradient(135deg, #D7CCC8 0%, #A1887F 100%)',
     icon: 'fa-leaf',
     borderColor: '#6D4C41',
-    image: 'images/cards/woody/deer.jpg'
+    image: '../../images/cards/woody/deer.jpg'
   },
   smoke: {
     name: '烟卡',
@@ -91,7 +91,7 @@ const FANTASY_CARDS = {
     bgColor: 'linear-gradient(135deg, #CFD8DC 0%, #B0BEC5 100%)',
     icon: 'fa-smoke',
     borderColor: '#455A64',
-    image: 'images/cards/woody/smoke.jpg'
+    image: '../../images/cards/woody/smoke.jpg'
   }
 };
 

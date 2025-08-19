@@ -232,6 +232,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }));
     
     console.log('处理后的香料数据:', selectedIngredients);
+    console.log('香料数量:', selectedIngredients.length);
+    
+    // 验证香料数据完整性
+    selectedIngredients.forEach((ing, index) => {
+      if (!ing.name) {
+        console.error(`香料 ${index} 缺少名称:`, ing);
+      }
+      if (!ing.id) {
+        console.error(`香料 ${index} 缺少ID:`, ing);
+      }
+    });
     
     // 显示香料滑块界面
     sliderForm.innerHTML = `
@@ -252,7 +263,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="mb-4 p-3 bg-gray-50 rounded-lg">
           <label class="block font-bold mb-2 flex items-center justify-between">
             <span class="flex items-center">
-              <img src="${ing.image.startsWith('/') ? ing.image : '/' + ing.image}" alt="${ing.name}" class="w-6 h-6 rounded-full mr-2 object-cover">
+              <img src="${ing.image.startsWith('/') ? ing.image : '/' + ing.image}" alt="${ing.name}" class="w-6 h-6 rounded-full mr-2 object-cover"
+                   onerror="this.style.display='none'; console.error('香料图片加载失败:', '${ing.image}')"
+                   onload="console.log('香料图片加载成功:', '${ing.name}')">
               ${ing.name}
             </span>
             <div class="flex items-center space-x-2">
@@ -791,6 +804,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const card = FANTASY_CARDS[cardType];
     const generatedAt = new Date(storyData.generated_at * 1000).toLocaleString();
     
+    console.log('=== 创建幻界卡 ===');
+    console.log('卡片类型:', cardType);
+    console.log('卡片配置:', card);
+    console.log('图片路径:', card.image);
+    
     // 构建图片显示区域
     let imageSection = '';
     if (card.image) {
@@ -798,12 +816,16 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="px-6 mb-6">
           <div class="flex justify-center">
             <div class="relative">
-              <img src="${card.image}" alt="${card.name}" class="w-48 h-64 object-cover rounded-lg shadow-lg" style="border: 2px solid ${card.borderColor};">
+              <img src="${card.image}" alt="${card.name}" class="w-48 h-64 object-cover rounded-lg shadow-lg" style="border: 2px solid ${card.borderColor};" 
+                   onerror="console.error('图片加载失败:', '${card.image}')" 
+                   onload="console.log('图片加载成功:', '${card.image}')">
               <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg"></div>
             </div>
           </div>
         </div>
       `;
+    } else {
+      console.warn('卡片没有配置图片路径:', cardType);
     }
     
     return `

@@ -249,6 +249,8 @@ document.addEventListener('DOMContentLoaded', () => {
             </span>
             <div class="flex items-center space-x-2">
               <input type="number" 
+                     id="input-${ing.id}"
+                     name="input-${ing.id}"
                      min="0" 
                      max="100" 
                      step="0.1" 
@@ -261,6 +263,8 @@ document.addEventListener('DOMContentLoaded', () => {
           </label>
           <div class="flex items-center space-x-3">
             <input type="range" 
+                   id="slider-${ing.id}"
+                   name="slider-${ing.id}"
                    min="0" 
                    max="100" 
                    value="0" 
@@ -306,8 +310,13 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('=== 更新总比例 ===');
     
     selectedIngredients.forEach(ing => {
-      const slider = document.querySelector(`input[data-id="${ing.id}"]`);
-      const input = document.querySelector(`input[data-input-id="${ing.id}"]`);
+      // 使用多种选择器来确保找到元素
+      const slider = document.getElementById(`slider-${ing.id}`) || 
+                    document.querySelector(`input[data-id="${ing.id}"]`) ||
+                    document.querySelector(`input[name="slider-${ing.id}"]`);
+      const input = document.getElementById(`input-${ing.id}`) || 
+                   document.querySelector(`input[data-input-id="${ing.id}"]`) ||
+                   document.querySelector(`input[name="input-${ing.id}"]`);
       
       if (!slider) {
         console.error(`找不到香料 ${ing.name} (${ing.id}) 的滑块元素`);
@@ -353,8 +362,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // 添加输入框事件监听
   function setupInputEvents() {
     selectedIngredients.forEach(ing => {
-      const slider = document.querySelector(`input[data-id="${ing.id}"]`);
-      const input = document.querySelector(`input[data-input-id="${ing.id}"]`);
+      // 使用多种选择器来确保找到元素
+      const slider = document.getElementById(`slider-${ing.id}`) || 
+                    document.querySelector(`input[data-id="${ing.id}"]`) ||
+                    document.querySelector(`input[name="slider-${ing.id}"]`);
+      const input = document.getElementById(`input-${ing.id}`) || 
+                   document.querySelector(`input[data-input-id="${ing.id}"]`) ||
+                   document.querySelector(`input[name="input-${ing.id}"]`);
       
       if (slider && input) {
         // 滑块变化时更新输入框
@@ -419,8 +433,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 应用分配结果
         selectedIngredients.forEach((ing, index) => {
-          const slider = document.querySelector(`input[data-id="${ing.id}"]`);
-          const input = document.querySelector(`input[data-input-id="${ing.id}"]`);
+          // 使用多种选择器来确保找到元素
+          const slider = document.getElementById(`slider-${ing.id}`) || 
+                        document.querySelector(`input[data-id="${ing.id}"]`) ||
+                        document.querySelector(`input[name="slider-${ing.id}"]`);
+          const input = document.getElementById(`input-${ing.id}`) || 
+                       document.querySelector(`input[data-input-id="${ing.id}"]`) ||
+                       document.querySelector(`input[name="input-${ing.id}"]`);
+          
           if (slider && input) {
             const ratio = ratios[index];
             slider.value = ratio;
@@ -428,6 +448,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`设置 ${ing.name} (${ing.id}) 的比例为: ${ratio}%`);
           } else {
             console.error(`找不到香料 ${ing.name} (${ing.id}) 的DOM元素`);
+            console.error(`滑块查找结果:`, slider);
+            console.error(`输入框查找结果:`, input);
           }
         });
         
